@@ -9,39 +9,76 @@ export const AuthProvider = ({ children }) => {
 
     const [user, setUser] = useState(null); 
     const [token, setToken] = useState(null);
+    const [expiresAt, setExpiresAt] = useState(null);
+
 
     // When component mounts, check localStorage for a token
     useEffect(() => { 
         const storedToken = localStorage.getItem('token'); 
-        if (storedToken) { 
-            setToken(storedToken); 
-            try { 
-                const decoded = jwtDecode(storedToken); 
-                setUser(decoded); 
-            } catch (error) { 
-                console.error('Failed to decode token:', error); 
-                localStorage.removeItem('token'); 
-            } 
-        } 
+        const storedExpiry = localStorage.getItem('expiresAt'); 
+
+        if (storedToken && storedExpiry) { 
+            const expiryDate = new Date(storedExpiry); 
+            if (expiryDate > new Date()) {
+                setToken(storedToken); 
+                setExpiresAt(expiryDate); 
+                try { 
+                    const decoded = jwtDecode(storedToken); 
+                    setUser(decoded); 
+
+                    // auto log out when token expires
+                    const timeout = expiryDate.getTime() - new Date().getTime();
+                    setTimeout(logout, timeout); 
+                } catch (error) { 
+                    console.error('Failed to decode token:', error); 
+                    logout();
+                }
+            } else {
+                // token expired
+                logout(); 
+            }
+        }
     }, []);
 
-    // login: save token and update state 
-    const login = (token) => { 
-        localStorage.setItem('token', token); 
-        setToken(token); 
+    // login: save credentials to backend, stores token and expiry
+    const login = async (credentials) => {
         try { 
-            const decoded = jwtDecode(token); 
+            const response = await fetch(
+                'backend-domain/auth/tokens', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'}, 
+                    body: JSON.stringify(credentials)
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error('Login failed'); 
+            }
+
+            const data = await response.json();
+            // data should include token, expiresAt 
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('expiresAt', data.expiresAt); 
+            setToken(data.token); 
+            setExpiresAt(new Date(data.expiresAt));
+            const decoded = jwtDecode(data.token); 
             setUser(decoded); 
+
+            // set up augo logout timer 
+            const timeout = new Date(data.expiresAt).getTime() - new Date().getTime();
+            setTimeout(logout, timeout); 
         } catch (error) { 
-            console.error('Failed to decode token:', error); 
+            console.error('Login error:', error); 
         } 
     };
 
     // logout: clear token and user state
     const logout = () => { 
         localStorage.removeItem('token'); 
+        localStorage.removeItem('expiresAt'); 
         setToken(null); 
         setUser(null); 
+        setExpiresAt(null);
     };
 
     return ( <AuthContext.Provider value={{ user, token, login, logout }}> {children} </AuthContext.Provider> ); 
