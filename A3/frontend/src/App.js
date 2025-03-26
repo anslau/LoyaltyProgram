@@ -1,18 +1,30 @@
-import logo from './logo.svg';
+import logo from './assets/logo.svg';
 import './App.css';
 import React from 'react'; 
-import { BrowserRouter, Routes, Route } from 'react-router-dom'; 
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'; 
 import Login from './pages/Login'; 
 import Dashboard from './pages/Dashboard'; 
 import Transactions from './pages/Transactions';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 
 function App() { 
     return ( 
-    <BrowserRouter> <Routes> 
-        <Route path="/login" element={<Login />} /> 
-        <Route path="/dashboard" element={<Dashboard />} /> 
-        <Route path="/transactions" element={<Transactions />} /> 
-    </Routes> </BrowserRouter> 
+        <BrowserRouter>
+            <Routes> 
+                <Route path="/login" element={<Login />} /> 
+                <Route path="/dashboard" element={
+                    <ProtectedRoute>
+                        <Dashboard />
+                    </ProtectedRoute>
+                } /> 
+                <Route path="/transactions" element={
+                    <ProtectedRoute>
+                        <Transactions />
+                    </ProtectedRoute>
+                } />
+                <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            </Routes>
+        </BrowserRouter> 
     ); 
 }
 
