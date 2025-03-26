@@ -56,3 +56,14 @@ export default AuthContext;
 // login() saves the token to localStorage and updates state
 // logout() clears both the state and localStorage
 // wrap app with the AuthProvider to make the authentication data available throughout.
+
+
+// how to use AuthContext in components that are descendant of AuthProvider
+// for example something like userstatus() 
+// import React, { useContext } from 'react'; 
+// import AuthContext from './context/AuthContext'; 
+
+// const UserStatus = () => { 
+//     const { user, login, logout } = useContext(AuthContext);
+//     return <div>{user ? 'Welcome ' + user.utorid : 'Please log in'}</div>;
+// };
