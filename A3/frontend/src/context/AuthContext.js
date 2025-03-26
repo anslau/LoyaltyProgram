@@ -87,20 +87,23 @@ export const AuthProvider = ({ children }) => {
 export default AuthContext;
 
 
-// Explanation: The AuthContext holds the current user and token as state
-// on mount, the provider checks localStorage for an existing token. 
-// If one is found, it decodes it (using the jwt-decode package) and sets the user info.
-// login() saves the token to localStorage and updates state
-// logout() clears both the state and localStorage
-// wrap app with the AuthProvider to make the authentication data available throughout.
-
+// Explanation: Authprovider checks for an exisitng token in local storage and verifies against expiration time. 
+// If token valid, decoded to get user info and sets timer to log out automatically when token expires. 
+// Login function sends user's credentials to auth/tokens endpoint, stores returned token and expireation time,
+// decodes token to update user state. 
+// Logout clears all token related data from both state AND local storage. 
 
 // how to use AuthContext in components that are descendant of AuthProvider
 // for example something like userstatus() 
+//
 // import React, { useContext } from 'react'; 
 // import AuthContext from './context/AuthContext'; 
 
 // const UserStatus = () => { 
 //     const { user, login, logout } = useContext(AuthContext);
-//     return <div>{user ? 'Welcome ' + user.utorid : 'Please log in'}</div>;
+//     return (
+//         <div>{user ? 'Welcome ' + user.utorid : 'Please log in'}</div>
+//     ); 
 // };
+
+// export default UserStatus;
