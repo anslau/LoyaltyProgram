@@ -48,3 +48,11 @@ export const AuthProvider = ({ children }) => {
 };
 
 export default AuthContext;
+
+
+// Explanation: The AuthContext holds the current user and token as state
+// on mount, the provider checks localStorage for an existing token. 
+// If one is found, it decodes it (using the jwt-decode package) and sets the user info.
+// login() saves the token to localStorage and updates state
+// logout() clears both the state and localStorage
+// wrap app with the AuthProvider to make the authentication data available throughout.
