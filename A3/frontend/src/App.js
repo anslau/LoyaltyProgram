@@ -1,8 +1,8 @@
 import logo from './assets/logo.svg';
-import './App.css';
+import './styles/App.css';
 import React from 'react'; 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'; 
-import Login from './pages/Login'; 
+import Login from './pages/Login/Login'; 
 import Dashboard from './pages/Dashboard'; 
 import Transactions from './pages/Transactions';
 import ProtectedRoute from './route/ProtectedRoute';
