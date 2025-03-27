@@ -44,10 +44,13 @@ export const AuthProvider = ({ children }) => {
     const login = async (credentials) => {
         try { 
             const response = await fetch(
-                'backend-domain/auth/tokens', {
+                'http://localhost:3000/auth/tokens', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'}, 
-                    body: JSON.stringify(credentials)
+                    body: JSON.stringify({
+                        utorid: credentials.utorid, 
+                        password: credentials.password
+                    })
                 }
             );
 
@@ -69,6 +72,7 @@ export const AuthProvider = ({ children }) => {
             setTimeout(logout, timeout); 
         } catch (error) { 
             console.error('Login error:', error); 
+            throw error;
         } 
     };
 
