@@ -1,15 +1,38 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
+import { Outlet, Navigate } from 'react-router-dom';
+import AuthContext from '../context/AuthContext';
 
-const ProtectedRoute = ({ children }) => {
-    const { token } = React.useContext(AuthContext);
-    
-    if (!token) {
-        return <Navigate to="/login" replace />;
+const ProtectedRoute = ({ roles = [] }) => {
+    const { token, user, expiresAt, logout, loading } = React.useContext(AuthContext);
+
+    // loading state
+    if (loading) {
+        return <div>Loading...</div>;
     }
 
-    return children;
+    // validate token and expiry
+    const isTokenValid = token && new Date(expiresAt) > new Date();
+    if (!isTokenValid) {
+        logout();
+        return <Navigate to="/login" />;
+    }
+
+    // user authentication
+    if (!user) {
+        return <Navigate to="/login" />;
+    }
+
+    // role-based authorization
+    // if (roles.length > 0 && !roles.includes(user.role)) {
+    //     return <Navigate to="/unauthorized" />;  # not implemented
+    // }
+    //
+    // Usage:
+    // <Route element={<ProtectedRoute roles={['Manager', 'Superuser']} />}>
+    //     <Route path="/admin" element={<AdminDashboard />} />
+    // </Route>
+
+    return <Outlet />;
 };
 
 export default ProtectedRoute; 

@@ -11,20 +11,23 @@ function App() {
     return ( 
         <BrowserRouter>
             <Routes> 
+                {/* Redirect to dashboard if authenticated, otherwise to login */} 
+                <Route path="/" element={
+                    <ProtectedRoute>
+                        <Navigate to="/dashboard" />
+                    </ProtectedRoute>
+                }/>
                 <Route path="/login" element={<Login />} /> 
-                <Route path="/dashboard" element={
-                    <ProtectedRoute>
-                        <Dashboard />
-                    </ProtectedRoute>
-                } /> 
-                <Route path="/transactions" element={
-                    <ProtectedRoute>
-                        <Transactions />
-                    </ProtectedRoute>
-                } />
-                <Route path="/" element={<Navigate to="/dashboard" replace />} />
+
+                <Route element={<ProtectedRoute />} >
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/transactions" element={<Transactions />} />
+                </Route>
+                
+                {/* Fallback for unmatched routes */}
+                <Route path="*" element={<Navigate to="/" />} />
             </Routes>
-        </BrowserRouter> 
+        </BrowserRouter>
     ); 
 }
 
