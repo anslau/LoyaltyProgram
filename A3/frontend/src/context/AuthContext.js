@@ -86,7 +86,11 @@ export const AuthProvider = ({ children }) => {
         setExpiresAt(null);
     };
 
-    return ( <AuthContext.Provider value={{ user, token, login, logout }}> {children} </AuthContext.Provider> ); 
+    return (
+        <AuthContext.Provider value={{ user, token, expiresAt, login, logout, loading: false }}>
+            {children}
+        </AuthContext.Provider>
+    ); 
 };
 
 export default AuthContext;

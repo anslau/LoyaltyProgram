@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "createsuperuser": "node prisma/createsu.js",
-    "createtestuser": "node prisma/createtestuser.js",
     "clean": "rm -rf prisma/dev.db* node_modules package-lock.json prisma/migrations/"
   },
   "author": "CSC309 Student, Winter 2025",
