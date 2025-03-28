@@ -5,6 +5,8 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login/Login'; 
 import Dashboard from './pages/Dashboard'; 
 import Transactions from './pages/Transactions';
+import PerksPage from './pages/Perks/PerksPage';
+import EventDetail from './pages/Perks/Events/EventDetail';
 import ProtectedRoute from './route/ProtectedRoute';
 
 function App() { 
@@ -22,6 +24,8 @@ function App() {
                 <Route element={<ProtectedRoute />} >
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/transactions" element={<Transactions />} />
+                    <Route path="/perks" element={<PerksPage />} />
+                    <Route path="/events/:eventId" element={<EventDetail />} />
                 </Route>
                 
                 {/* Fallback for unmatched routes */}
@@ -35,8 +39,3 @@ function App() {
 // when navigating between pages and allows back/forward navigation.
 
 export default App;
-
-
-
-
-
