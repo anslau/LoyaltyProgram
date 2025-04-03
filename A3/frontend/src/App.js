@@ -6,6 +6,7 @@ import Login from './pages/Login/Login';
 import Dashboard from './pages/Dashboard'; 
 import Transactions from './pages/Transactions';
 import ProtectedRoute from './route/ProtectedRoute';
+import PointsDashboard from './pages/PointsDashboard';
 
 function App() { 
     return ( 
@@ -26,6 +27,12 @@ function App() {
                 
                 {/* Fallback for unmatched routes */}
                 <Route path="*" element={<Navigate to="/" />} />
+
+                <Route path="/points" element={
+                    <ProtectedRoute>
+                        <PointsDashboard />
+                    </ProtectedRoute>
+                }/>
             </Routes>
         </BrowserRouter>
     ); 
