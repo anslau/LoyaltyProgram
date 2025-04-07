@@ -22,6 +22,7 @@ function CashierPage() {
   // State for creating a purchase transaction
   const [purchaseUtorid, setPurchaseUtorid] = useState('');
   const [purchaseAmount, setPurchaseAmount] = useState('');
+  const [promoIds,       setPromoIds]       = useState('');
 
   // State for redemption processing
   const [redemptionId, setRedemptionId] = useState('');
@@ -52,9 +53,14 @@ function CashierPage() {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          type: 'purchase',
-          utorid: purchaseUtorid,
-          spent: parseFloat(purchaseAmount),
+            type:'purchase',
+            utorid: purchaseUtorid,
+            spent: parseFloat(purchaseAmount),
+            promotionIds: promoIds
+                .split(',')
+                .map(s=>s.trim())
+                .filter(Boolean)
+                .map(Number)
         }),
       });
       if (!resp.ok) {
@@ -121,9 +127,7 @@ function CashierPage() {
         Cashier Dashboard
       </Typography>
 
-      {/* ========================================== */}
       {/* ACCORDION 1: CREATE PURCHASE */}
-      {/* ========================================== */}
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -162,7 +166,11 @@ function CashierPage() {
               onChange={(e) => setPurchaseAmount(e.target.value)}
               required
             />
-            {/* If you have promotions, you can add more fields here. */}
+            <TextField
+                label="Promotion IDs (comma‑sep, optional)"
+                value={promoIds}
+                onChange={(e) => setPromoIds(e.target.value)}
+            />
             <Button variant="contained" type="submit">
               Submit Purchase
             </Button>
@@ -170,9 +178,7 @@ function CashierPage() {
         </AccordionDetails>
       </Accordion>
 
-      {/* ========================================== */}
       {/* ACCORDION 2: PROCESS REDEMPTION */}
-      {/* ========================================== */}
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
