@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Tabs, Tab, Typography, Container } from '@mui/material';
+import { Box, Tabs, Tab, Typography, Container, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import LogoutButton from '../../components/auth/LogoutButton';
 import PromotionsList from './Promotions/PromotionsList';
@@ -63,10 +63,30 @@ const PerksPage = () => {
           </Box>
           
           <TabPanel value={tabValue} index={0}>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+              <Button 
+                variant="contained" 
+                color="primary" 
+                component={Link} 
+                to="/promotions/create"
+              >
+                Create Promotion
+              </Button>
+            </Box>
             <PromotionsList />
           </TabPanel>
           
           <TabPanel value={tabValue} index={1}>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+              <Button 
+                variant="contained" 
+                color="primary" 
+                component={Link} 
+                to="/events/create"
+              >
+                Create Event
+              </Button>
+            </Box>
             <EventsList />
           </TabPanel>
         </Box>
