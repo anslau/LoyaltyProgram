@@ -38,7 +38,7 @@ const PerksPage = () => {
         <div className="nav-content">
           <h1 className="dashboard-title">What's New</h1>
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Link to="/dashboard" style={{ marginRight: '20px', textDecoration: 'none', color: '#1976d2', fontWeight: 'bold' }}>
+            <Link to="/dashboard" style={{ marginRight: '20px', textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}>
               Dashboard
             </Link>
             <LogoutButton />
@@ -56,17 +56,30 @@ const PerksPage = () => {
               value={tabValue} 
               onChange={handleTabChange} 
               aria-label="perks tabs"
+              TabIndicatorProps={{ style: { backgroundColor: 'rgb(101, 82, 82)' } }}
             >
-              <Tab label="Promotions" id="perks-tab-0" aria-controls="perks-tabpanel-0" />
-              <Tab label="Events" id="perks-tab-1" aria-controls="perks-tabpanel-1" />
+              <Tab label="Promotions" id="perks-tab-0" aria-controls="perks-tabpanel-0"
+              sx={{
+                '&.Mui-selected': {
+                  color: 'rgb(101, 82, 82)'
+                }
+              }}
+              />
+              <Tab label="Events" id="perks-tab-1" aria-controls="perks-tabpanel-1" 
+              sx={{
+                '&.Mui-selected': {
+                  color: 'rgb(101, 82, 82)' 
+                }
+              }}
+              />
             </Tabs>
           </Box>
           
           <TabPanel value={tabValue} index={0}>
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
               <Button 
-                variant="contained" 
-                color="primary" 
+                variant="contained"
+                sx={{ color: 'rgb(101, 82, 82)', backgroundColor: '#ebc2c2', fontWeight: 'bold' }}
                 component={Link} 
                 to="/promotions/create"
               >
@@ -80,7 +93,7 @@ const PerksPage = () => {
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
               <Button 
                 variant="contained" 
-                color="primary" 
+                sx={{ color: 'rgb(101, 82, 82)', backgroundColor: '#ebc2c2', fontWeight: 'bold' }}
                 component={Link} 
                 to="/events/create"
               >
