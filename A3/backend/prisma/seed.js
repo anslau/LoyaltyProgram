@@ -16,56 +16,110 @@ async function main() {
   await prisma.event.deleteMany({});
   await prisma.user.deleteMany({});
 
-  // Create users with different roles
-  const regularUser = await prisma.user.create({
-    data: {
+// Create users with different roles and edge cases
+const userData = [
+    {
       utorid: 'testuser',
-      password: 'Password123!', 
+      password: 'Password123!',
       email: 'testuser@utoronto.ca',
       role: 'regular',
       name: 'Test User',
       verified: true
-    }
-  });
-
-  const cashierUser = await prisma.user.create({
-    data: {
+    },
+    {
       utorid: 'cashier1',
       password: 'Cashier123!',
       email: 'cashier@utoronto.ca',
       role: 'cashier',
       name: 'Test Cashier',
       verified: true
-    }
-  });
-
-  const managerUser = await prisma.user.create({
-    data: {
+    },
+    {
       utorid: 'manager1',
       password: 'Manager123!',
       email: 'manager@utoronto.ca',
       role: 'manager',
       name: 'Test Manager',
       verified: true
-    }
-  });
-
-  const superUser = await prisma.user.create({
-    data: {
+    },
+    {
       utorid: 'superuser',
       password: 'Super123!',
       email: 'super@utoronto.ca',
       role: 'superuser',
       name: 'Super User',
       verified: true
+    },
+    {
+      utorid: 'unverified1',
+      password: 'Test123!',
+      email: 'unverified1@utoronto.ca',
+      role: 'regular',
+      name: 'Unverified User',
+      verified: false
+    },
+    {
+      utorid: 'minimal1',
+      password: 'Test123!',
+      email: 'minimal1@utoronto.ca',
+      role: 'regular',
+      name: '',
+      verified: true
+    },
+    {
+      utorid: 'redemptionzero',
+      password: 'Test123!',
+      email: 'redemptionzero@utoronto.ca',
+      role: 'regular',
+      name: 'No Points',
+      verified: true
+    },
+    {
+      utorid: 'eventguest1',
+      password: 'Test123!',
+      email: 'guest1@utoronto.ca',
+      role: 'regular',
+      name: 'Event Guest',
+      verified: true
+    },
+    {
+      utorid: 'cashier2',
+      password: 'Test123!',
+      email: 'cashier2@utoronto.ca',
+      role: 'cashier',
+      name: 'Cashier Two',
+      verified: true
+    },
+    {
+      utorid: 'manager2',
+      password: 'Test123!',
+      email: 'manager2@utoronto.ca',
+      role: 'manager',
+      name: 'Manager Two',
+      verified: true
     }
-  });
-
+  ];
+  
+  const [
+    regularUser,
+    cashierUser,
+    managerUser,
+    superUser,
+    unverifiedUser,
+    minimalUser,
+    zeroPointsUser,
+    eventGuestUser,
+    cashierUser2,
+    managerUser2
+  ] = await Promise.all(userData.map((u) => prisma.user.create({ data: u })));
+  
   console.log('Users created:');
   console.log('- Regular: testuser / Password123!');
   console.log('- Cashier: cashier1 / Cashier123!');
   console.log('- Manager: manager1 / Manager123!');
   console.log('- Superuser: superuser / Super123!');
+  console.log('- + 6 additional users for testing.');
+
 
   // Create promotions
   const nowDate = new Date();
