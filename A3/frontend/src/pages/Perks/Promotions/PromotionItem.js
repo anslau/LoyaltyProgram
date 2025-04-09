@@ -1,7 +1,9 @@
 import React from 'react';
-import { Card, CardContent, Typography, Box, Chip } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { Card, CardContent, Typography, Box, Chip, Button, CardActions } from '@mui/material';
 
 const PromotionItem = ({ promotion }) => {
+  const navigate = useNavigate();
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -60,6 +62,15 @@ const PromotionItem = ({ promotion }) => {
           </Typography>
         </Box>
       </CardContent>
+      <CardActions sx={{ justifyContent: 'flex-end', p: 2, pt: 0 }}>
+        <Button 
+          size="small" 
+          color="primary" 
+          onClick={() => navigate(`/promotions/${promotion.id}`)}
+        >
+          View Details
+        </Button>
+      </CardActions>
     </Card>
   );
 };
