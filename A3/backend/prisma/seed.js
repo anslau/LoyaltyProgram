@@ -327,10 +327,64 @@ const userData = [
         utorid: zeroPointsUser.utorid,
         type: 'redemption',
         amount: 999,
-        remark: 'Attempt to exploit system 🤓',
+        remark: 'Attempt to exploit system',
         createdBy: zeroPointsUser.utorid
     }
     });
+
+    // 30+ purchase transactions for pagination
+    for (let i = 1; i <= 25; i++) {
+        await prisma.transaction.create({
+        data: {
+            utorid: regularUser.utorid,
+            type: 'purchase',
+            spent: 5.00 + i, // varying amount
+            amount: pointsFromSpent(5.00 + i),
+            createdBy: cashierUser.utorid,
+            remark: `Purchase #${i} by testuser`,
+            promotionIds: []
+        }
+        });
+    }
+    
+    for (let i = 1; i <= 10; i++) {
+        await prisma.transaction.create({
+        data: {
+            utorid: eventGuestUser.utorid,
+            type: 'purchase',
+            spent: 3.00 + i,
+            amount: pointsFromSpent(3.00 + i),
+            createdBy: cashierUser2.utorid,
+            remark: `EventGuest purchase #${i}`,
+            promotionIds: []
+        }
+        });
+    }
+    
+    // Mark cashier2 as suspicious
+    await prisma.user.update({
+        where: { id: cashierUser2.id },
+        data: { suspicious: true }
+    });
+    
+    // Suspicious cashier's transaction (should be unverified initially)
+    const flaggedTx = await prisma.transaction.create({
+        data: {
+        utorid: regularUser.utorid,
+        type: 'purchase',
+        spent: 15.00,
+        amount: pointsFromSpent(15.00),
+        createdBy: cashierUser2.utorid,
+        remark: 'Suspicious transaction'
+        }
+    });
+    
+    // Manager flags this transaction explicitly in the system
+    await prisma.transaction.update({
+        where: { id: flaggedTx.id },
+        data: { suspicious: true }
+    });
+    
 
 }
 
