@@ -186,7 +186,7 @@ const CreatePromotion = () => {
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>
       <Paper elevation={3} sx={{ borderRadius: 2, overflow: 'hidden' }}>
-        <Box sx={{ bgcolor: 'primary.main', color: 'primary.contrastText', p: 3 }}>
+        <Box sx={{ bgcolor: '#ebc2c2', color: 'rgb(101, 82, 82)', p: 3 }}>
           <Typography variant="h4" component="h1">
             Create New Promotion
           </Typography>
@@ -216,7 +216,16 @@ const CreatePromotion = () => {
                         error={!!formErrors.name}
                         helperText={formErrors.name}
                         variant="outlined"
-                        sx={{ mb: 1 }}
+                        sx={{ mb: 1,
+                          '& .MuiOutlinedInput-root.Mui-focused': {
+                            '& fieldset': {
+                              borderColor: 'rgb(101, 82, 82)', 
+                            },
+                          },
+                          '& label.Mui-focused': {
+                            color: 'rgb(101, 82, 82)', 
+                          }
+                        }}
                       />
                     </Grid>
                     
@@ -234,6 +243,16 @@ const CreatePromotion = () => {
                         error={!!formErrors.description}
                         helperText={formErrors.description}
                         variant="outlined"
+                        sx={{ 
+                          '& .MuiOutlinedInput-root.Mui-focused': {
+                            '& fieldset': {
+                              borderColor: 'rgb(101, 82, 82)', 
+                            },
+                          },
+                          '& label.Mui-focused': {
+                            color: 'rgb(101, 82, 82)', 
+                          }
+                        }}
                       />
                     </Grid>
                   </Grid>
@@ -247,7 +266,18 @@ const CreatePromotion = () => {
                   </Typography>
                   <Grid container spacing={3}>
                     <Grid item xs={12} sm={6}>
-                      <FormControl fullWidth required error={!!formErrors.type}>
+                      <FormControl fullWidth required error={!!formErrors.type} 
+                      sx={{ 
+                        '& .MuiOutlinedInput-root.Mui-focused': {
+                          '& fieldset': {
+                            borderColor: 'rgb(101, 82, 82)', 
+                          },
+                        },
+                        '& label.Mui-focused': {
+                          color: 'rgb(101, 82, 82)', 
+                        }
+                      }}
+                      >
                         <InputLabel id="type-label">Promotion Type</InputLabel>
                         <Select
                           labelId="type-label"
@@ -277,6 +307,16 @@ const CreatePromotion = () => {
                         helperText={formErrors.points}
                         InputProps={{ inputProps: { min: 0 } }}
                         variant="outlined"
+                        sx={{ 
+                          '& .MuiOutlinedInput-root.Mui-focused': {
+                            '& fieldset': {
+                              borderColor: 'rgb(101, 82, 82)', 
+                            },
+                          },
+                          '& label.Mui-focused': {
+                            color: 'rgb(101, 82, 82)', 
+                          }
+                        }}
                       />
                     </Grid>
                   </Grid>
@@ -303,6 +343,16 @@ const CreatePromotion = () => {
                         helperText={formErrors.startTime}
                         InputLabelProps={{ shrink: true }}
                         variant="outlined"
+                        sx={{ 
+                          '& .MuiOutlinedInput-root.Mui-focused': {
+                            '& fieldset': {
+                              borderColor: 'rgb(101, 82, 82)', 
+                            },
+                          },
+                          '& label.Mui-focused': {
+                            color: 'rgb(101, 82, 82)', 
+                          }
+                        }}
                       />
                     </Grid>
                     
@@ -320,6 +370,16 @@ const CreatePromotion = () => {
                         helperText={formErrors.endTime}
                         InputLabelProps={{ shrink: true }}
                         variant="outlined"
+                        sx={{ 
+                          '& .MuiOutlinedInput-root.Mui-focused': {
+                            '& fieldset': {
+                              borderColor: 'rgb(101, 82, 82)', 
+                            },
+                          },
+                          '& label.Mui-focused': {
+                            color: 'rgb(101, 82, 82)', 
+                          }
+                        }}
                       />
                     </Grid>
                   </Grid>
@@ -345,6 +405,16 @@ const CreatePromotion = () => {
                         helperText={formErrors.minSpending || "Leave empty if not applicable"}
                         InputProps={{ inputProps: { min: 0, step: 0.01 } }}
                         variant="outlined"
+                        sx={{ 
+                          '& .MuiOutlinedInput-root.Mui-focused': {
+                            '& fieldset': {
+                              borderColor: 'rgb(101, 82, 82)', 
+                            },
+                          },
+                          '& label.Mui-focused': {
+                            color: 'rgb(101, 82, 82)', 
+                          }
+                        }}
                       />
                     </Grid>
                     
@@ -361,6 +431,16 @@ const CreatePromotion = () => {
                         helperText={formErrors.rate || "Leave empty if not applicable"}
                         InputProps={{ inputProps: { min: 0, step: 0.01 } }}
                         variant="outlined"
+                        sx={{ 
+                          '& .MuiOutlinedInput-root.Mui-focused': {
+                            '& fieldset': {
+                              borderColor: 'rgb(101, 82, 82)', 
+                            },
+                          },
+                          '& label.Mui-focused': {
+                            color: 'rgb(101, 82, 82)', 
+                          }
+                        }}
                       />
                     </Grid>
                   </Grid>
@@ -373,7 +453,7 @@ const CreatePromotion = () => {
                   onClick={() => navigate('/perks')}
                   disabled={loading}
                   size="large"
-                  sx={{ px: 4 }}
+                  sx={{ px: 4, color: 'rgb(101, 82, 82)', borderColor: 'rgb(101, 82, 82)' }}
                 >
                   Cancel
                 </Button>
@@ -383,7 +463,7 @@ const CreatePromotion = () => {
                   color="primary"
                   disabled={loading || success}
                   size="large"
-                  sx={{ px: 4 }}
+                  sx={{ px: 4, color: 'rgb(101, 82, 82)', backgroundColor: '#ebc2c2' }}
                 >
                   {loading ? 'Creating...' : 'Create Promotion'}
                 </Button>

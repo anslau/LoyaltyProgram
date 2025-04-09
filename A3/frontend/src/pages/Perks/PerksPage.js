@@ -79,7 +79,7 @@ const PerksPage = () => {
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
               <Button 
                 variant="contained"
-                sx={{ color: 'rgb(101, 82, 82)', backgroundColor: '#ebc2c2', fontWeight: 'bold' }}
+                sx={{ color: 'rgb(101, 82, 82)', backgroundColor: '#ebc2c2' }}
                 component={Link} 
                 to="/promotions/create"
               >
@@ -93,7 +93,7 @@ const PerksPage = () => {
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
               <Button 
                 variant="contained" 
-                sx={{ color: 'rgb(101, 82, 82)', backgroundColor: '#ebc2c2', fontWeight: 'bold' }}
+                sx={{ color: 'rgb(101, 82, 82)', backgroundColor: '#ebc2c2' }}
                 component={Link} 
                 to="/events/create"
               >
