@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import {
     Box, Typography, Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper, Button, TextField, MenuItem, Stack, Chip,
-    IconButton, CircularProgress, Pagination
+    IconButton, CircularProgress, Pagination, Alert
 } from "@mui/material";
 import { FilterList as FilterListIcon } from '@mui/icons-material';
 
@@ -47,6 +47,8 @@ const TransactionTable = ({
         promotionId: '',
         amount: '',
         operator: '',
+        page: 1,
+        limit: 10
     });
 
     const [transactions, setTransactions] = useState([]);
@@ -56,8 +58,14 @@ const TransactionTable = ({
     const [showFilters, setShowFilters] = useState(false);
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(10);
+    const [clearFilter, setClearFilter] = useState(false);
 
     const fetchTransactions = async () => {
+        if (!validateSearch(filters)) {
+            return;
+        }
+
+
         setLoading(true);
         setError(null);
         try {
@@ -77,18 +85,31 @@ const TransactionTable = ({
 
     const handleSearch = () => {
         setPage(1);
-        setTimeout(() => {
-            fetchTransactions();
-        }, 500);
+        setFilters({ ...filters, page: 1 });
+        fetchTransactions();
+    };
+
+    const validateSearch = (filters) => {
+        if (filters.amount !== '' && filters.operator === '') {
+            alert('Please select an operator for the amount filter.');
+            return false;
+        }
+        if (filters.operator !== '' && filters.amount === '') {
+            alert('Please select an amount for the operator.');
+            return false;
+        }
+        return true;
     };
 
     const handlePageChange = (event, value) => {
         setPage(value);
+        setFilters({ ...filters, page: value });
     };
 
     const handleLimitChange = (event) => {
         setLimit(parseInt(event.target.value, 10));
         setPage(1);
+        setFilters({ ...filters, page: 1, limit: parseInt(event.target.value, 10) });
     };
 
     const toggleFilters = () => {
@@ -96,14 +117,23 @@ const TransactionTable = ({
     };
 
     const clearFilters = () => {
+        setPage(1);
         setFilters({
             type: '',
             relatedId: '',
             promotionId: '',
             amount: '',
             operator: '',
+            page: 1,
+            limit: limit
         });
+
+        setClearFilter(true);
     };
+
+    useEffect(() => {
+        fetchTransactions();
+    }, [clearFilter]);
 
     const defaultColumns = [
         { key: 'id', label: 'Transaction ID' },
@@ -128,7 +158,7 @@ const TransactionTable = ({
     ];
 
     const mergedColumns = [...defaultColumns, ...columns];
-    const paginatedTransactions = transactions.slice((page - 1) * limit, page * limit);
+    // const paginatedTransactions = transactions.slice((page - 1) * limit, page * limit);
 
     return (
         <div className="transactions-container">
@@ -227,7 +257,7 @@ const TransactionTable = ({
                         ) : transactions.length === 0 ? (
                             <TableRow><TableCell colSpan={mergedColumns.length} align="center">No transactions found</TableCell></TableRow>
                         ) : (
-                            paginatedTransactions.map((t) => (
+                            transactions.map((t) => (
                                 <TableRow key={t.id} hover onClick={() => onRowClick?.(t)}>
                                     {mergedColumns.map(col => (
                                         <TableCell key={col.key}>

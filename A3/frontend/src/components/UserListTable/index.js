@@ -36,7 +36,9 @@ const UserListTable = ({
         name: '',
         role: '',
         verified: '',
-        activated: ''
+        activated: '',
+        page: 1,
+        limit: 10
     });
 
     const [users, setUsers] = useState([]);
@@ -46,6 +48,7 @@ const UserListTable = ({
     const [showFilters, setShowFilters] = useState(false);
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(10);
+    const [clearFilter, setClearFilter] = useState(false);
 
     const fetchUsers = async () => {
         setLoading(true);
@@ -75,11 +78,14 @@ const UserListTable = ({
 
     const handlePageChange = (event, value) => {
         setPage(value);
+        setFilters({ ...filters, page: value });
     };
 
     const handleLimitChange = (event) => {
         setLimit(parseInt(event.target.value, 10));
         setPage(1);
+        setFilters({ ...filters, page: 1, limit: parseInt(event.target.value, 10) });
+
     };
 
     const toggleFilters = () => {
@@ -87,13 +93,19 @@ const UserListTable = ({
     };
 
     const clearFilters = () => {
+        setPage(1);
         setFilters({
             name: '',
             role: '',
             verified: '',
             activated: ''
         });
+        setClearFilter(true);
     };
+
+    useEffect(() => {
+        fetchUsers();
+    }, [clearFilter]);
 
     const defaultColumns = [
         { key: 'id', label: 'User ID' },
@@ -121,7 +133,6 @@ const UserListTable = ({
     ];
 
     const mergedColumns = [...defaultColumns, ...columns];
-    const paginatedUsers = users.slice((page - 1) * limit, page * limit);
 
     return (
         <div className="users-container">
@@ -152,8 +163,8 @@ const UserListTable = ({
                         </TextField>
 
                         <TextField
-                            select label="Role" value={filters.type}
-                            onChange={(e) => setFilters({ ...filters, type: e.target.value })}
+                            select label="Role" value={filters.role}
+                            onChange={(e) => setFilters({ ...filters, role: e.target.value })}
                             helperText="Select user role"
                         >
                             {userRoles.map((option) => (
@@ -221,7 +232,7 @@ const UserListTable = ({
                         ) : users.length === 0 ? (
                             <TableRow><TableCell colSpan={mergedColumns.length} align="center">No users found</TableCell></TableRow>
                         ) : (
-                            paginatedUsers.map((t) => (
+                            users.map((t) => (
                                 <TableRow key={t.id} hover onClick={() => onRowClick?.(t)}>
                                     {mergedColumns.map(col => (
                                         <TableCell key={col.key}>
