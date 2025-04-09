@@ -6,6 +6,7 @@ import Login from './pages/Login/Login';
 import Dashboard from './pages/Dashboard'; 
 import Transactions from './pages/Transactions';
 import ProtectedRoute from './route/ProtectedRoute';
+
 import OrganizerEvents from './pages/Organizer/OrganizerEvents';
 import EventManage     from './pages/Organizer/EventManage';
 
