@@ -31,9 +31,9 @@ function App() {
                 </Route>
 
                 {/* Organizer/Manager event management page */}
-                <Route element={<ProtectedRoute />}>
-                <Route path="/organizer/events" element={<OrganizerEvents />} />
-                <Route path="/organizer/events/:eventId" element={<EventManage />} />
+                    <Route element={<ProtectedRoute />}>
+                    <Route path="/organizer/events" element={<OrganizerEvents />} />
+                    <Route path="/organizer/events/:eventId" element={<EventManage />} />
                 </Route>
                 
                 {/* Fallback for unmatched routes */}
