@@ -243,6 +243,95 @@ const userData = [
   });
 
   console.log('Database seeded successfully!');
+
+    // Transactions
+
+    // Helper: Convert dollars to points (4 pts per $1)
+    const pointsFromSpent = (spent) => Math.round(spent / 0.25);
+
+    // Purchase (testuser earns 80 points)
+    await prisma.transaction.create({
+    data: {
+        utorid: regularUser.utorid,
+        type: 'purchase',
+        spent: 20.00,
+        amount: pointsFromSpent(20.00), // 80 pts
+        createdBy: cashierUser.utorid,
+        remark: 'Test purchase by testuser',
+        promotionIds: []
+    }
+    });
+
+    // Redemption (testuser redeems 50 pts, needs cashier to process later)
+    const redemption = await prisma.transaction.create({
+    data: {
+        utorid: regularUser.utorid,
+        type: 'redemption',
+        amount: 50,
+        remark: 'Redeeming for coffee',
+        createdBy: regularUser.utorid
+    }
+    });
+
+    // Adjustment (manager fixes testuser’s balance by removing 30 pts)
+    await prisma.transaction.create({
+    data: {
+        utorid: regularUser.utorid,
+        type: 'adjustment',
+        amount: -30,
+        relatedId: redemption.id,
+        remark: 'Incorrect redemption amount',
+        createdBy: managerUser.utorid
+    }
+    });
+
+    // Transfer (testuser sends 25 pts to eventGuestUser)
+    await prisma.transaction.create({
+    data: {
+        utorid: regularUser.utorid,
+        type: 'transfer',
+        amount: 25,
+        relatedId: eventGuestUser.id, // receiver
+        remark: 'Thanks for helping!',
+        createdBy: regularUser.utorid
+    }
+    });
+
+    // Mirror: receiving transfer for eventGuestUser
+    await prisma.transaction.create({
+    data: {
+        utorid: eventGuestUser.utorid,
+        type: 'transfer',
+        amount: 25,
+        relatedId: regularUser.id, // sender
+        remark: 'Received from testuser',
+        createdBy: regularUser.utorid
+    }
+    });
+
+    // Event reward: manager gives 100 pts to testuser for attending event1
+    await prisma.transaction.create({
+    data: {
+        utorid: regularUser.utorid,
+        type: 'event',
+        amount: 100,
+        relatedId: event1.id,
+        remark: 'Participation points - CS Career Fair',
+        createdBy: managerUser.utorid
+    }
+    });
+
+    // Redemption that SHOULD fail if processed (user has 0 points)
+    await prisma.transaction.create({
+    data: {
+        utorid: zeroPointsUser.utorid,
+        type: 'redemption',
+        amount: 999,
+        remark: 'Attempt to exploit system 🤓',
+        createdBy: zeroPointsUser.utorid
+    }
+    });
+
 }
 
 main()
@@ -254,22 +343,3 @@ main()
     await prisma.$disconnect();
   });
 
-  /*
-  Users:
-  A regular user (testuser)
-  A cashier (cashier1)
-  A manager (manager1)
-  A superuser (superuser)
-
-  Promotions:
-  An automatic promotion that doubles points
-  A one-time promotion that gives a welcome bonus
-
-  Events:
-  A CS Career Fair starting tomorrow
-  A Coding Competition starting next week
-
-  All users are assigned both promotions
-  The manager is set as the organizer for both events
-  The regular user is registered as a guest for the first event.
-  */
