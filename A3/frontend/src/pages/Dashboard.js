@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import LogoutButton from '../components/auth/LogoutButton';
 import '../styles/auth.css';
 
@@ -8,7 +9,12 @@ const Dashboard = () => {
             <nav className="dashboard-nav">
                 <div className="nav-content">
                     <h1 className="dashboard-title">Dashboard</h1>
-                    <LogoutButton />
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <Link to="/perks" style={{ marginRight: '20px', textDecoration: 'none', color: '#1976d2', fontWeight: 'bold' }}>
+                            What's New
+                        </Link>
+                        <LogoutButton />
+                    </div>
                 </div>
             </nav>
             <div className="dashboard-main">

@@ -13,9 +13,9 @@ const ProtectedRoute = ({ children, roles = [] }) => {
     }
 
     // user authentication
-    if (!user) {
-        return <Navigate to="/login" />;
-    }
+    // if (!user) {
+    //     return <Navigate to="/login" />;
+    // }
     
     // role-based authorization
     // if (roles.length > 0 && !roles.includes(user.role)) {
@@ -27,12 +27,12 @@ const ProtectedRoute = ({ children, roles = [] }) => {
     //     <Route path="/admin" element={<AdminDashboard />} />
     // </Route>
 
-    // If this component is used as a wrapper (with children)
+    // if this component is used as a wrapper (with children)
     if (children) {
         return children;
     }
 
-    // If this component is used as an outlet wrapper
+    // if this component is used as an outlet wrapper
     return <Outlet />;
 };
 

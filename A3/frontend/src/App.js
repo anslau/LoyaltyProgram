@@ -5,43 +5,42 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login/Login'; 
 import Dashboard from './pages/Dashboard'; 
 import Transactions from './pages/Transactions';
+import PerksPage from './pages/Perks/PerksPage';
+import EventDetail from './pages/Perks/Events/EventDetail';
 import ProtectedRoute from './route/ProtectedRoute';
-
 import OrganizerEvents from './pages/Organizer/OrganizerEvents';
 import EventManage     from './pages/Organizer/EventManage';
 
-function App() {
-    return (
-      <BrowserRouter>
-        <Routes>
-          {/* public */}
-          <Route path="/login" element={<Login />} />
-  
-          {/* protected */}
-          <Route
-            path="/dashboard"
-            element={<ProtectedRoute><Dashboard /></ProtectedRoute>}
-          />
-          <Route
-            path="/transactions"
-            element={<ProtectedRoute><Transactions /></ProtectedRoute>}
-          />
-  
-          {/* organizer */}
-          <Route
-            path="/organizer/events"
-            element={<ProtectedRoute><OrganizerEvents /></ProtectedRoute>}
-          />
-          <Route
-            path="/organizer/events/:id"
-            element={<ProtectedRoute><EventManage /></ProtectedRoute>}
-          />
-  
-          {/* default redirect */}
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
-        </Routes>
-      </BrowserRouter>
-    );
+function App() { 
+    return ( 
+        <BrowserRouter>
+            <Routes> 
+                {/* Redirect to dashboard if authenticated, otherwise to login */} 
+                <Route path="/" element={
+                    <ProtectedRoute>
+                        <Navigate to="/dashboard" />
+                    </ProtectedRoute>
+                }/>
+                <Route path="/login" element={<Login />} /> 
+
+                <Route element={<ProtectedRoute />} >
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/transactions" element={<Transactions />} />
+                    <Route path="/perks" element={<PerksPage />} />
+                    <Route path="/events/:eventId" element={<EventDetail />} />
+                </Route>
+
+                {/* Organizer/Manager event management page */}
+                    <Route element={<ProtectedRoute />}>
+                    <Route path="/organizer/events" element={<OrganizerEvents />} />
+                    <Route path="/organizer/events/:eventId" element={<EventManage />} />
+                </Route>
+                
+                {/* Fallback for unmatched routes */}
+                <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+        </BrowserRouter>
+    ); 
 }
   
 
@@ -49,8 +48,3 @@ function App() {
 // when navigating between pages and allows back/forward navigation.
 
 export default App;
-
-
-
-
-
