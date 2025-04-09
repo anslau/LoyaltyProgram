@@ -29,6 +29,12 @@ function App() {
                     <Route path="/perks" element={<PerksPage />} />
                     <Route path="/events/:eventId" element={<EventDetail />} />
                 </Route>
+
+                {/* Organizer/Manager event management page */}
+                <Route element={<ProtectedRoute />}>
+                <Route path="/organizer/events" element={<OrganizerEvents />} />
+                <Route path="/organizer/events/:eventId" element={<EventManage />} />
+                </Route>
                 
                 {/* Fallback for unmatched routes */}
                 <Route path="*" element={<Navigate to="/" />} />
