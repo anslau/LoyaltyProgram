@@ -202,14 +202,23 @@ const EventsList = () => {
           <Typography variant="h5">Events</Typography>
           <Box sx={{ display: 'flex', gap: 2 }}>
             <IconButton 
-              color={showFilters ? 'primary' : 'default'} 
+              color={showFilters ? 'rgb(101, 82, 82)' : 'default'} 
               onClick={toggleFilters}
               aria-label="toggle filters"
             >
               <FilterListIcon />
             </IconButton>
             
-            <FormControl variant="outlined" size="small" sx={{ minWidth: 180 }}>
+            <FormControl variant="outlined" size="small" sx={{ minWidth: 180, '& .MuiOutlinedInput-root.Mui-focused': {
+                    '& fieldset': {
+                      borderColor: 'rgb(101, 82, 82)', 
+                    },
+                  },
+                  '& label.Mui-focused': {
+                    color: 'rgb(101, 82, 82)', 
+                  } 
+                }}
+            >
               <InputLabel id="event-status-select-label">Status</InputLabel>
               <Select
                 labelId="event-status-select-label"
@@ -217,11 +226,41 @@ const EventsList = () => {
                 value={filters.started === 'true' ? 'active' : filters.started === 'false' ? 'upcoming' : filters.ended === 'true' ? 'ended' : 'all'}
                 onChange={handleStatusChange}
                 label="Status"
+                sx={{ 
+                  '& .MuiOutlinedInput-root.Mui-focused': {
+                    '& fieldset': {
+                      borderColor: 'rgb(101, 82, 82)', 
+                    },
+                  },
+                  '& label.Mui-focused': {
+                    color: 'rgb(101, 82, 82)', 
+                  }
+                }}
               >
-                <MenuItem value="all">All Events</MenuItem>
-                <MenuItem value="active">Active</MenuItem>
-                <MenuItem value="upcoming">Upcoming</MenuItem>
-                <MenuItem value="ended">Ended</MenuItem>
+                <MenuItem value="all"
+                sx={{
+                  '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                  '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                }}
+                >All Events</MenuItem>
+                <MenuItem value="active"
+                sx={{
+                  '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                  '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                }}
+                >Active</MenuItem>
+                <MenuItem value="upcoming"
+                sx={{
+                  '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                  '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                }}
+                >Upcoming</MenuItem>
+                <MenuItem value="ended"
+                sx={{
+                  '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                  '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                }}
+                >Ended</MenuItem>
               </Select>
             </FormControl>
           </Box>
@@ -247,6 +286,16 @@ const EventsList = () => {
                       </InputAdornment>
                     ),
                   }}
+                  sx={{ 
+                    '& .MuiOutlinedInput-root.Mui-focused': {
+                      '& fieldset': {
+                        borderColor: 'rgb(101, 82, 82)', 
+                      },
+                    },
+                    '& label.Mui-focused': {
+                      color: 'rgb(101, 82, 82)', 
+                    }
+                  }}
                 />
               </Grid>
               
@@ -259,11 +308,31 @@ const EventsList = () => {
                   size="small"
                   value={filters.location}
                   onChange={handleFilterChange}
+                  sx={{ 
+                    '& .MuiOutlinedInput-root.Mui-focused': {
+                      '& fieldset': {
+                        borderColor: 'rgb(101, 82, 82)', 
+                      },
+                    },
+                    '& label.Mui-focused': {
+                      color: 'rgb(101, 82, 82)', 
+                    }
+                  }}
                 />
               </Grid>
               
               <Grid item xs={12} md={4}>
-                <FormControl fullWidth size="small">
+                <FormControl fullWidth size="small" sx={{ 
+                    '& .MuiOutlinedInput-root.Mui-focused': {
+                      '& fieldset': {
+                        borderColor: 'rgb(101, 82, 82)', 
+                      },
+                    },
+                    '& label.Mui-focused': {
+                      color: 'rgb(101, 82, 82)', 
+                    }
+                  }}
+                >
                   <InputLabel id="event-status-filter-label">Event Status</InputLabel>
                   <Select
                     labelId="event-status-filter-label"
@@ -272,10 +341,30 @@ const EventsList = () => {
                     onChange={handleStatusChange}
                     label="Event Status"
                   >
-                    <MenuItem value="all">All Statuses</MenuItem>
-                    <MenuItem value="active">Active</MenuItem>
-                    <MenuItem value="upcoming">Upcoming</MenuItem>
-                    <MenuItem value="ended">Ended</MenuItem>
+                    <MenuItem value="all"
+                    sx={{
+                      '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                      '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                    }}
+                    >All Statuses</MenuItem>
+                    <MenuItem value="active"
+                    sx={{
+                      '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                      '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                    }}
+                    >Active</MenuItem>
+                    <MenuItem value="upcoming"
+                    sx={{
+                      '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                      '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                    }}
+                    >Upcoming</MenuItem>
+                    <MenuItem value="ended"
+                    sx={{
+                      '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                      '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                    }}
+                    >Ended</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
@@ -287,6 +376,11 @@ const EventsList = () => {
                       checked={filters.showFull === 'true'}
                       onChange={(e) => setFilters({...filters, showFull: e.target.checked ? 'true' : ''})}
                       name="showFull"
+                      sx={{
+                        '&.Mui-checked': {
+                          color: '#ebc2c2',
+                        }
+                      }}
                     />
                   }
                   label="Show Full Events"
@@ -300,6 +394,11 @@ const EventsList = () => {
                       checked={filters.published === 'true'}
                       onChange={(e) => setFilters({...filters, published: e.target.checked ? 'true' : 'false'})}
                       name="published"
+                      sx={{
+                        '&.Mui-checked': {
+                          color: '#ebc2c2',
+                        }
+                      }}
                     />
                   }
                   label="Published Events Only"
@@ -312,7 +411,7 @@ const EventsList = () => {
                   <Chip 
                     label="Start Time" 
                     variant={sortBy === 'startTime' ? 'filled' : 'outlined'}
-                    color={sortBy === 'startTime' ? 'primary' : 'default'}
+                    color={sortBy === 'startTime' ? 'rgb(101, 82, 82)' : 'default'}
                     onClick={() => handleSortChange('startTime')}
                     icon={sortBy === 'startTime' ? <SortIcon sx={{ transform: sortOrder === 'desc' ? 'rotate(180deg)' : 'none' }} /> : null}
                     sx={{ cursor: 'pointer' }}
@@ -320,7 +419,7 @@ const EventsList = () => {
                   <Chip 
                     label="Name" 
                     variant={sortBy === 'name' ? 'filled' : 'outlined'}
-                    color={sortBy === 'name' ? 'primary' : 'default'}
+                    color={sortBy === 'name' ? 'rgb(101, 82, 82)' : 'default'}
                     onClick={() => handleSortChange('name')}
                     icon={sortBy === 'name' ? <SortIcon sx={{ transform: sortOrder === 'desc' ? 'rotate(180deg)' : 'none' }} /> : null}
                     sx={{ cursor: 'pointer' }}
@@ -328,7 +427,7 @@ const EventsList = () => {
                   <Chip 
                     label="Location" 
                     variant={sortBy === 'location' ? 'filled' : 'outlined'}
-                    color={sortBy === 'location' ? 'primary' : 'default'}
+                    color={sortBy === 'location' ? 'rgb(101, 82, 82)' : 'default'}
                     onClick={() => handleSortChange('location')}
                     icon={sortBy === 'location' ? <SortIcon sx={{ transform: sortOrder === 'desc' ? 'rotate(180deg)' : 'none' }} /> : null}
                     sx={{ cursor: 'pointer' }}

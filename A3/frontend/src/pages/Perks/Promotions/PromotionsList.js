@@ -177,14 +177,23 @@ const PromotionsList = () => {
           <Typography variant="h5">Available Promotions</Typography>
           <Box sx={{ display: 'flex', gap: 2 }}>
             <IconButton 
-              color={showFilters ? 'primary' : 'default'} 
+              color={showFilters ? 'rgb(101, 82, 82)' : 'default'} 
               onClick={toggleFilters}
               aria-label="toggle filters"
             >
               <FilterListIcon />
             </IconButton>
             
-            <FormControl variant="outlined" size="small" sx={{ minWidth: 180 }}>
+            <FormControl variant="outlined" size="small" sx={{ minWidth: 180, '& .MuiOutlinedInput-root.Mui-focused': {
+                    '& fieldset': {
+                      borderColor: 'rgb(101, 82, 82)', 
+                    },
+                  },
+                  '& label.Mui-focused': {
+                    color: 'rgb(101, 82, 82)', 
+                  }
+                }}
+            >
               <InputLabel id="status-select-label">Status</InputLabel>
               <Select
                 labelId="status-select-label"
@@ -192,11 +201,41 @@ const PromotionsList = () => {
                 value={filters.started === 'true' ? 'active' : filters.started === 'false' ? 'upcoming' : filters.ended === 'true' ? 'ended' : 'all'}
                 onChange={handleStatusChange}
                 label="Status"
+                sx={{ 
+                  '& .MuiOutlinedInput-root.Mui-focused': {
+                    '& fieldset': {
+                      borderColor: 'rgb(101, 82, 82)', 
+                    },
+                  },
+                  '& label.Mui-focused': {
+                    color: 'rgb(101, 82, 82)', 
+                  }
+                }}
               >
-                <MenuItem value="all">All Promotions</MenuItem>
-                <MenuItem value="active">Active</MenuItem>
-                <MenuItem value="upcoming">Upcoming</MenuItem>
-                <MenuItem value="ended">Ended</MenuItem>
+                <MenuItem value="all"
+                sx={{
+                  '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                  '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                }}
+                >All Promotions</MenuItem>
+                <MenuItem value="active"
+                sx={{
+                  '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                  '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                }}
+                >Active</MenuItem>
+                <MenuItem value="upcoming"
+                sx={{
+                  '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                  '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                }}
+                >Upcoming</MenuItem>
+                <MenuItem value="ended"
+                sx={{
+                  '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                  '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                }}
+                >Ended</MenuItem>
               </Select>
             </FormControl>
           </Box>
@@ -222,11 +261,30 @@ const PromotionsList = () => {
                       </InputAdornment>
                     ),
                   }}
+                  sx={{ 
+                    '& .MuiOutlinedInput-root.Mui-focused': {
+                      '& fieldset': {
+                        borderColor: 'rgb(101, 82, 82)', 
+                      },
+                    },
+                    '& label.Mui-focused': {
+                      color: 'rgb(101, 82, 82)', 
+                    }
+                  }}
                 />
               </Grid>
               
               <Grid item xs={12} md={4}>
-                <FormControl fullWidth size="small">
+                <FormControl fullWidth size="small" sx={{ 
+                      '& .MuiOutlinedInput-root.Mui-focused': {
+                        '& fieldset': {
+                          borderColor: 'rgb(101, 82, 82)', 
+                        },
+                      },
+                      '& label.Mui-focused': {
+                        color: 'rgb(101, 82, 82)', 
+                      }
+                    }}>
                   <InputLabel id="type-select-label">Promotion Type</InputLabel>
                   <Select
                     labelId="type-select-label"
@@ -236,15 +294,39 @@ const PromotionsList = () => {
                     onChange={handleFilterChange}
                     label="Promotion Type"
                   >
-                    <MenuItem value="">All Types</MenuItem>
-                    <MenuItem value="automatic">Automatic</MenuItem>
-                    <MenuItem value="one-time">One-time</MenuItem>
+                    <MenuItem value=""
+                    sx={{
+                      '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                      '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                    }}
+                    >All Types</MenuItem>
+                    <MenuItem value="automatic"
+                    sx={{
+                      '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                      '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                    }}
+                    >Automatic</MenuItem>
+                    <MenuItem value="one-time"
+                    sx={{
+                      '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                      '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                    }}
+                    >One-time</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
               
               <Grid item xs={12} md={4}>
-                <FormControl fullWidth size="small">
+                <FormControl fullWidth size="small" sx={{ 
+                      '& .MuiOutlinedInput-root.Mui-focused': {
+                        '& fieldset': {
+                          borderColor: 'rgb(101, 82, 82)', 
+                        },
+                      },
+                      '& label.Mui-focused': {
+                        color: 'rgb(101, 82, 82)', 
+                      }
+                    }}>
                   <InputLabel id="status-filter-label">Promotion Status</InputLabel>
                   <Select
                     labelId="status-filter-label"
@@ -253,10 +335,30 @@ const PromotionsList = () => {
                     onChange={handleStatusChange}
                     label="Promotion Status"
                   >
-                    <MenuItem value="all">All Statuses</MenuItem>
-                    <MenuItem value="active">Active</MenuItem>
-                    <MenuItem value="upcoming">Upcoming</MenuItem>
-                    <MenuItem value="ended">Ended</MenuItem>
+                    <MenuItem value="all"
+                    sx={{
+                      '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                      '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                    }}
+                    >All Statuses</MenuItem>
+                    <MenuItem value="active"
+                    sx={{
+                      '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                      '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                    }}
+                    >Active</MenuItem>
+                    <MenuItem value="upcoming"
+                    sx={{
+                      '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                      '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                    }}
+                    >Upcoming</MenuItem>
+                    <MenuItem value="ended"
+                    sx={{
+                      '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                      '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                    }}
+                    >Ended</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
@@ -267,8 +369,7 @@ const PromotionsList = () => {
                 label="Clear Filters" 
                 variant="outlined" 
                 onClick={clearFilters} 
-                sx={{ cursor: 'pointer' }}
-              />
+                sx={{ cursor: 'pointer' }}/>
             </Box>
           </Paper>
         )}
