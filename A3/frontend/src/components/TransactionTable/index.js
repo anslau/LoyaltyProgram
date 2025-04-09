@@ -65,7 +65,6 @@ const TransactionTable = ({
             return;
         }
 
-
         setLoading(true);
         setError(null);
         try {
