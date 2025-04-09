@@ -17,7 +17,7 @@ export default function Login() {
           await login({utorid, password});
 
           // not implemented yet
-          //navigate("/dashboard");
+          navigate("/dashboard");
 
         }catch(e){
           setError(e.message || "Invalid utorid or password");
