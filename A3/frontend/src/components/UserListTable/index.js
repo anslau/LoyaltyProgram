@@ -63,6 +63,7 @@ const UserListTable = ({
 
     useEffect(() => {
         fetchUsers();
+        setPage(1);
     }, [page, limit]);
 
     const handleSearch = () => {
@@ -89,8 +90,8 @@ const UserListTable = ({
         setFilters({
             name: '',
             role: '',
-            verified: false,
-            activated: false
+            verified: '',
+            activated: ''
         });
     };
 
@@ -115,8 +116,7 @@ const UserListTable = ({
         { key: 'points', label: 'Points' },
         { key: 'createdAt', label: 'Created At' },
         { key: 'lastLogin', label: 'Last Login', render: (value) => value || 'Never' },
-        { key: 'verified', label: 'Verified', render: (value) => value || 'No' },
-        { key: 'activated', label: 'Activated', render: (value) => value || 'No' },
+        { key: 'verified', label: 'Verified', render: (value) => value === true ? 'True' : 'False' },
         { key: 'avatarUrl', label: 'Avatar', render: (value) => value || 'None' }
     ];
 
@@ -145,15 +145,15 @@ const UserListTable = ({
                         sx={{ '& .MuiTextField-root': { m: 1, width: '25ch' }, mt: 2 }}
                     >
                         <TextField
-                            label="Name" value={filters.type}
-                            onChange={(e) => setFilters({ ...filters, type: e.target.value })}
+                            label="Name" value={filters.name}
+                            onChange={(e) => setFilters({ ...filters, name: e.target.value })}
                             helperText="Enter name or utorid"
                         >
                         </TextField>
 
                         <TextField
-                            select label="Role" value={filters.relatedId}
-                            onChange={(e) => setFilters({ ...filters, relatedId: e.target.value })}
+                            select label="Role" value={filters.type}
+                            onChange={(e) => setFilters({ ...filters, type: e.target.value })}
                             helperText="Select user role"
                         >
                             {userRoles.map((option) => (
@@ -163,7 +163,7 @@ const UserListTable = ({
 
                         <FormGroup>
                             <FormControlLabel control={
-                                <Checkbox checked={filters.verified || false}
+                                <Checkbox checked={filters.verified }
                                     onChange={(e) => {
                                         setFilters({ ...filters, verified: e.target.checked });
                                     }}
@@ -175,7 +175,7 @@ const UserListTable = ({
 
                         <FormGroup>
                             <FormControlLabel control={
-                                <Checkbox checked={filters.activated || false}
+                                <Checkbox checked={filters.activated }
                                     onChange={(e) => {
                                         setFilters({ ...filters, activated: e.target.checked });
                                     }}

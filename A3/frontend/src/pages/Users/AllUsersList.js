@@ -13,6 +13,9 @@ const AllUsersList = () => {
     const { token } = useContext(AuthContext);
     
     const fetchUsers = async (filters) => {
+        // reset the filters
+        window.history.pushState(null, '', `/users?`); 
+        
         // build the query string from filters
         const queryString = {};
         Object.keys(filters).forEach(key => {

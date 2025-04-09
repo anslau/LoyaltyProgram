@@ -13,6 +13,9 @@ const AllTransactionsList = () => {
     const { token } = useContext(AuthContext);
     
     const fetchTransactions = async (filters) => {
+        // reset the filters
+        window.history.pushState(null, '', `/transactions?`); 
+        
         // build the query string from filters
         const queryString = {};
         Object.keys(filters).forEach(key => {
