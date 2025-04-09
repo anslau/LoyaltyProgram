@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useParams } from 'reactrouterdom';
+import { useParams } from 'react-router-dom';
 import AuthContext from '../../context/AuthContext';
 import {
   Box, Typography, TextField, Button, Alert,
   Accordion, AccordionSummary, AccordionDetails, Divider
 } from '@mui/material';
-import ExpandMoreIcon from '@mui/iconsmaterial/ExpandMore';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const EventManage = () => {
   const { token } = useContext(AuthContext);
