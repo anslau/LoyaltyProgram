@@ -1,7 +1,7 @@
-import logo from './assets/logo.svg';
 import './styles/App.css';
 import React from 'react'; 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'; 
+
 import Login from './pages/Login/Login'; 
 import Dashboard from './pages/Dashboard'; 
 import PastTransactions from './pages/Transactions/PastTransactions';
@@ -14,6 +14,8 @@ import PromotionDetail from './pages/Perks/Promotions/PromotionDetail';
 import CreateEvent from './pages/Perks/Events/CreateEvent';
 import ProtectedRoute from './route/ProtectedRoute';
 import AllUsersList from './pages/Users/AllUsersList';
+import OrganizerEvents from './pages/Organizer/OrganizerEvents';
+import EventManage     from './pages/Organizer/EventManage';
 
 function App() { 
     return ( 
@@ -39,6 +41,12 @@ function App() {
                     <Route path="/transactions/:transactionId" element={<TransactionDetail />} />
                     <Route path="/users" element={<AllUsersList />} />
                 </Route>
+
+                {/* Organizer/Manager event management page */}
+                    <Route element={<ProtectedRoute />}>
+                    <Route path="/organizer/events" element={<OrganizerEvents />} />
+                    <Route path="/organizer/events/:eventId" element={<EventManage />} />
+                </Route>
                 
                 {/* Fallback for unmatched routes */}
                 <Route path="*" element={<Navigate to="/" />} />
@@ -46,6 +54,7 @@ function App() {
         </BrowserRouter>
     ); 
 }
+  
 
 // setup uses react-router-dom to change the browser URL 
 // when navigating between pages and allows back/forward navigation.

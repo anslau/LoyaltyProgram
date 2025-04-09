@@ -177,7 +177,7 @@ const CreateEvent = () => {
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>
       <Paper elevation={3} sx={{ borderRadius: 2, overflow: 'hidden' }}>
-        <Box sx={{ bgcolor: 'primary.main', color: 'primary.contrastText', p: 3 }}>
+        <Box sx={{ bgcolor: '#ebc2c2', color: 'rgb(101, 82, 82)', p: 3 }}>
           <Typography variant="h4" component="h1">
             Create New Event
           </Typography>
@@ -207,7 +207,16 @@ const CreateEvent = () => {
                         error={!!formErrors.name}
                         helperText={formErrors.name}
                         variant="outlined"
-                        sx={{ mb: 1 }}
+                        sx={{ mb: 1,
+                          '& .MuiOutlinedInput-root.Mui-focused': {
+                            '& fieldset': {
+                              borderColor: 'rgb(101, 82, 82)', 
+                            },
+                          },
+                          '& label.Mui-focused': {
+                            color: 'rgb(101, 82, 82)', 
+                          }
+                        }}
                       />
                     </Grid>
                     
@@ -225,6 +234,16 @@ const CreateEvent = () => {
                         error={!!formErrors.description}
                         helperText={formErrors.description}
                         variant="outlined"
+                        sx={{ 
+                          '& .MuiOutlinedInput-root.Mui-focused': {
+                            '& fieldset': {
+                              borderColor: 'rgb(101, 82, 82)', 
+                            },
+                          },
+                          '& label.Mui-focused': {
+                            color: 'rgb(101, 82, 82)', 
+                          }
+                        }}
                       />
                     </Grid>
                     
@@ -240,6 +259,16 @@ const CreateEvent = () => {
                         error={!!formErrors.location}
                         helperText={formErrors.location}
                         variant="outlined"
+                        sx={{ 
+                          '& .MuiOutlinedInput-root.Mui-focused': {
+                            '& fieldset': {
+                              borderColor: 'rgb(101, 82, 82)', 
+                            },
+                          },
+                          '& label.Mui-focused': {
+                            color: 'rgb(101, 82, 82)', 
+                          }
+                        }}
                       />
                     </Grid>
                   </Grid>
@@ -265,6 +294,16 @@ const CreateEvent = () => {
                         helperText={formErrors.capacity || "Leave empty for unlimited capacity"}
                         InputProps={{ inputProps: { min: 0 } }}
                         variant="outlined"
+                        sx={{ 
+                          '& .MuiOutlinedInput-root.Mui-focused': {
+                            '& fieldset': {
+                              borderColor: 'rgb(101, 82, 82)', 
+                            },
+                          },
+                          '& label.Mui-focused': {
+                            color: 'rgb(101, 82, 82)', 
+                          }
+                        }}
                       />
                     </Grid>
                     
@@ -282,6 +321,16 @@ const CreateEvent = () => {
                         helperText={formErrors.points || "Points awarded to attendees"}
                         InputProps={{ inputProps: { min: 0 } }}
                         variant="outlined"
+                        sx={{ 
+                          '& .MuiOutlinedInput-root.Mui-focused': {
+                            '& fieldset': {
+                              borderColor: 'rgb(101, 82, 82)', 
+                            },
+                          },
+                          '& label.Mui-focused': {
+                            color: 'rgb(101, 82, 82)', 
+                          }
+                        }}
                       />
                     </Grid>
                   </Grid>
@@ -308,6 +357,16 @@ const CreateEvent = () => {
                         helperText={formErrors.startTime}
                         InputLabelProps={{ shrink: true }}
                         variant="outlined"
+                        sx={{ 
+                          '& .MuiOutlinedInput-root.Mui-focused': {
+                            '& fieldset': {
+                              borderColor: 'rgb(101, 82, 82)', 
+                            },
+                          },
+                          '& label.Mui-focused': {
+                            color: 'rgb(101, 82, 82)', 
+                          }
+                        }}
                       />
                     </Grid>
                     
@@ -325,6 +384,16 @@ const CreateEvent = () => {
                         helperText={formErrors.endTime}
                         InputLabelProps={{ shrink: true }}
                         variant="outlined"
+                        sx={{ 
+                          '& .MuiOutlinedInput-root.Mui-focused': {
+                            '& fieldset': {
+                              borderColor: 'rgb(101, 82, 82)', 
+                            },
+                          },
+                          '& label.Mui-focused': {
+                            color: 'rgb(101, 82, 82)', 
+                          }
+                        }}
                       />
                     </Grid>
                   </Grid>
@@ -342,7 +411,7 @@ const CreateEvent = () => {
                         checked={formData.published}
                         onChange={handleChange}
                         name="published"
-                        color="primary"
+                        color="#ebc2c2"
                       />
                     }
                     label={formData.published ? "Published (visible to users)" : "Draft (not visible to users)"}
@@ -356,7 +425,7 @@ const CreateEvent = () => {
                   onClick={() => navigate('/perks')}
                   disabled={loading}
                   size="large"
-                  sx={{ px: 4 }}
+                  sx={{ px: 4, color: 'rgb(101, 82, 82)', borderColor: 'rgb(101, 82, 82)' }}
                 >
                   Cancel
                 </Button>
@@ -366,7 +435,7 @@ const CreateEvent = () => {
                   color="primary"
                   disabled={loading || success}
                   size="large"
-                  sx={{ px: 4 }}
+                  sx={{ px: 4, color: 'rgb(101, 82, 82)', backgroundColor: '#ebc2c2' }}
                 >
                   {loading ? 'Creating...' : 'Create Event'}
                 </Button>
