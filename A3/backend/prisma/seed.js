@@ -1,2 +1,7 @@
 console.log('Running seed script...');
-require('./seeds');
+const runSeed = require('./seed/index.js'); // force direct file import
+
+runSeed().catch((e) => {
+  console.error('Seed script failed:', e);
+  process.exit(1);
+});

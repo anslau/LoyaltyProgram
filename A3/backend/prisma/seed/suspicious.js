@@ -18,7 +18,8 @@ module.exports = async function seedSuspicious(users, promotions) {
       spent: 15,
       amount: pointsFromSpent(15),
       createdBy: users.cashierUser2.utorid,
-      remark: 'Suspicious purchase'
+      remark: 'Suspicious purchase',
+      customerId: users.regularUser.id  
     }
   });
 
@@ -55,8 +56,13 @@ module.exports = async function seedSuspicious(users, promotions) {
       amount: pointsFromSpent(30),
       createdBy: users.cashierUser2.utorid,
       remark: 'Suspicious use of promo',
-      promotionIds: [susPromo.id],
-      suspicious: true
+      promotions: {
+        create: [
+          { promotionId: susPromo.id }
+        ]
+      },
+      suspicious: true,
+      customerId: users.regularUser.id
     }
   });
 
@@ -99,7 +105,8 @@ module.exports = async function seedSuspicious(users, promotions) {
       type: 'redemption',
       amount: 100,
       createdBy: users.unverifiedUser.utorid,
-      remark: 'Redemption by unverified'
+      remark: 'Redemption by unverified',
+      customerId: users.unverifiedUser.id  
     }
   });
 };

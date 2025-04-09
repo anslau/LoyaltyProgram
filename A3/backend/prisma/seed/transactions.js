@@ -12,7 +12,8 @@ module.exports = async function seedTransactions(users, promotions, events) {
       spent: 20,
       amount: pointsFromSpent(20),
       createdBy: users.cashierUser.utorid,
-      remark: 'Initial purchase'
+      remark: 'Initial purchase',
+      customerId: users.regularUser.id
     }
   });
 
@@ -23,7 +24,8 @@ module.exports = async function seedTransactions(users, promotions, events) {
       type: 'redemption',
       amount: 50,
       createdBy: users.regularUser.utorid,
-      remark: 'Redeeming coffee'
+      remark: 'Redeeming coffee',
+      customerId: users.regularUser.id
     }
   });
 
@@ -35,7 +37,8 @@ module.exports = async function seedTransactions(users, promotions, events) {
       amount: -30,
       relatedId: redemption.id,
       createdBy: users.managerUser.utorid,
-      remark: 'Fixed overredeem'
+      remark: 'Fixed overredeem',
+      customerId: users.regularUser.id
     }
   });
 
@@ -47,7 +50,8 @@ module.exports = async function seedTransactions(users, promotions, events) {
       amount: 25,
       relatedId: users.eventGuestUser.id,
       createdBy: users.regularUser.utorid,
-      remark: 'Gift points'
+      remark: 'Gift points',
+      customerId: users.regularUser.id
     }
   });
 
@@ -58,7 +62,8 @@ module.exports = async function seedTransactions(users, promotions, events) {
       amount: 25,
       relatedId: users.regularUser.id,
       createdBy: users.regularUser.utorid,
-      remark: 'Received points'
+      remark: 'Received points',
+      customerId: users.regularUser.id
     }
   });
 
@@ -70,7 +75,8 @@ module.exports = async function seedTransactions(users, promotions, events) {
       amount: 100,
       relatedId: events[0].id,
       createdBy: users.managerUser.utorid,
-      remark: 'Attended career fair'
+      remark: 'Attended career fair',
+      customerId: users.regularUser.id
     }
   });
 
@@ -81,7 +87,8 @@ module.exports = async function seedTransactions(users, promotions, events) {
       type: 'redemption',
       amount: 999,
       createdBy: users.zeroPointsUser.utorid,
-      remark: 'Exploit attempt'
+      remark: 'Exploit attempt',
+      customerId: users.regularUser.id
     }
   });
 
@@ -89,7 +96,7 @@ module.exports = async function seedTransactions(users, promotions, events) {
   await prisma.transaction.update({
     where: { id: redemption.id },
     data: {
-      processedBy: users.cashierUser.id
+      processedBy: users.cashierUser.utorid
     }
   });
 
@@ -102,7 +109,8 @@ module.exports = async function seedTransactions(users, promotions, events) {
         spent: 5 + i,
         amount: pointsFromSpent(5 + i),
         createdBy: users.cashierUser.utorid,
-        remark: `Paginated purchase ${i}`
+        remark: `Paginated purchase ${i}`,
+        customerId: users.regularUser.id
       }
     });
   }
@@ -115,7 +123,8 @@ module.exports = async function seedTransactions(users, promotions, events) {
         spent: 3 + i,
         amount: pointsFromSpent(3 + i),
         createdBy: users.cashierUser2.utorid,
-        remark: `Paginated guest purchase ${i}`
+        remark: `Paginated guest purchase ${i}`,
+        customerId: users.regularUser.id
       }
     });
   }

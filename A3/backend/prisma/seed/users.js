@@ -85,7 +85,18 @@ module.exports = async function seedUsers() {
     }
   ];
 
-  const created = await Promise.all(users.map(u => prisma.user.create({ data: u })));
+//   const created = await Promise.all(users.map(u => prisma.user.create({ data: u })));
+
+  const created = await Promise.all(
+    users.map(u =>
+      prisma.user.upsert({
+        where: { email: u.email },
+        update: {},
+        create: u
+      })
+    )
+  );
+  
 
   return {
     regularUser: created[0],
