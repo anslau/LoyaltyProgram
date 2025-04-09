@@ -7,6 +7,9 @@ import Dashboard from './pages/Dashboard';
 import Transactions from './pages/Transactions';
 import PerksPage from './pages/Perks/PerksPage';
 import EventDetail from './pages/Perks/Events/EventDetail';
+import CreatePromotion from './pages/Perks/Promotions/CreatePromotion';
+import PromotionDetail from './pages/Perks/Promotions/PromotionDetail';
+import CreateEvent from './pages/Perks/Events/CreateEvent';
 import ProtectedRoute from './route/ProtectedRoute';
 import OrganizerEvents from './pages/Organizer/OrganizerEvents';
 import EventManage     from './pages/Organizer/EventManage';
@@ -28,6 +31,9 @@ function App() {
                     <Route path="/transactions" element={<Transactions />} />
                     <Route path="/perks" element={<PerksPage />} />
                     <Route path="/events/:eventId" element={<EventDetail />} />
+                    <Route path="/events/create" element={<CreateEvent />} />
+                    <Route path="/promotions/create" element={<CreatePromotion />} />
+                    <Route path="/promotions/:promotionId" element={<PromotionDetail />} />
                 </Route>
 
                 {/* Organizer/Manager event management page */}
