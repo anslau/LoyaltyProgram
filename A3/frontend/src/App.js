@@ -16,6 +16,8 @@ import ProtectedRoute from './route/ProtectedRoute';
 import AllUsersList from './pages/Users/AllUsersList';
 import OrganizerEvents from './pages/Organizer/OrganizerEvents';
 import EventManage     from './pages/Organizer/EventManage';
+import OrganizerEvents from './pages/Organizer/OrganizerEvents';
+import EventManage     from './pages/Organizer/EventManage';
 
 function App() { 
     return ( 
@@ -48,12 +50,6 @@ function App() {
                     <Route path="/organizer/events/:eventId" element={<EventManage />} />
                 </Route>
 
-                {/* Organizer/Manager event management page */}
-                    <Route element={<ProtectedRoute />}>
-                    <Route path="/organizer/events" element={<OrganizerEvents />} />
-                    <Route path="/organizer/events/:eventId" element={<EventManage />} />
-                </Route>
-                
                 {/* Fallback for unmatched routes */}
                 <Route path="*" element={<Navigate to="/" />} />
             </Routes>
