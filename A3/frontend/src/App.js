@@ -16,8 +16,6 @@ import ProtectedRoute from './route/ProtectedRoute';
 import AllUsersList from './pages/Users/AllUsersList';
 import OrganizerEvents from './pages/Organizer/OrganizerEvents';
 import EventManage     from './pages/Organizer/EventManage';
-import OrganizerEvents from './pages/Organizer/OrganizerEvents';
-import EventManage     from './pages/Organizer/EventManage';
 
 function App() { 
     return ( 
