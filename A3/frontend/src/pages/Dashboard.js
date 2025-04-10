@@ -118,6 +118,9 @@ const Dashboard = () => {
                     <Link to="/users" style={{ textDecoration: 'none', color: '#1976d2', fontWeight: 'bold', marginLeft: '20px' }}>
                         View All Users
                     </Link>
+                    <Link to="/transfer" style={{ textDecoration: 'none', color: '#1976d2', fontWeight: 'bold', marginLeft: '20px' }}>
+                        Transfer Points
+                    </Link>
                 </div>
             </div>
         </div>
