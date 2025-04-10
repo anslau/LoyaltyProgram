@@ -927,7 +927,7 @@ async function createRewardTransaction(type, eventId, utorid, amount, userId, us
                 type: type,
                 relatedId: eventId,
                 remark: `Awarded ${amount} points for attending event ${eventId}`,
-                createdBy: userUtorid
+                createBy: userUtorid
             }
 
         }else{
@@ -994,7 +994,7 @@ async function createRewardTransaction(type, eventId, utorid, amount, userId, us
                 type: 'event',
                 relatedId: eventId,
                 remark: `Awarded ${amount} points for attending event ${eventId}`,
-                createdBy: userUtorid
+                createBy: userUtorid
             }))
         }
     }catch(e){

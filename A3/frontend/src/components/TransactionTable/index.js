@@ -124,7 +124,7 @@ const TransactionTable = ({
         { key: 'relatedId', label: 'Related ID', render: (value) => value || 'N/A' },
         { key: 'amount', label: 'Amount', render: (value) => value || 'N/A' },
         { key: 'remark', label: 'Remark', render: (value) => value || 'N/A' },
-        { key: 'createdBy', label: 'Created By' },
+        { key: 'createBy', label: 'Created By' },
     ];
 
     const mergedColumns = [...defaultColumns, ...columns];

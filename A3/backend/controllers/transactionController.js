@@ -91,13 +91,13 @@ async function createTransaction(req, res) {
 
 async function retrieveTransactions(req, res) {
     // validate filters
-    const validFilters = ['name', 'createdBy', 'suspicious', 'promotionId', 'type', 'relatedId', 'amount', 'operator', 'page', 'limit'];
+    const validFilters = ['name', 'createBy', 'suspicious', 'promotionId', 'type', 'relatedId', 'amount', 'operator', 'page', 'limit'];
     if (!validateFields(req.query, validFilters)) {
         return res.status(400).json({ message: "Invalid filter" });
     }
     
     // get the filter parameters
-    const { name, createdBy, suspicious, promotionId, type, relatedId, amount, operator, page, limit } = req.query;
+    const { name, createBy, suspicious, promotionId, type, relatedId, amount, operator, page, limit } = req.query;
 
     // check that filters are valid
     if (suspicious && (suspicious !== 'true' && suspicious !== 'false')) {
@@ -149,7 +149,7 @@ async function retrieveTransactions(req, res) {
     }
 
     // get the transactions
-    const filters = { name, createdBy, suspicious, promotionId, type, relatedId, amount, operator, page, limit };
+    const filters = { name, createBy, suspicious, promotionId, type, relatedId, amount, operator, page, limit };
     const transactions = await transactionService.retrieveTransactions(filters);
     
     return res.status(200).json(transactions);

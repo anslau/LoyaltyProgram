@@ -244,7 +244,7 @@ const TransactionDetail = () => {
 
                             <Grid item xs={12}>
                                 <Typography variant="subtitle1" color="text.secondary">Created By</Typography>
-                                <Typography variant="body1" paragraph>{transaction.createdBy}</Typography>
+                                <Typography variant="body1" paragraph>{transaction.createBy}</Typography>
                             </Grid>
                         </Grid>
 

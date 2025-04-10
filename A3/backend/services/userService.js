@@ -492,7 +492,7 @@ async function transferTransaction(senderId, recipientId, amount, type, remark){
             type,
             sent: amount,
             remark: senderUpdate.remark,
-            createdBy: sender.utorid
+            createBy: sender.utorid
         }
 
     }catch(e){
@@ -553,7 +553,7 @@ async function createRedemption(userId, type, amount, remark){
             processedBy: transaction.processedBy,
             amount: transaction.amount,
             remark: transaction.remark,
-            createdBy: user.utorid
+            createBy: user.utorid
         };
 
     }catch(e){
@@ -644,7 +644,7 @@ async function retrieveOwnTransactions(filters, userId){
             promotionIds: transaction.promotions.map(promotion => promotion.promotionId),
             redeemed: transaction.type === 'redemption' ? transaction.amount : undefined,
             remark: transaction.remark,
-            createdBy: transaction.createBy,
+            createBy: transaction.createBy,
             processedBy: transaction.type === 'redemption' ? transaction.processedBy : undefined
         }));
 

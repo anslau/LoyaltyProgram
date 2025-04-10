@@ -99,7 +99,7 @@ const Dashboard = () => {
                                         </Typography>
 
                                         <Typography variant="body2">
-                                            <strong>Created by:</strong> {transaction.createdBy}
+                                            <strong>Created by:</strong> {transaction.createBy}
                                         </Typography>
                                     </CardContent>
                                 </Card>
