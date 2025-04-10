@@ -102,7 +102,7 @@ const AllTransactionsList = () => {
                             onChange={(e) => {
                                 setFilters({ ...filters, name: e.target.value });
                             }}
-                            helperText="User who created the transaction"
+                            helperText="User who made the transaction"
                         />
                         
                         <FormGroup>
