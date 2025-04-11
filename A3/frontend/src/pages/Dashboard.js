@@ -1,16 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import LogoutButton from '../components/auth/LogoutButton';
+import RoleSwitcher from '../components/RoleSwitcher';
 import '../styles/auth.css';
 import { useState, useEffect, useContext } from 'react';
 import AuthContext from '../context/AuthContext';
-import { Grid, Card, CardContent, Typography, Chip } from '@mui/material';
+import ActiveRoleContext from '../context/ActiveRoleContext';
+import { Grid, Card, CardContent, Typography, Chip, Box } from '@mui/material';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
 
 const Dashboard = () => {
     const [transactions, setTransactions] = useState([]);
-    const { token } = useContext(AuthContext);
+    const { token, userDetails } = useContext(AuthContext);
+    const { activeRole } = useContext(ActiveRoleContext);
 
     // fetching the three most recent transactions for the dashboard
     useEffect(() => {
@@ -59,6 +62,7 @@ const Dashboard = () => {
                         <Link to="/perks" style={{ marginRight: '20px', textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}>
                             What's New
                         </Link>
+                        <RoleSwitcher />
                         <LogoutButton />
                     </div>
                 </div>
@@ -99,7 +103,7 @@ const Dashboard = () => {
                                         </Typography>
 
                                         <Typography variant="body2">
-                                            <strong>Created by:</strong> {transaction.createBy}
+                                            <strong>Created by:</strong> {transaction.createdBy}
                                         </Typography>
                                     </CardContent>
                                 </Card>
@@ -109,14 +113,33 @@ const Dashboard = () => {
                     ) : (
                         <p>No recent transactions available.</p>
                     )}
+                    {/* All users can view their own transactions */}
                     <Link to="/users/me/transactions" style={{ textDecoration: 'none', color: '#1976d2', fontWeight: 'bold' }}>
                         View All of Your Transactions
                     </Link>
-                    <Link to="/transactions" style={{ textDecoration: 'none', color: '#1976d2', fontWeight: 'bold', marginLeft: '20px' }}>
-                        View All Transactions
+                    
+                    {/* Only Cashiers, Managers, and Superusers can view all transactions */}
+                    {activeRole && ['cashier', 'manager', 'superuser'].includes(activeRole) && (
+                        <Link to="/transactions" style={{ textDecoration: 'none', color: '#1976d2', fontWeight: 'bold', marginLeft: '20px' }}>
+                            View All Transactions
+                        </Link>
+                    )}
+                    
+                    {/* Only Managers and Superusers can view all users */}
+                    {activeRole && ['manager', 'superuser'].includes(activeRole) && (
+                        <Link to="/users" style={{ textDecoration: 'none', color: '#1976d2', fontWeight: 'bold', marginLeft: '20px' }}>
+                            View All Users
+                        </Link>
+                    )}
+                    
+                    {/* All users can view promotions (regular users will see filtered results) */}
+                    <Link to="/promotions" style={{ textDecoration: 'none', color: '#1976d2', fontWeight: 'bold', marginLeft: '20px' }}>
+                        View All Promotions
                     </Link>
-                    <Link to="/users" style={{ textDecoration: 'none', color: '#1976d2', fontWeight: 'bold', marginLeft: '20px' }}>
-                        View All Users
+                    
+                    {/* All users can view events (regular users will see filtered results) */}
+                    <Link to="/events" style={{ textDecoration: 'none', color: '#1976d2', fontWeight: 'bold', marginLeft: '20px' }}>
+                        View All Events
                     </Link>
                 </div>
             </div>
