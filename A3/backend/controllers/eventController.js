@@ -68,7 +68,7 @@ async function retrieveEventsList(req, res){
     const { role } = req.user;
 
     // only managers can access these
-    if ((role === 'regular' || role === 'cashier') && (published)){
+    if ((role === 'regular' || role === 'cashier') && published === 'false'){
         return res.status(403).json({ message: "Unauthorized" });
     }
 
