@@ -16,6 +16,7 @@ import ProtectedRoute from './route/ProtectedRoute';
 import AllUsersList from './pages/Users/AllUsersList';
 import UserDetail from './pages/Users/UserDetail';
 import TransferPoints from './pages/TransferPoints';
+import UserProfile from './pages/Users/UserProfile';
 
 function App() { 
     return ( 
@@ -42,6 +43,7 @@ function App() {
                     <Route path="/users" element={<AllUsersList />} />
                     <Route path="/users/:userId" element={<UserDetail />} />
                     <Route path="/transfer" element={<TransferPoints />} />
+                    <Route path="/profile" element={<UserProfile />} />
                 </Route>
                 
                 {/* Fallback for unmatched routes */}
