@@ -7,6 +7,7 @@ import {
     Checkbox
 } from "@mui/material";
 import { FilterList as FilterListIcon } from '@mui/icons-material';
+import UserAvatar from "../UserAvatar";
 
 // Dropdown constants
 const userRoles = [
@@ -110,6 +111,17 @@ const UserListTable = ({
     const defaultColumns = [
         { key: 'id', label: 'User ID' },
         { key: 'utorid', label: 'Utorid' },
+        {
+            key: 'avatarUrl', label: 'Avatar', render: (value, user) => {
+                return (
+                    <UserAvatar
+                        name={user.name}
+                        avatarUrl={user.avatarUrl}
+                        size={32}
+                    />
+                );
+            }
+        },
         { key: 'name', label: 'Name' },
         { key: 'email', label: 'Email' },
         { key: 'birthday', label: 'Birthday', render: (value) => value || 'N/A' },
@@ -128,8 +140,7 @@ const UserListTable = ({
         { key: 'points', label: 'Points' },
         { key: 'createdAt', label: 'Created At' },
         { key: 'lastLogin', label: 'Last Login', render: (value) => value || 'Never' },
-        { key: 'verified', label: 'Verified', render: (value) => value === true ? 'True' : 'False' },
-        { key: 'avatarUrl', label: 'Avatar', render: (value) => value || 'None' }
+        { key: 'verified', label: 'Verified', render: (value) => value === true ? 'True' : 'False' }
     ];
 
     const mergedColumns = [...defaultColumns, ...columns];
@@ -174,7 +185,7 @@ const UserListTable = ({
 
                         <FormGroup>
                             <FormControlLabel control={
-                                <Checkbox checked={filters.verified }
+                                <Checkbox checked={filters.verified}
                                     onChange={(e) => {
                                         setFilters({ ...filters, verified: e.target.checked });
                                     }}
@@ -186,7 +197,7 @@ const UserListTable = ({
 
                         <FormGroup>
                             <FormControlLabel control={
-                                <Checkbox checked={filters.activated }
+                                <Checkbox checked={filters.activated}
                                     onChange={(e) => {
                                         setFilters({ ...filters, activated: e.target.checked });
                                     }}
