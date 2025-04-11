@@ -82,6 +82,14 @@ module.exports = async function seedUsers() {
       role: 'manager',
       name: 'Manager Two',
       verified: true
+    },
+    {
+      utorid: 'forgotpw',
+      password: 'Test123!', // reset to 'Reset123!'
+      email: 'forgotpw@utoronto.ca',
+      role: 'regular',
+      name: 'Forgot Password',
+      verified: true
     }
   ];
 
