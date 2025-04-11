@@ -14,6 +14,9 @@ const Dashboard = () => {
 
     // fetching the three most recent transactions for the dashboard
     useEffect(() => {
+        // Only run if a token is available
+        if (!token) return;
+
         fetch(`${BACKEND_URL}/users/me/transactions`, {
             method: 'GET',
             headers: {
@@ -21,9 +24,14 @@ const Dashboard = () => {
                 Authorization: `Bearer ${token}`,
             },
         })
-            .then((response) => response.json())
+            .then(async (response) => {
+                // Read the response as text first
+                const text = await response.text();
+                // If text is not empty, parse it as JSON; otherwise return an empty object with a default structure.
+                return text ? JSON.parse(text) : { results: [] };
+            })
             .then((data) => {
-                const allTransactions = data.results;
+                const allTransactions = data.results || [];
                 const recentTransactions = allTransactions.slice(-3).reverse();
                 setTransactions(recentTransactions);
             })
@@ -31,7 +39,7 @@ const Dashboard = () => {
                 console.error('Error fetching transactions:', error);
             }
         )
-    }, []);
+    }, [token]);   
 
     const chipColour = (type) => {
         switch (type) {
@@ -99,7 +107,7 @@ const Dashboard = () => {
                                         </Typography>
 
                                         <Typography variant="body2">
-                                            <strong>Created by:</strong> {transaction.createBy}
+                                            <strong>Created by:</strong> {transaction.createdBy}
                                         </Typography>
                                     </CardContent>
                                 </Card>

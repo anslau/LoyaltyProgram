@@ -10,20 +10,27 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null); 
     const [token, setToken] = useState(null);
     const [expiresAt, setExpiresAt] = useState(null);
+    const [loading, setLoading] = useState(true);
 
 
     // When component mounts, check localStorage for a token
     useEffect(() => { 
         const storedToken = localStorage.getItem('token'); 
         const storedExpiry = localStorage.getItem('expiresAt'); 
+        console.log('AuthContext loaded token:', storedToken, storedExpiry);
 
         if (storedToken && storedExpiry) { 
+            console.log("Stored token:", storedToken);
+            console.log("Stored expiry:", storedExpiry);
+
             const expiryDate = new Date(storedExpiry); 
             if (expiryDate > new Date()) {
                 setToken(storedToken); 
                 setExpiresAt(expiryDate); 
                 try { 
                     const decoded = jwtDecode(storedToken); 
+                    console.log("Decoded token:", decoded);
+
                     setUser(decoded); 
 
                     // auto log out when token expires
@@ -38,6 +45,7 @@ export const AuthProvider = ({ children }) => {
                 logout(); 
             }
         }
+        setLoading(false);
     }, []);
 
     // login: save credentials to backend, stores token and expiry
@@ -79,6 +87,7 @@ export const AuthProvider = ({ children }) => {
 
     // logout: clear token and user state
     const logout = () => { 
+        console.log('logout called');
         localStorage.removeItem('token'); 
         localStorage.removeItem('expiresAt'); 
         setToken(null); 
@@ -87,7 +96,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, token, expiresAt, login, logout, loading: false }}>
+        <AuthContext.Provider value={{ user, token, expiresAt, loading, login, logout }}>
             {children}
         </AuthContext.Provider>
     ); 
