@@ -138,9 +138,9 @@ const UserListTable = ({
             )
         },
         { key: 'points', label: 'Points' },
-        { key: 'createdAt', label: 'Created At' },
-        { key: 'lastLogin', label: 'Last Login', render: (value) => value || 'Never' },
-        { key: 'verified', label: 'Verified', render: (value) => value === true ? 'True' : 'False' }
+        { key: 'createdAt', label: 'Created At', render: (value) => value ? value.slice(0, 10) : 'N/A' },
+        { key: 'lastLogin', label: 'Last Login', render: (value) => value ? value.slice(0, 10) : 'Never' },
+        { key: 'verified', label: 'Verified', render: (value) => value === true ? 'Yes' : 'No' }
     ];
 
     const mergedColumns = [...defaultColumns, ...columns];
