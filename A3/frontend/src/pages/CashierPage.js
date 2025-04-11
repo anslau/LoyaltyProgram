@@ -13,10 +13,12 @@ import {
   Alert,
 } from '@mui/material';
 
+import { useNavigate } from 'react-router-dom';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 function CashierPage() {
   const { token } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   // State for creating a purchase transaction
   const [purchaseUtorid, setPurchaseUtorid] = useState('');
@@ -32,7 +34,7 @@ function CashierPage() {
   const [redemptionError, setRedemptionError] = useState('');
   const [redemptionSuccess, setRedemptionSuccess] = useState('');
 
-  // CREATE PURCHASE TRANSACTION\
+  // CREATE PURCHASE TRANSACTION
   const handlePurchase = async (e) => {
     e.preventDefault();
     // Clear alerts
@@ -76,6 +78,7 @@ function CashierPage() {
       // Clear form
       setPurchaseUtorid('');
       setPurchaseAmount('');
+      setPromoIds('');
     } catch (err) {
       setPurchaseError(err.message);
     }
@@ -120,102 +123,119 @@ function CashierPage() {
     }
   };
 
+  
   return (
     <Box sx={{ maxWidth: 600, margin: '0 auto', mt: 4, mb: 4 }}>
-      <Typography variant="h4" gutterBottom>
-        Cashier Dashboard
-      </Typography>
+        <Typography variant="h4" gutterBottom>
+            Cashier Dashboard
+        </Typography>
 
-      {/* ACCORDION 1: CREATE PURCHASE */}
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
+        {/* New Button to navigate to user registration */}
+        <Button
+            variant="outlined"
+            sx={{
+            mt: 2,
+            mb: 4,
+            px: 4,
+            color: 'rgb(101, 82, 82)',
+            borderColor: 'rgb(101, 82, 82)',
+            '&:hover': { backgroundColor: '#c48f8f' }
+            }}
+            onClick={() => navigate('/register')}
         >
-          <Typography>Create Purchase Transaction</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          {purchaseError && (
-            <Alert severity="error" sx={{ mb: 2 }}>
-              {purchaseError}
-            </Alert>
-          )}
-          {purchaseSuccess && (
-            <Alert severity="success" sx={{ mb: 2 }}>
-              {purchaseSuccess}
-            </Alert>
-          )}
+            Register New User
+        </Button>
 
-          <Box
-            component="form"
-            onSubmit={handlePurchase}
-            sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
-          >
+        {/* ACCORDION 1: CREATE PURCHASE */}
+        <Accordion>
+            <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+            >
+            <Typography>Create Purchase Transaction</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+            {purchaseError && (
+                <Alert severity="error" sx={{ mb: 2 }}>
+                {purchaseError}
+                </Alert>
+            )}
+            {purchaseSuccess && (
+                <Alert severity="success" sx={{ mb: 2 }}>
+                {purchaseSuccess}
+                </Alert>
+            )}
+
+            <Box
+                component="form"
+                onSubmit={handlePurchase}
+                sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+            >
+                <TextField
+                label="Customer Utorid"
+                value={purchaseUtorid}
+                onChange={(e) => setPurchaseUtorid(e.target.value)}
+                required
+                />
+                <TextField
+                label="Amount Spent (e.g. 19.99)"
+                type="number"
+                value={purchaseAmount}
+                onChange={(e) => setPurchaseAmount(e.target.value)}
+                required
+                />
+                <TextField
+                    label="Promotion IDs (comma‑sep, optional)"
+                    value={promoIds}
+                    onChange={(e) => setPromoIds(e.target.value)}
+                />
+                <Button variant="contained" type="submit">
+                Submit Purchase
+                </Button>
+            </Box>
+            </AccordionDetails>
+        </Accordion>
+
+        {/* ACCORDION 2: PROCESS REDEMPTION */}
+        <Accordion>
+            <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel2a-content"
+                id="panel2a-header"
+            >
+            <Typography>Process Redemption</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+            {redemptionError && (
+                <Alert severity="error" sx={{ mb: 2 }}>
+                {redemptionError}
+                </Alert>
+            )}
+            {redemptionSuccess && (
+                <Alert severity="success" sx={{ mb: 2 }}>
+                {redemptionSuccess}
+                </Alert>
+            )}
+
+            <Box
+                component="form"
+                onSubmit={handleProcessRedemption}
+                sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+            >
+                
             <TextField
-              label="Customer Utorid"
-              value={purchaseUtorid}
-              onChange={(e) => setPurchaseUtorid(e.target.value)}
-              required
-            />
-            <TextField
-              label="Amount Spent (e.g. 19.99)"
-              type="number"
-              value={purchaseAmount}
-              onChange={(e) => setPurchaseAmount(e.target.value)}
-              required
-            />
-            <TextField
-                label="Promotion IDs (comma‑sep, optional)"
-                value={promoIds}
-                onChange={(e) => setPromoIds(e.target.value)}
+                label="Redemption Transaction ID"
+                value={redemptionId}
+                onChange={(e) => setRedemptionId(e.target.value)}
+                required
             />
             <Button variant="contained" type="submit">
-              Submit Purchase
+                Process
             </Button>
-          </Box>
-        </AccordionDetails>
-      </Accordion>
-
-      {/* ACCORDION 2: PROCESS REDEMPTION */}
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel2a-content"
-          id="panel2a-header"
-        >
-          <Typography>Process Redemption</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          {redemptionError && (
-            <Alert severity="error" sx={{ mb: 2 }}>
-              {redemptionError}
-            </Alert>
-          )}
-          {redemptionSuccess && (
-            <Alert severity="success" sx={{ mb: 2 }}>
-              {redemptionSuccess}
-            </Alert>
-          )}
-
-          <Box
-            component="form"
-            onSubmit={handleProcessRedemption}
-            sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
-          >
-            
-            <TextField
-              label="Redemption Transaction ID"
-              value={redemptionId}
-              onChange={(e) => setRedemptionId(e.target.value)}
-              required
-            />
-            <Button variant="contained" type="submit">
-              Process
-            </Button>
-          </Box>
-        </AccordionDetails>
-      </Accordion>
+            </Box>
+            </AccordionDetails>
+        </Accordion>
     </Box>
   );
 }
