@@ -1,7 +1,7 @@
 //import LoginForm from "../components/Auth/LoginForm";
 import {useState, useContext} from "react";
-import {Box, Button, Container, TextField, Typography, Alert} from "@mui/material";
-import {useNavigate} from "react-router-dom";
+import {Box, Button, Container, TextField, Typography, Alert, Link as MuiLink} from "@mui/material";
+import {useNavigate, Link} from "react-router-dom";
 import AuthContext from "../../context/AuthContext";
 
 export default function Login() {
@@ -49,9 +49,14 @@ export default function Login() {
                 fullWidth
               />
               {error && <Alert severity="error">{error}</Alert>}
-            <Button type="submit" variant="contained" color="primary">
-              Login
-            </Button>
+              <Button type="submit" variant="contained" color="primary">
+                Login
+              </Button>
+              <Box sx={{ mt: 2, textAlign: 'right' }}>
+                <MuiLink component={Link} to="/reset-request" variant="body2">
+                  Forgot password?
+                </MuiLink>
+              </Box>
             </Box>
         </Box>
       </Container>

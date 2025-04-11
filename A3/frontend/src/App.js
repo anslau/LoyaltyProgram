@@ -16,6 +16,8 @@ import ProtectedRoute from './route/ProtectedRoute';
 import AllUsersList from './pages/Users/AllUsersList';
 import OrganizerEvents from './pages/Organizer/OrganizerEvents';
 import EventManage     from './pages/Organizer/EventManage';
+import ResetRequest from './pages/Login/ResetRequest';
+import ResetConfirm from './pages/Login/ResetConfirm';
 
 function App() { 
     return ( 
@@ -47,6 +49,9 @@ function App() {
                     <Route path="/organizer/events" element={<OrganizerEvents />} />
                     <Route path="/organizer/events/:eventId" element={<EventManage />} />
                 </Route>
+
+                <Route path="/reset-request" element={<ResetRequest />} />
+                <Route path="/reset-confirm" element={<ResetConfirm />} />
 
                 {/* Fallback for unmatched routes */}
                 <Route path="*" element={<Navigate to="/" />} />
