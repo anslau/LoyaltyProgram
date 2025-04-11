@@ -26,6 +26,14 @@ const UserProfile = () => {
     const [editMode, setEditMode] = useState(false);
     const [avatarUploaded, setAvatarUploaded] = useState(false);
 
+    const [passwordForm, setPasswordForm] = useState({
+        old: '',
+        new: '',
+    });
+    const [changePassword, setChangePassword] = useState(false);
+    const [passwordError, setPasswordError] = useState(false);
+    const [passwordSuccess, setPasswordSuccess] = useState(false);
+
     // fetching the logged in user details
     useEffect(() => {
         setLoading(true);
@@ -130,6 +138,48 @@ const UserProfile = () => {
             setLoading(false);
         }
     }
+
+    // const validateNewPassword = () => {
+    // };
+    const handleChangePassword = () => {
+        setChangePassword(!changePassword);
+        setPasswordError(null);
+        setPasswordSuccess(false);
+    }
+
+    const handlePasswordReset = async (e) => {
+        e.preventDefault();
+
+        try {
+            const payload = {
+                old: passwordForm.old,
+                new: passwordForm.new,
+            };
+
+            const response = await fetch(`${BACKEND_URL}/users/me/password`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                setPasswordError(errorData.message);
+                return;
+            }
+            
+            setLoading(false);
+            setChangePassword(false);
+            setPasswordSuccess(true);
+
+        } catch (error) {
+            setPasswordError(error.message);
+            setLoading(false);
+        }
+    };
 
     return (
         <div className="user-profile-container">
@@ -319,29 +369,113 @@ const UserProfile = () => {
                                         </Grid>
                                     )}
 
+                                    {error && (
+                                        <Grid item xs={12} sx={{ mt: 2 }}>
+                                            <Alert severity="error" sx={{ mt: 2 }}>
+                                                {error}
+                                            </Alert>
+                                        </Grid>
+                                    )}
+
+                                    {success && (
+                                        <Grid item xs={12} sx={{ mt: 2 }}>
+                                            <Alert severity="success" sx={{ mt: 2 }}>
+                                                Profile updated successfully!
+                                            </Alert>
+                                        </Grid>
+                                    )}
+
                                 </Grid>
                             </Box>
 
-                            {error && (
+                            <div className="user-profile-password">
                                 <Grid item xs={12} sx={{ mt: 2 }}>
-                                    <Alert severity="error" sx={{ mt: 2 }}>
-                                        {error}
-                                    </Alert>
+                                    <Button onClick={handleChangePassword}>
+                                        Change Password
+                                    </Button>
                                 </Grid>
-                            )}
 
-                            {success && (
-                                <Grid item xs={12} sx={{ mt: 2 }}>
-                                    <Alert severity="success" sx={{ mt: 2 }}>
-                                        Profile updated successfully!
-                                    </Alert>
-                                </Grid>
-                            )}
+                                {changePassword && (
+                                    <Box component={"form"} onSubmit={handlePasswordReset} sx={{ padding: 2, backgroundColor: '#f5f5f5', borderRadius: 2, position: 'relative', marginTop: 2 }}>
+                                        <Grid container spacing={1} direction={'column'} alignItems="flex-start">
+                                            <Grid item xs={12}>
+                                                <h2>Reset Password</h2>
+                                            </Grid>
+
+                                            <Grid item xs={12}>
+                                                <Typography variant="h6">
+                                                    <strong>Old Password:</strong>
+                                                    <TextField
+                                                        type="text"
+                                                        size="medium"
+                                                        value={passwordForm.old}
+                                                        onChange={(e) => {
+                                                            setPasswordForm({ ...passwordForm, old: e.target.value });
+                                                            setPasswordError('');
+                                                            setPasswordSuccess(false);
+                                                        }}
+                                                    />
+                                                </Typography>
+                                            </Grid>
+
+                                            <Grid item xs={12}>
+                                                <Typography variant="h6">
+                                                    <strong>New Password:</strong>
+                                                    <TextField
+                                                        type="text"
+                                                        size="medium"
+                                                        value={passwordForm.new}
+                                                        onChange={(e) => {
+                                                            setPasswordForm({ ...passwordForm, new: e.target.value });
+                                                            setPasswordError('');
+                                                            setPasswordSuccess(false);
+                                                        }}
+                                                    />
+                                                </Typography>
+                                            </Grid>
+                                        </Grid>
+
+                                        <Grid item xs={12} sx={{ mt: 2, display: 'flex', justifyContent: 'flex-start', gap: 2 }}>
+                                            <Button
+                                                variant="outlined"
+                                                onClick={handleChangePassword}
+                                                disabled={loading}
+                                            >
+                                                Cancel
+                                            </Button>
+                                            <Button
+                                                type="submit"
+                                                variant="contained"
+                                                color="primary"
+                                                disabled={loading}
+                                            >
+                                                {loading ? 'Resetting...' : 'Reset'}
+                                            </Button>
+                                        </Grid>
+
+                                        {passwordError && (
+                                            <Grid item xs={12} sx={{ mt: 2 }}>
+                                                <Alert severity="error" sx={{ mt: 2, wordWrap: 'break-word', whiteSpace: 'normal' }}>
+                                                    {passwordError}
+                                                </Alert>
+                                            </Grid>
+                                        )}
+
+                                        {passwordSuccess && (
+                                            <Grid item xs={12} sx={{ mt: 2 }}>
+                                                <Alert severity="success" sx={{ mt: 2 }}>
+                                                    Password updated successfully!
+                                                </Alert>
+                                            </Grid>
+                                        )}
+
+                                    </Box>
+                                )}
+                            </div>
                         </div>
                     </>
                 )}
             </Box>
-
         </div>
     );
 }
