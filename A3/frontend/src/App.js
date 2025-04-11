@@ -2,7 +2,7 @@ import './styles/App.css';
 import React from 'react'; 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'; 
 
-import Registration from './pages/Registration'; 
+import Registration from './pages/Login/Registration'; 
 import Login from './pages/Login/Login'; 
 import Dashboard from './pages/Dashboard'; 
 import PastTransactions from './pages/Transactions/PastTransactions';
