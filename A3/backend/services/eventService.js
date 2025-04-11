@@ -888,7 +888,7 @@ async function createRewardTransaction(type, eventId, utorid, amount, userId, us
                         amount,
                         relatedId: eventId,
                         remark: `Awarded ${amount} points for attending event ${eventId}`,
-                        createBy: userUtorid,
+                        createdBy: userUtorid,
                         customerId: user.id
                     }
                 }),
@@ -927,7 +927,7 @@ async function createRewardTransaction(type, eventId, utorid, amount, userId, us
                 type: type,
                 relatedId: eventId,
                 remark: `Awarded ${amount} points for attending event ${eventId}`,
-                createBy: userUtorid
+                createdBy: userUtorid
             }
 
         }else{
@@ -943,7 +943,7 @@ async function createRewardTransaction(type, eventId, utorid, amount, userId, us
                             amount,
                             relatedId: eventId,
                             remark: `Awarded ${amount} points for attending event ${eventId}`,
-                            createBy: userUtorid,
+                            createdBy: userUtorid,
                             customerId: guest.user.id
                         }
                     })
@@ -994,7 +994,7 @@ async function createRewardTransaction(type, eventId, utorid, amount, userId, us
                 type: 'event',
                 relatedId: eventId,
                 remark: `Awarded ${amount} points for attending event ${eventId}`,
-                createBy: userUtorid
+                createdBy: userUtorid
             }))
         }
     }catch(e){

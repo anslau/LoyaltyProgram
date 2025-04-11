@@ -442,7 +442,7 @@ async function transferTransaction(senderId, recipientId, amount, type, remark){
                     relatedId: recipientId,
                     remark,
                     customerId: senderId,
-                    createBy: sender.utorid
+                    createdBy: sender.utorid
                 }
             }),
 
@@ -455,7 +455,7 @@ async function transferTransaction(senderId, recipientId, amount, type, remark){
                     relatedId: senderId,
                     remark,
                     customerId: recipientId,
-                    createBy: sender.utorid
+                    createdBy: sender.utorid
                 }
             }),
 
@@ -492,7 +492,7 @@ async function transferTransaction(senderId, recipientId, amount, type, remark){
             type,
             sent: amount,
             remark: senderUpdate.remark,
-            createBy: sender.utorid
+            createdBy: sender.utorid
         }
 
     }catch(e){
@@ -535,7 +535,7 @@ async function createRedemption(userId, type, amount, remark){
                 amount: amount || 0,
                 remark,
                 customerId: userId,
-                createBy: user.utorid
+                createdBy: user.utorid
             },
             select: {
                 id: true,
@@ -553,7 +553,7 @@ async function createRedemption(userId, type, amount, remark){
             processedBy: transaction.processedBy,
             amount: transaction.amount,
             remark: transaction.remark,
-            createBy: user.utorid
+            createdBy: user.utorid
         };
 
     }catch(e){
@@ -618,7 +618,7 @@ async function retrieveOwnTransactions(filters, userId){
                 },
                 relatedId: true,
                 remark: true,
-                createBy: true,
+                createdBy: true,
                 processedBy: true
             },
             skip,
@@ -644,7 +644,7 @@ async function retrieveOwnTransactions(filters, userId){
             promotionIds: transaction.promotions.map(promotion => promotion.promotionId),
             redeemed: transaction.type === 'redemption' ? transaction.amount : undefined,
             remark: transaction.remark,
-            createBy: transaction.createBy,
+            createdBy: transaction.createdBy,
             processedBy: transaction.type === 'redemption' ? transaction.processedBy : undefined
         }));
 

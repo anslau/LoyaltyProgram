@@ -11,7 +11,7 @@ module.exports = async function seedTransactions(users, promotions, events) {
       type: 'purchase',
       spent: 20,
       amount: pointsFromSpent(20),
-      createBy: users.cashierUser.utorid,
+      createdBy: users.cashierUser.utorid,
       remark: 'Initial purchase',
       customerId: users.regularUser.id
     }
@@ -23,7 +23,7 @@ module.exports = async function seedTransactions(users, promotions, events) {
       utorid: users.regularUser.utorid,
       type: 'redemption',
       amount: 50,
-      createBy: users.regularUser.utorid,
+      createdBy: users.regularUser.utorid,
       remark: 'Redeeming coffee',
       customerId: users.regularUser.id
     }
@@ -36,7 +36,7 @@ module.exports = async function seedTransactions(users, promotions, events) {
       type: 'adjustment',
       amount: -30,
       relatedId: redemption.id,
-      createBy: users.managerUser.utorid,
+      createdBy: users.managerUser.utorid,
       remark: 'Fixed overredeem',
       customerId: users.regularUser.id
     }
@@ -49,7 +49,7 @@ module.exports = async function seedTransactions(users, promotions, events) {
       type: 'transfer',
       amount: 25,
       relatedId: users.eventGuestUser.id,
-      createBy: users.regularUser.utorid,
+      createdBy: users.regularUser.utorid,
       remark: 'Gift points',
       customerId: users.regularUser.id
     }
@@ -61,7 +61,7 @@ module.exports = async function seedTransactions(users, promotions, events) {
       type: 'transfer',
       amount: 25,
       relatedId: users.regularUser.id,
-      createBy: users.regularUser.utorid,
+      createdBy: users.regularUser.utorid,
       remark: 'Received points',
       customerId: users.regularUser.id
     }
@@ -74,7 +74,7 @@ module.exports = async function seedTransactions(users, promotions, events) {
       type: 'event',
       amount: 100,
       relatedId: events[0].id,
-      createBy: users.managerUser.utorid,
+      createdBy: users.managerUser.utorid,
       remark: 'Attended career fair',
       customerId: users.regularUser.id
     }
@@ -86,7 +86,7 @@ module.exports = async function seedTransactions(users, promotions, events) {
       utorid: users.zeroPointsUser.utorid,
       type: 'redemption',
       amount: 999,
-      createBy: users.zeroPointsUser.utorid,
+      createdBy: users.zeroPointsUser.utorid,
       remark: 'Exploit attempt',
       customerId: users.regularUser.id
     }
@@ -108,7 +108,7 @@ module.exports = async function seedTransactions(users, promotions, events) {
         type: 'purchase',
         spent: 5 + i,
         amount: pointsFromSpent(5 + i),
-        createBy: users.cashierUser.utorid,
+        createdBy: users.cashierUser.utorid,
         remark: `Paginated purchase ${i}`,
         customerId: users.regularUser.id
       }
@@ -122,7 +122,7 @@ module.exports = async function seedTransactions(users, promotions, events) {
         type: 'purchase',
         spent: 3 + i,
         amount: pointsFromSpent(3 + i),
-        createBy: users.cashierUser2.utorid,
+        createdBy: users.cashierUser2.utorid,
         remark: `Paginated guest purchase ${i}`,
         customerId: users.regularUser.id
       }
