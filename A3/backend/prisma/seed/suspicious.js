@@ -17,7 +17,7 @@ module.exports = async function seedSuspicious(users, promotions) {
       type: 'purchase',
       spent: 15,
       amount: pointsFromSpent(15),
-      createBy: users.cashierUser2.utorid,
+      createdBy: users.cashierUser2.utorid,
       remark: 'Suspicious purchase',
       customerId: users.regularUser.id  
     }
@@ -54,7 +54,7 @@ module.exports = async function seedSuspicious(users, promotions) {
       type: 'purchase',
       spent: 30,
       amount: pointsFromSpent(30),
-      createBy: users.cashierUser2.utorid,
+      createdBy: users.cashierUser2.utorid,
       remark: 'Suspicious use of promo',
       promotions: {
         create: [
@@ -104,7 +104,7 @@ module.exports = async function seedSuspicious(users, promotions) {
       utorid: users.unverifiedUser.utorid,
       type: 'redemption',
       amount: 100,
-      createBy: users.unverifiedUser.utorid,
+      createdBy: users.unverifiedUser.utorid,
       remark: 'Redemption by unverified',
       customerId: users.unverifiedUser.id  
     }

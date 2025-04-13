@@ -115,7 +115,7 @@ model Transaction {
   amount     Float                   @default(0)
   relatedId  Int?
   remark     String                  @default("")
-  createBy   String
+  createdBy   String
   processedBy String?
   customer   User                    @relation(fields: [customerId], references: [id])
   customerId Int

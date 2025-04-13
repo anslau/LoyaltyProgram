@@ -89,7 +89,7 @@ const AllTransactionsList = () => {
                         <TextField
                             label="Created By"
                             onChange={(e) => {
-                                setFilters({ ...filters, createBy: e.target.value });
+                                setFilters({ ...filters, createdBy: e.target.value });
                             }}
                             helperText="User who created the transaction"
                         />

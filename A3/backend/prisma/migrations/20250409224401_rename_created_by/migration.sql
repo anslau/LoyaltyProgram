@@ -1,7 +1,7 @@
 /*
   Warnings:
 
-  - You are about to drop the column `createBy` on the `Transaction` table. All the data in the column will be lost.
+  - You are about to drop the column `createdBy` on the `Transaction` table. All the data in the column will be lost.
   - Added the required column `createdBy` to the `Transaction` table without a default value. This is not possible if the table is not empty.
 
 */

@@ -1,6 +1,6 @@
 //import LoginForm from "../components/Auth/LoginForm";
 import {useState, useContext} from "react";
-import {Box, Button, Container, TextField, Typography, Alert, Link as MuiLink} from "@mui/material";
+import {Box, Button, Container, TextField, Typography, Alert, Paper, Link as MuiLink} from "@mui/material";
 import {useNavigate, Link} from "react-router-dom";
 import AuthContext from "../../context/AuthContext";
 
@@ -25,10 +25,23 @@ export default function Login() {
     };
 
     return (
-      <Container>
-        <Box>
-          <Typography variant="h4">Login</Typography>
-            <Box component="form" onSubmit={handleLogin}>
+        <Container maxWidth="sm" sx={{ mt: 8 }}>
+          <Paper elevation={3} sx={{ borderRadius: 2, overflow: "hidden" }}>
+            <Box sx={{ bgcolor: "#ebc2c2", p: 3 }}>
+              <Typography variant="h4" align="center" color="rgb(101, 82, 82)">
+                Login
+              </Typography>
+            </Box>
+            <Box
+              component="form"
+              onSubmit={handleLogin}
+              sx={{
+                p: 4,
+                display: "flex",
+                flexDirection: "column",
+                gap: 2
+              }}
+            >
               <TextField
                 label="Utorid"
                 type="text"
@@ -38,6 +51,12 @@ export default function Login() {
                 required
                 fullWidth
                 autoFocus
+                sx={{
+                  "& .MuiOutlinedInput-root.Mui-focused": {
+                    "& fieldset": { borderColor: "rgb(101, 82, 82)" }
+                  },
+                  "& label.Mui-focused": { color: "rgb(101, 82, 82)" }
+                }}
               />
               <TextField
                 label="Password"
@@ -47,19 +66,33 @@ export default function Login() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 fullWidth
+                sx={{
+                  "& .MuiOutlinedInput-root.Mui-focused": {
+                    "& fieldset": { borderColor: "rgb(101, 82, 82)" }
+                  },
+                  "& label.Mui-focused": { color: "rgb(101, 82, 82)" }
+                }}
               />
               {error && <Alert severity="error">{error}</Alert>}
-              <Button type="submit" variant="contained" color="primary">
-                Login
-              </Button>
+                <Button
+                type="submit"
+                variant="contained"
+                sx={{
+                  backgroundColor: "#ebc2c2",
+                  color: "rgb(101, 82, 82)",
+                  "&:hover": { backgroundColor: "#c48f8f" }
+                }}
+              >
+                  Login
+                </Button>
               <Box sx={{ mt: 2, textAlign: 'right' }}>
                 <MuiLink component={Link} to="/reset-request" variant="body2">
                   Forgot password?
                 </MuiLink>
               </Box>
             </Box>
-        </Box>
-      </Container>
+          </Paper>
+        </Container>
     );
 }
 

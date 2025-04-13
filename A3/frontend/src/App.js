@@ -3,6 +3,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'; 
 import { ActiveRoleProvider } from './context/ActiveRoleContext';
 
+import Registration from './pages/Login/Register'; 
 import Login from './pages/Login/Login'; 
 import Dashboard from './pages/Dashboard'; 
 import PastTransactions from './pages/Transactions/PastTransactions';
@@ -33,6 +34,7 @@ function App() {
                         <Navigate to="/dashboard" />
                     </ProtectedRoute>
                 }/>
+
                 <Route path="/login" element={<Login />} /> 
 
                 <Route element={<ProtectedRoute />} >
@@ -48,6 +50,7 @@ function App() {
                     <Route path="/transactions" element={<AllTransactionsList />} />
                     <Route path="/transactions/:transactionId" element={<TransactionDetail />} />
                     <Route path="/users" element={<AllUsersList />} />
+                    <Route path="/register" element={<Registration />} /> 
                 </Route>
 
                 {/* Organizer/Manager event management page */}

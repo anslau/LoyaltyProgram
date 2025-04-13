@@ -119,7 +119,7 @@ async function createPurchaseTransaction(data, requesterUtorid) {
                 spent,
                 amount: earned,
                 remark: remark || "",
-                createBy: requesterUtorid,
+                createdBy: requesterUtorid,
                 customerId: customer.id,
                 promotions: {
                     create: validPromotionsIds
@@ -169,7 +169,7 @@ async function createPurchaseTransaction(data, requesterUtorid) {
             earned,
             remark: remark || "",
             promotionIds: validPromotionsIds.map(promotion => promotion.promotionId),
-            createBy: requesterUtorid
+            createdBy: requesterUtorid
         }
 
     }catch(e){
@@ -293,7 +293,7 @@ async function createAdjustmentTransaction(data, requesterUtorid) {
                 amount,
                 relatedId,
                 remark: remark || "",
-                createBy: requesterUtorid,
+                createdBy: requesterUtorid,
                 customerId: customer.id,
                 relatedId: relatedId,
                 promotions: {
@@ -321,7 +321,7 @@ async function createAdjustmentTransaction(data, requesterUtorid) {
             relatedId,
             remark: remark || "",
             promotionIds: validPromotionsIds.map(promotion => promotion.promotionId),
-            createBy: requesterUtorid
+            createdBy: requesterUtorid
         }
 
     }catch(e){
@@ -344,7 +344,7 @@ async function createTransaction(data, requesterUtorid) {
 
 async function retrieveTransactions(filters){
     try{
-        const {name, createBy, suspicious, promotionId, type, relatedId, amount, operator, page, limit} = filters;
+        const {name, createdBy, suspicious, promotionId, type, relatedId, amount, operator, page, limit} = filters;
 
         // for pagination
         let pageNum = parseInt(page) || 1;
@@ -362,8 +362,8 @@ async function retrieveTransactions(filters){
                 ]
             };
         }
-        if (createBy) {
-            where.createBy = createBy;
+        if (createdBy) {
+            where.createdBy = createdBy;
         }
         if (suspicious !== undefined) {
             where.suspicious = suspicious === 'true';
@@ -410,7 +410,7 @@ async function retrieveTransactions(filters){
                 },
                 suspicious: true,
                 remark: true,
-                createBy: true,
+                createdBy: true,
                 processedBy: true
             },
             take,
@@ -436,7 +436,7 @@ async function retrieveTransactions(filters){
             suspicious: transaction.type !== 'redemption' ? transaction.suspicious : undefined,
             redeemed: transaction.type === 'redemption' ? transaction.amount : undefined,
             remark: transaction.remark,
-            createBy: transaction.createBy,
+            createdBy: transaction.createdBy,
             processedBy: transaction.type === 'redemption' ? transaction.processedBy : undefined
         }));
 
@@ -467,7 +467,7 @@ async function retrieveSpecificTransaction(transactionId){
                 spent: true,
                 relatedId: true,
                 remark: true,
-                createBy: true,
+                createdBy: true,
                 suspicious: true,
                 promotions: {
                     select: {
@@ -497,7 +497,7 @@ async function retrieveSpecificTransaction(transactionId){
             promotionIds: transaction.promotions.map(promotion => promotion.promotionId),
             ...suspicious,
             remark: transaction.remark,
-            createBy: transaction.createBy
+            createdBy: transaction.createdBy
         }
 
     }catch(e){
@@ -584,7 +584,7 @@ async function transactionSuspicious(transactionId, suspicious){
                 },
                 suspicious: true,
                 remark: true,
-                createBy: true
+                createdBy: true
             }
         });
 
@@ -603,7 +603,7 @@ async function transactionSuspicious(transactionId, suspicious){
             promotionIds: updatedTransaction.promotions.map(promotion => promotion.promotionId),
             suspicious: updatedTransaction.suspicious,
             remark: updatedTransaction.remark,
-            createBy: updatedTransaction.createBy
+            createdBy: updatedTransaction.createdBy
         }
 
     }catch(e){
@@ -660,7 +660,7 @@ async function completeRedemption(transactionId, processedByUtorid, processedByI
                     amount: true,
                     processedBy: true,
                     remark: true,
-                    createBy: true
+                    createdBy: true
                 }
             }),
 
@@ -684,7 +684,7 @@ async function completeRedemption(transactionId, processedByUtorid, processedByI
             processedBy: updatedTransaction.processedBy,
             redeemed: updatedTransaction.amount,
             remark: updatedTransaction.remark,
-            createBy: updatedTransaction.createBy
+            createdBy: updatedTransaction.createdBy
         }
 
     }catch(e){
