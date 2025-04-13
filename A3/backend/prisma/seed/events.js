@@ -32,15 +32,30 @@ module.exports = async function seedEvents(users) {
     }
   });
 
+  const event3 = await prisma.event.create({
+    data: {
+      name: 'Student-Led Workshop',
+      description: 'A workshop organized by regular users',
+      location: 'Online',
+      startTime: new Date(now.getTime() + 10 * 86400000),
+      endTime: new Date(now.getTime() + 11 * 86400000),
+      capacity: 30,
+      pointsRemain: 300,
+      pointsAwarded: 0,
+      published: true
+    }
+  });
+
   // Add organizers
   await Promise.all([
     prisma.eventOrganizer.create({ data: { eventId: event1.id, userId: users.managerUser.id } }),
-    prisma.eventOrganizer.create({ data: { eventId: event2.id, userId: users.managerUser.id } })
+    prisma.eventOrganizer.create({ data: { eventId: event2.id, userId: users.managerUser.id } }),
+    prisma.eventOrganizer.create({ data: { eventId: event3.id, userId: users.regularUser.id } })
   ]);
 
   // Add guests
   await prisma.eventGuest.create({ data: { eventId: event1.id, userId: users.regularUser.id } });
   await prisma.eventGuest.create({ data: { eventId: event2.id, userId: users.eventGuestUser.id } });
 
-  return [event1, event2];
+  return [event1, event2, event3];
 };

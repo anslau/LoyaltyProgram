@@ -4,12 +4,17 @@ import './styles/index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from './context/AuthContext';
+import { ActiveRoleProvider } from './context/ActiveRoleContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <React.StrictMode> <AuthProvider> 
-        <App />
-    </AuthProvider> </React.StrictMode>
+    <React.StrictMode>
+        <AuthProvider>
+            <ActiveRoleProvider>
+                <App />
+            </ActiveRoleProvider>
+        </AuthProvider>
+    </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
