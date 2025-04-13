@@ -4,7 +4,7 @@ import {
     Box, Typography, Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper, Button, TextField, MenuItem, Stack, Chip,
     IconButton, CircularProgress, Pagination, FormGroup, FormControlLabel,
-    Checkbox
+    Checkbox, TableSortLabel
 } from "@mui/material";
 import { FilterList as FilterListIcon } from '@mui/icons-material';
 import UserAvatar from "../UserAvatar";
@@ -51,6 +51,10 @@ const UserListTable = ({
     const [limit, setLimit] = useState(10);
     const [clearFilter, setClearFilter] = useState(false);
 
+    const [orderBy, setOrderBy] = useState('id');
+    const [order, setOrder] = useState('asc');
+
+    // Fetch users from the API
     const fetchUsers = async () => {
         setLoading(true);
         setError(null);
@@ -65,6 +69,7 @@ const UserListTable = ({
         }
     };
 
+    // Fetch users when the component mounts or when filters change
     useEffect(() => {
         fetchUsers();
         setPage(1);
@@ -104,6 +109,7 @@ const UserListTable = ({
         setClearFilter(true);
     };
 
+    // automatically fetch users when filters are cleared
     useEffect(() => {
         fetchUsers();
     }, [clearFilter]);
@@ -144,6 +150,36 @@ const UserListTable = ({
     ];
 
     const mergedColumns = [...defaultColumns, ...columns];
+
+    ////////// FROM MUI TABLE DOCUMENTATION /////////////////////////
+    // https://mui.com/material-ui/react-table/#sorting-amp-selecting
+    // sorts the table based on the column clicked by asc/desc
+    function descendingComparator(a, b, orderBy) {
+        if (b[orderBy] < a[orderBy]) {
+            return -1;
+        }
+        if (b[orderBy] > a[orderBy]) {
+            return 1;
+        }
+        return 0;
+    }
+
+    function getComparator(order, orderBy) {
+        return order === 'desc'
+            ? (a, b) => descendingComparator(a, b, orderBy)
+            : (a, b) => -descendingComparator(a, b, orderBy);
+    }
+
+    const handleRequestSort = (columnKey) => {
+        const isAsc = orderBy === columnKey && order === 'asc';
+        setOrder(isAsc ? 'desc' : 'asc');
+        setOrderBy(columnKey);
+    };
+
+    const sortedUsers = orderBy
+        ? [...users].sort(getComparator(order, orderBy))
+        : users;
+    /////////////////////////////////////////////////////////////////
 
     return (
         <div className="users-container">
@@ -229,8 +265,19 @@ const UserListTable = ({
                 <Table>
                     <TableHead>
                         <TableRow>
-                            {mergedColumns.map(col => (
+                            {/* {mergedColumns.map(col => (
                                 <TableCell key={col.key}>{col.label}</TableCell>
+                            ))} */}
+                            {mergedColumns.map((col) => (
+                                <TableCell key={col.key} sortDirection={orderBy === col.key ? order : false}>
+                                    <TableSortLabel
+                                        active={orderBy === col.key}
+                                        direction={orderBy === col.key ? order : 'asc'}
+                                        onClick={() => handleRequestSort(col.key)}
+                                    >
+                                        {col.label}
+                                    </TableSortLabel>
+                                </TableCell>
                             ))}
                         </TableRow>
                     </TableHead>
@@ -243,7 +290,7 @@ const UserListTable = ({
                         ) : users.length === 0 ? (
                             <TableRow><TableCell colSpan={mergedColumns.length} align="center">No users found</TableCell></TableRow>
                         ) : (
-                            users.map((t) => (
+                            sortedUsers.map((t) => (
                                 <TableRow key={t.id} hover onClick={() => onRowClick?.(t)}>
                                     {mergedColumns.map(col => (
                                         <TableCell key={col.key}>

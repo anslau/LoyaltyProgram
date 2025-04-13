@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import {
     Box, Typography, Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper, Button, TextField, MenuItem, Stack, Chip,
-    IconButton, CircularProgress, Pagination, Alert
+    IconButton, CircularProgress, Pagination, Alert, TableSortLabel
 } from "@mui/material";
 import { FilterList as FilterListIcon } from '@mui/icons-material';
 
@@ -61,6 +61,11 @@ const TransactionTable = ({
     const [limit, setLimit] = useState(10);
     const [clearFilter, setClearFilter] = useState(false);
 
+    const [orderBy, setOrderBy] = useState('id');
+    const [order, setOrder] = useState('asc');
+
+    // fetching the transactions based on the given filters
+    // also handles getting the utorid of the related transaction
     const fetchTransactions = async () => {
         if (!validateSearch(filters)) {
             return;
@@ -86,8 +91,8 @@ const TransactionTable = ({
                     }
                 }
                 return { ...transaction, relatedUser: 'N/A' };
-            }));    
-                
+            }));
+
             // setTransactions(results);
             setTransactions(withRelatedUsers);
             setCount(Math.ceil(count / limit) || 1);
@@ -98,6 +103,7 @@ const TransactionTable = ({
         }
     };
 
+    // fetch transactions when the component mounts or when the page or limit changes
     useEffect(() => {
         fetchTransactions();
     }, [page, limit]);
@@ -108,6 +114,7 @@ const TransactionTable = ({
         fetchTransactions();
     };
 
+    // ensures that amount and operator are used together
     const validateSearch = (filters) => {
         if (filters.amount !== '' && filters.operator === '') {
             alert('Please select an operator for the amount filter.');
@@ -120,6 +127,7 @@ const TransactionTable = ({
         return true;
     };
 
+    // handles the page change for pagination
     const handlePageChange = (event, value) => {
         setPage(value);
         setFilters({ ...filters, page: value });
@@ -131,6 +139,7 @@ const TransactionTable = ({
         setFilters({ ...filters, page: 1, limit: parseInt(event.target.value, 10) });
     };
 
+    // toggles the filters section
     const toggleFilters = () => {
         setShowFilters(!showFilters);
     };
@@ -150,6 +159,7 @@ const TransactionTable = ({
         setClearFilter(true);
     };
 
+    // automatically fetch transactions when the filters are cleared
     useEffect(() => {
         fetchTransactions();
     }, [clearFilter]);
@@ -177,7 +187,37 @@ const TransactionTable = ({
     ];
 
     const mergedColumns = [...defaultColumns, ...columns];
-    // const paginatedTransactions = transactions.slice((page - 1) * limit, page * limit);
+
+    ////////// FROM MUI TABLE DOCUMENTATION /////////////////////////
+    // https://mui.com/material-ui/react-table/#sorting-amp-selecting
+    // sorts the table based on the column clicked by asc/desc
+    function descendingComparator(a, b, orderBy) {
+        if (b[orderBy] < a[orderBy]) {
+            return -1;
+        }
+        if (b[orderBy] > a[orderBy]) {
+            return 1;
+        }
+        return 0;
+    }
+
+    function getComparator(order, orderBy) {
+        return order === 'desc'
+            ? (a, b) => descendingComparator(a, b, orderBy)
+            : (a, b) => -descendingComparator(a, b, orderBy);
+    }
+
+    const handleRequestSort = (columnKey) => {
+        const isAsc = orderBy === columnKey && order === 'asc';
+        setOrder(isAsc ? 'desc' : 'asc');
+        setOrderBy(columnKey);
+    };
+
+    const sortedTransactions = orderBy
+        ? [...transactions].sort(getComparator(order, orderBy))
+        : transactions;
+
+    /////////////////////////////////////////////////////////////////
 
     return (
         <div className="transactions-container">
@@ -262,8 +302,19 @@ const TransactionTable = ({
                 <Table>
                     <TableHead>
                         <TableRow>
-                            {mergedColumns.map(col => (
+                            {/* {mergedColumns.map(col => (
                                 <TableCell key={col.key}>{col.label}</TableCell>
+                            ))} */}
+                            {mergedColumns.map((col) => (
+                                <TableCell key={col.key} sortDirection={orderBy === col.key ? order : false}>
+                                    <TableSortLabel
+                                        active={orderBy === col.key}
+                                        direction={orderBy === col.key ? order : 'asc'}
+                                        onClick={() => handleRequestSort(col.key)}
+                                    >
+                                        {col.label}
+                                    </TableSortLabel>
+                                </TableCell>
                             ))}
                         </TableRow>
                     </TableHead>
@@ -276,7 +327,7 @@ const TransactionTable = ({
                         ) : transactions.length === 0 ? (
                             <TableRow><TableCell colSpan={mergedColumns.length} align="center">No transactions found</TableCell></TableRow>
                         ) : (
-                            transactions.map((t) => (
+                            sortedTransactions.map((t) => (
                                 <TableRow key={t.id} hover onClick={() => onRowClick?.(t)}>
                                     {mergedColumns.map(col => (
                                         <TableCell key={col.key}>
