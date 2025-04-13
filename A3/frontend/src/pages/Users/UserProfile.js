@@ -217,7 +217,7 @@ const UserProfile = () => {
 
                         <div className="user-profile-info">
                             <Box component={"form"} onSubmit={handleSubmit} sx={{ padding: 2, backgroundColor: '#f5f5f5', borderRadius: 2, position: 'relative', minWidth: 400 }}>
-                                <IconButton color="#c48f8f" onClick={handleEditToggle} title="Edit" sx={{ position: 'absolute', top: 0, right: 0, color: '#c48f8f' }}>
+                                <IconButton color="#c48f8f" onClick={handleEditToggle} title="Edit" sx={{ position: 'absolute', top: 0, right: 0, color: '#c48f8f'}}>
                                     {!editMode && (<EditIcon />)}
                                 </IconButton>
 

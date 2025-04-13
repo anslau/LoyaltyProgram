@@ -483,7 +483,7 @@ const EventDetail = () => {
         <div className="nav-content">
           <h1 className="dashboard-title">Event Details</h1>
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Link to="/perks" style={{ marginRight: '20px', textDecoration: 'none', color: '#1976d2', fontWeight: 'bold' }}>
+            <Link to="/perks" style={{ marginRight: '20px', textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}>
               Back to Events
             </Link>
             <LogoutButton />
@@ -498,7 +498,7 @@ const EventDetail = () => {
                 <Typography variant="h4" component="h1">
                   Edit Event
                 </Typography>
-                <Button variant="outlined" onClick={handleEditToggle}>
+                <Button variant="outlined" onClick={handleEditToggle} sx={{ px: 4, color: 'rgb(101, 82, 82)', borderColor: 'rgb(101, 82, 82)' }}>
                   Cancel
                 </Button>
               </Box>
@@ -534,7 +534,16 @@ const EventDetail = () => {
                           error={!!editFormErrors.name}
                           helperText={editFormErrors.name}
                           variant="outlined"
-                          sx={{ mb: 1 }}
+                          sx={{ mb: 1,
+                            '& .MuiOutlinedInput-root.Mui-focused': {
+                              '& fieldset': {
+                                borderColor: 'rgb(101, 82, 82)', 
+                              },
+                            },
+                            '& label.Mui-focused': {
+                              color: 'rgb(101, 82, 82)', 
+                            }
+                          }}
                         />
                       </Grid>
                       
@@ -552,6 +561,16 @@ const EventDetail = () => {
                           error={!!editFormErrors.description}
                           helperText={editFormErrors.description}
                           variant="outlined"
+                          sx={{ mb: 1,
+                            '& .MuiOutlinedInput-root.Mui-focused': {
+                              '& fieldset': {
+                                borderColor: 'rgb(101, 82, 82)', 
+                              },
+                            },
+                            '& label.Mui-focused': {
+                              color: 'rgb(101, 82, 82)', 
+                            }
+                          }}
                         />
                       </Grid>
                       
@@ -567,6 +586,16 @@ const EventDetail = () => {
                           error={!!editFormErrors.location}
                           helperText={editFormErrors.location}
                           variant="outlined"
+                          sx={{ mb: 1,
+                            '& .MuiOutlinedInput-root.Mui-focused': {
+                              '& fieldset': {
+                                borderColor: 'rgb(101, 82, 82)', 
+                              },
+                            },
+                            '& label.Mui-focused': {
+                              color: 'rgb(101, 82, 82)', 
+                            }
+                          }}
                         />
                       </Grid>
                     </Grid>
@@ -592,6 +621,16 @@ const EventDetail = () => {
                           helperText={editFormErrors.capacity || "Leave empty for unlimited capacity"}
                           InputProps={{ inputProps: { min: 0 } }}
                           variant="outlined"
+                          sx={{ mb: 1,
+                            '& .MuiOutlinedInput-root.Mui-focused': {
+                              '& fieldset': {
+                                borderColor: 'rgb(101, 82, 82)', 
+                              },
+                            },
+                            '& label.Mui-focused': {
+                              color: 'rgb(101, 82, 82)', 
+                            }
+                          }}
                         />
                       </Grid>
                       
@@ -609,6 +648,16 @@ const EventDetail = () => {
                           helperText={editFormErrors.points || "Points awarded to attendees"}
                           InputProps={{ inputProps: { min: 0 } }}
                           variant="outlined"
+                          sx={{ mb: 1,
+                            '& .MuiOutlinedInput-root.Mui-focused': {
+                              '& fieldset': {
+                                borderColor: 'rgb(101, 82, 82)', 
+                              },
+                            },
+                            '& label.Mui-focused': {
+                              color: 'rgb(101, 82, 82)', 
+                            }
+                          }}
                         />
                       </Grid>
                     </Grid>
@@ -635,6 +684,16 @@ const EventDetail = () => {
                           helperText={editFormErrors.startTime}
                           InputLabelProps={{ shrink: true }}
                           variant="outlined"
+                          sx={{ mb: 1,
+                            '& .MuiOutlinedInput-root.Mui-focused': {
+                              '& fieldset': {
+                                borderColor: 'rgb(101, 82, 82)', 
+                              },
+                            },
+                            '& label.Mui-focused': {
+                              color: 'rgb(101, 82, 82)', 
+                            }
+                          }}
                         />
                       </Grid>
                       
@@ -652,6 +711,16 @@ const EventDetail = () => {
                           helperText={editFormErrors.endTime}
                           InputLabelProps={{ shrink: true }}
                           variant="outlined"
+                          sx={{ mb: 1,
+                            '& .MuiOutlinedInput-root.Mui-focused': {
+                              '& fieldset': {
+                                borderColor: 'rgb(101, 82, 82)', 
+                              },
+                            },
+                            '& label.Mui-focused': {
+                              color: 'rgb(101, 82, 82)', 
+                            }
+                          }}
                         />
                       </Grid>
                     </Grid>
@@ -669,7 +738,7 @@ const EventDetail = () => {
                           checked={editFormData.published}
                           onChange={handleEditFormChange}
                           name="published"
-                          color="primary"
+                          color="#c48f8f"
                         />
                       }
                       label={editFormData.published ? "Published (visible to users)" : "Draft (not visible to users)"}
@@ -684,7 +753,7 @@ const EventDetail = () => {
                     onClick={handleUpdateEvent}
                     disabled={updateLoading}
                     size="large"
-                    sx={{ px: 4 }}
+                    sx={{px: 4, backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)'}}
                   >
                     {updateLoading ? 'Updating...' : 'Update Event'}
                   </Button>
@@ -706,7 +775,7 @@ const EventDetail = () => {
                   />
                   {isManager && (
                     <Box>
-                      <IconButton color="primary" onClick={handleEditToggle} title="Edit">
+                      <IconButton color="primary" onClick={handleEditToggle} title="Edit" sx={{ color: '#c48f8f'}}>
                         <EditIcon />
                       </IconButton>
                       <IconButton color="error" onClick={handleDeleteDialogOpen} title="Delete">
@@ -832,7 +901,7 @@ const EventDetail = () => {
                                   handleAddGuestDialogOpen();
                                 }}
                               >
-                                <PersonAddIcon color="primary" />
+                                <PersonAddIcon color="primary" sx={{ color: '#c48f8f'}}/>
                               </IconButton>
                             </Tooltip>
                           )
@@ -958,7 +1027,7 @@ const EventDetail = () => {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleDeleteDialogClose} disabled={deleteLoading}>
+            <Button onClick={handleDeleteDialogClose} disabled={deleteLoading} sx={{ color: 'rgb(101, 82, 82)'}}>
               Cancel
             </Button>
             <Button 
@@ -966,6 +1035,7 @@ const EventDetail = () => {
               color="error" 
               disabled={deleteLoading}
               variant="contained"
+              sx={{backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)'}}
             >
               {deleteLoading ? <CircularProgress size={24} /> : 'Delete'}
             </Button>
@@ -1007,10 +1077,20 @@ const EventDetail = () => {
               onChange={(e) => setAddGuestUtorid(e.target.value)}
               error={!!addGuestError}
               disabled={addGuestLoading}
+              sx={{ mb: 1,
+                '& .MuiOutlinedInput-root.Mui-focused': {
+                  '& fieldset': {
+                    borderColor: 'rgb(101, 82, 82)', 
+                  },
+                },
+                '& label.Mui-focused': {
+                  color: 'rgb(101, 82, 82)', 
+                }
+              }}
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleAddGuestDialogClose} disabled={addGuestLoading}>
+            <Button onClick={handleAddGuestDialogClose} disabled={addGuestLoading} sx={{ color: 'rgb(101, 82, 82)'}}>
               Cancel
             </Button>
             <Button 
@@ -1018,6 +1098,7 @@ const EventDetail = () => {
               color="primary" 
               disabled={addGuestLoading || !addGuestUtorid.trim()}
               variant="contained"
+              sx={{backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)'}}
             >
               {addGuestLoading ? <CircularProgress size={24} /> : 'Add Guest'}
             </Button>
