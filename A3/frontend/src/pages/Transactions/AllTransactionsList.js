@@ -44,6 +44,24 @@ const AllTransactionsList = () => {
         return await response.json();
     }; 
 
+    const fetchRelatedTransaction = async (transactionId) => {
+        const response = await fetch(`${BACKEND_URL}/transactions/${transactionId}`,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch transaction');
+        }
+
+        return await response.json();
+    };
+
     return (
         <div className="dashboard-container">
             <nav className="dashboard-nav">
@@ -64,6 +82,7 @@ const AllTransactionsList = () => {
             <Container maxWidth="lg" sx={{ padding: 1 }}>
                 <TransactionTable
                     fetchFunction={fetchTransactions}
+                    fetchRelatedFunction={fetchRelatedTransaction}
                     title="All Transactions"
                     columns={[
                         

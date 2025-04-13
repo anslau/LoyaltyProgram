@@ -36,6 +36,7 @@ const chipColour = (type) => {
 
 const TransactionTable = ({
     fetchFunction,
+    fetchRelatedFunction,
     onRowClick = null,
     title = "",
     columns = [], // additional columns for the manager transaction list
@@ -69,7 +70,26 @@ const TransactionTable = ({
         setError(null);
         try {
             const { results, count } = await fetchFunction(filters);
-            setTransactions(results);
+
+            // if the transaction has a relatedId, we fetch the related transaction and 
+            // get the utorid instead of displaying relatedId
+            const withRelatedUsers = await Promise.all(results.map(async (transaction) => {
+                if (transaction.relatedId) {
+                    try {
+                        const related = await fetchRelatedFunction(transaction.relatedId);
+                        return {
+                            ...transaction,
+                            relatedUser: related?.utorid || 'N/A'
+                        };
+                    } catch {
+                        return { ...transaction, relatedUser: 'N/A' };
+                    }
+                }
+                return { ...transaction, relatedUser: 'N/A' };
+            }));    
+                
+            // setTransactions(results);
+            setTransactions(withRelatedUsers);
             setCount(Math.ceil(count / limit) || 1);
         } catch (err) {
             setError(err);
@@ -150,7 +170,7 @@ const TransactionTable = ({
         },
         { key: 'spent', label: 'Spent', render: (value) => value || 'N/A' },
         { key: 'promotionId', label: 'Promotion IDs', render: (value) => value || 'N/A' },
-        { key: 'relatedId', label: 'Related ID', render: (value) => value || 'N/A' },
+        { key: 'relatedUser', label: 'Sender/Recipient', render: (value) => value || 'N/A' },
         { key: 'amount', label: 'Amount', render: (value) => value || 'N/A' },
         { key: 'remark', label: 'Remark', render: (value) => value || 'N/A' },
         { key: 'createdBy', label: 'Created By' },

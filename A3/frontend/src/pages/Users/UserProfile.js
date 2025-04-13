@@ -280,7 +280,7 @@ const UserProfile = () => {
 
                                                     }
                                                 />
-                                            ) : user.birthday || 'N/A'}
+                                            ) : user.birthday ? user.birthday.slice(0, 10) : 'N/A'}
                                         </Typography>
                                     </Grid>
 
@@ -298,13 +298,13 @@ const UserProfile = () => {
 
                                     <Grid item xs={12}>
                                         <Typography variant="h6">
-                                            <strong>Created At: </strong>{user.createdAt}
+                                            <strong>Created At: </strong>{user.createdAt.slice(0, 10)}
                                         </Typography>
                                     </Grid>
 
                                     <Grid item xs={12}>
                                         <Typography variant="h6">
-                                            <strong>Last Login: </strong>{user.lastLogin}
+                                            <strong>Last Login: </strong>{user.lastLogin.slice(0, 10)}
                                         </Typography>
                                     </Grid>
 

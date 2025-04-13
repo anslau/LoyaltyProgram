@@ -124,7 +124,7 @@ const UserListTable = ({
         },
         { key: 'name', label: 'Name' },
         { key: 'email', label: 'Email' },
-        { key: 'birthday', label: 'Birthday', render: (value) => value || 'N/A' },
+        { key: 'birthday', label: 'Birthday', render: (value) => value ? value.slice(0, 10) : 'N/A' },
         {
             key: 'role',
             label: 'Role',
