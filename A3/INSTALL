@@ -3,4 +3,114 @@
 # You should write detailed description on:
 
 # 1. All the packages you need to install
+### System Requirements
+- Node.js (v18 or newer recommended)
+- npm (v9 or newer)
+- Git
+
+### 1. Clone the Repository
+git clone <url>
+cd <directory>/A3
+
+### 2. Backend Setup
+#### Install Dependencies
+cd backend
+npm install
+
+#### Database Setup
+npx prisma migrate dev
+
+#### Seed the Database (Optional)
+npx prisma db seed
+
+### 3. Frontend Setup
+
+#### Install Dependencies
+cd ../frontend
+npm install
+npm install @mui/material @emotion/react @emotion/styled jwt-decode axios
+npm install @mui/icons-material
+npm install react-router-dom
+
+### 4. Running the Application
+
+#### Backend
+cd ../backend
+node index.js 8000
+
+#### Frontend
+cd ../frontend
+npm start
+
 # 2. How to configure various servers (e.g., Nginx, Apache, etc)
+## Deployment using Railway
+
+### 1. Create a GitHub Repository
+Create a new GitHub repository and push your code to it:
+
+    git init
+    git add .
+    git commit -m "Loyal Program APP"
+    git branch -M main
+    git remote add origin https://github.com/yourusername/your-repo-name.git
+    git push -u origin main
+
+### 2. Set Up Railway Account
+
+1. Sign up for [Railway](https://railway.app) using the "Sign in with GitHub" option
+2. Grant Railway the necessary permissions to access your repositories
+
+### 3. Create a New Project
+
+1. In the Railway dashboard, click "New Project"
+2. Select "Deploy from GitHub repo"
+3. Choose the repository containing this App
+
+### 4. Configure Frontend Service
+
+1. Click the "+ Create" button, select "GitHub repo", then choose your repository
+2. Rename the service to something like "loyal-program-frontend"
+3. Configure settings:
+   - Root Directory: `frontend`
+   - Build Command: `npm run build`
+   - Start Command: `npx serve -s build`
+4. Deploy the frontend
+5. Generate a public domain under "Settings > Networking"
+   - Note the URL: `https://<frontend-service-name>.up.railway.app`
+
+### 5. Configure Backend Service
+
+1. In your project, click "+ New Service" and select "GitHub repo" again
+2. Rename the service to something like "loyal-program-backend"
+3. Configure settings:
+   - Root Directory: `backend`
+   - Start Command: `node index.js 8000`
+4. Set environment variables in the "Variables" tab:
+   - Click "Raw Editor" and add: `FRONTEND_URL="https://<frontend-service-name>.up.railway.app"`
+   - Add `DATABASE_URL` if using a different database type
+5. Deploy the backend
+6. Generate a public domain under "Settings > Networking"
+   - Note the URL: `https://<backend-service-name>.up.railway.app`
+
+### 6. Connect Frontend to Backend
+
+1. Go back to your frontend service in Railway
+2. Add environment variable in the "Variables" tab:
+   - `REACT_APP_BACKEND_URL="https://<backend-service-name>.up.railway.app"`
+3. Redeploy the frontend service
+
+### 7. Verify Deployment
+
+1. Access your application using the frontend URL
+2. Test key functionality to ensure the frontend and backend are communicating properly
+
+### 8. Update CORS Configuration (if needed)
+
+If you encounter CORS issues, update the backend's CORS configuration to include your frontend domain:
+
+app.use(cors({
+origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+allowedHeaders: ['Content-Type', 'Authorization'],
+credentials: true
+}));
