@@ -71,7 +71,7 @@ const Dashboard = () => {
               What's New
             </Link>
             <RoleSwitcher />
-                        <Link to="/profile" style={{ marginRight: '20px', textDecoration: 'none', color: '#1976d2', fontWeight: 'bold' }}>
+                        <Link to="/profile" style={{ marginRight: '20px', textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}>
                             Profile
                         </Link>
             <LogoutButton />
@@ -123,31 +123,31 @@ const Dashboard = () => {
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 4 }}>
           <Link
             to="/users/me/transactions"
-            style={{ textDecoration: 'none', color: '#1976d2', fontWeight: 'bold' }}
+            style={{ textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}
           >
             View All of Your Transactions
           </Link>
           {activeRole && ['cashier', 'manager', 'superuser'].includes(activeRole) && (
             <Link
               to="/transactions"
-              style={{ textDecoration: 'none', color: '#1976d2', fontWeight: 'bold' }}
+              style={{ textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}
             >
               View All Transactions
             </Link>
           )}
           <Link
             to="/promotions"
-            style={{ textDecoration: 'none', color: '#1976d2', fontWeight: 'bold' }}
+            style={{ textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}
           >
             View All Promotions
           </Link>
           <Link
             to="/events"
-            style={{ textDecoration: 'none', color: '#1976d2', fontWeight: 'bold' }}
+            style={{ textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}
           >
             View All Events
           </Link>
-                    <Link to="/transfer" style={{ textDecoration: 'none', color: '#1976d2', fontWeight: 'bold' }}>
+                    <Link to="/transfer" style={{ textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}>
                         Transfer Points
                     </Link>
         </Box>

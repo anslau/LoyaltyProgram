@@ -187,10 +187,10 @@ const UserProfile = () => {
                 <div className="nav-content">
                     <h1 className="dashboard-title">My Profile</h1>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <Link to="/dashboard" style={{ marginRight: '20px', textDecoration: 'none', color: '#1976d2', fontWeight: 'bold' }}>
+                        <Link to="/dashboard" style={{ marginRight: '20px', textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}>
                             Dashboard
                         </Link>
-                        <Link to="/perks" style={{ marginRight: '20px', textDecoration: 'none', color: '#1976d2', fontWeight: 'bold' }}>
+                        <Link to="/perks" style={{ marginRight: '20px', textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}>
                             What's New
                         </Link>
                         <LogoutButton />
@@ -208,7 +208,7 @@ const UserProfile = () => {
                         <div className="user-profile-details">
                             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 2, borderRadius: 2, gap: 2}}>
                                 <UserAvatar name={user.name} avatarUrl={user.avatarUrl} size={256} />
-                                <Button variant="outlined" onClick={() => setQrCodeOpen(true)} style={{ marginRight: '20px' }}>
+                                <Button variant="outlined" onClick={() => setQrCodeOpen(true)} style={{ marginRight: '20px', borderColor: 'rgb(101, 82, 82)', color: 'rgb(101, 82, 82)' }}>
                                     QR Code
                                 </Button>
                             </Box>
@@ -217,7 +217,7 @@ const UserProfile = () => {
 
                         <div className="user-profile-info">
                             <Box component={"form"} onSubmit={handleSubmit} sx={{ padding: 2, backgroundColor: '#f5f5f5', borderRadius: 2, position: 'relative', minWidth: 400 }}>
-                                <IconButton color="primary" onClick={handleEditToggle} title="Edit" sx={{ position: 'absolute', top: 0, right: 0 }}>
+                                <IconButton color="#c48f8f" onClick={handleEditToggle} title="Edit" sx={{ position: 'absolute', top: 0, right: 0, color: '#c48f8f' }}>
                                     {!editMode && (<EditIcon />)}
                                 </IconButton>
 
@@ -239,6 +239,16 @@ const UserProfile = () => {
                                                         setError('');
                                                         setSuccess(false);
                                                     }}
+                                                    sx={{ mb: 1,
+                                                        '& .MuiOutlinedInput-root.Mui-focused': {
+                                                          '& fieldset': {
+                                                            borderColor: 'rgb(101, 82, 82)', 
+                                                          },
+                                                        },
+                                                        '& label.Mui-focused': {
+                                                          color: 'rgb(101, 82, 82)', 
+                                                        }
+                                                      }}
                                                 />
                                             ) : user.name}
                                         </Typography>
@@ -261,6 +271,16 @@ const UserProfile = () => {
                                                         setError('');
                                                         setSuccess(false);
                                                     }}
+                                                    sx={{ mb: 1,
+                                                        '& .MuiOutlinedInput-root.Mui-focused': {
+                                                          '& fieldset': {
+                                                            borderColor: 'rgb(101, 82, 82)', 
+                                                          },
+                                                        },
+                                                        '& label.Mui-focused': {
+                                                          color: 'rgb(101, 82, 82)', 
+                                                        }
+                                                      }}
                                                 />
                                             ) : user.email}
                                         </Typography>
@@ -277,9 +297,18 @@ const UserProfile = () => {
                                                             setUserForm({ ...userForm, birthday: e.target.value });
                                                             setError('');
                                                             setSuccess(false);
-                                                        }
-
+                                                        } 
                                                     }
+                                                    sx={{ mb: 1,
+                                                        '& .MuiOutlinedInput-root.Mui-focused': {
+                                                          '& fieldset': {
+                                                            borderColor: 'rgb(101, 82, 82)', 
+                                                          },
+                                                        },
+                                                        '& label.Mui-focused': {
+                                                          color: 'rgb(101, 82, 82)', 
+                                                        }
+                                                      }}
                                                 />
                                             ) : user.birthday ? user.birthday.slice(0, 10) : 'N/A'}
                                         </Typography>
@@ -322,7 +351,7 @@ const UserProfile = () => {
                                                     variant="contained"
                                                     component="label"
                                                     startIcon={<CloudUpload />}
-                                                    sx={{ marginTop: 2 }}
+                                                    sx={{ marginTop: 2, backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)'}}
                                                 >
                                                     Upload Avatar
                                                     <VisuallyHiddenInput
@@ -356,13 +385,14 @@ const UserProfile = () => {
                                                 variant="outlined"
                                                 onClick={handleEditToggle}
                                                 disabled={loading}
+                                                sx={{ px: 4, color: 'rgb(101, 82, 82)', borderColor: 'rgb(101, 82, 82)' }}
                                             >
                                                 Cancel
                                             </Button>
                                             <Button
                                                 type="submit"
                                                 variant="contained"
-                                                color="primary"
+                                                sx={{backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)'}}
                                                 disabled={loading}
                                             >
                                                 {loading ? 'Saving...' : 'Save Changes'}
@@ -391,7 +421,7 @@ const UserProfile = () => {
 
                             <div className="user-profile-password">
                                 <Grid item xs={12} sx={{ mt: 2 }}>
-                                    <Button onClick={handleChangePassword}>
+                                    <Button onClick={handleChangePassword} sx={{ color: 'rgb(101, 82, 82)' }}>
                                         Change Password
                                     </Button>
                                 </Grid>
@@ -415,6 +445,16 @@ const UserProfile = () => {
                                                             setPasswordError('');
                                                             setPasswordSuccess(false);
                                                         }}
+                                                        sx={{ mb: 1,
+                                                            '& .MuiOutlinedInput-root.Mui-focused': {
+                                                              '& fieldset': {
+                                                                borderColor: 'rgb(101, 82, 82)', 
+                                                              },
+                                                            },
+                                                            '& label.Mui-focused': {
+                                                              color: 'rgb(101, 82, 82)', 
+                                                            }
+                                                          }}
                                                     />
                                                 </Typography>
                                             </Grid>
@@ -431,6 +471,16 @@ const UserProfile = () => {
                                                             setPasswordError('');
                                                             setPasswordSuccess(false);
                                                         }}
+                                                        sx={{ mb: 1,
+                                                            '& .MuiOutlinedInput-root.Mui-focused': {
+                                                              '& fieldset': {
+                                                                borderColor: 'rgb(101, 82, 82)', 
+                                                              },
+                                                            },
+                                                            '& label.Mui-focused': {
+                                                              color: 'rgb(101, 82, 82)', 
+                                                            }
+                                                          }}
                                                     />
                                                 </Typography>
                                             </Grid>
@@ -441,14 +491,15 @@ const UserProfile = () => {
                                                 variant="outlined"
                                                 onClick={handleChangePassword}
                                                 disabled={loading}
+                                                sx={{ px: 4, color: 'rgb(101, 82, 82)', borderColor: 'rgb(101, 82, 82)' }}
                                             >
                                                 Cancel
                                             </Button>
                                             <Button
                                                 type="submit"
                                                 variant="contained"
-                                                color="primary"
                                                 disabled={loading}
+                                                sx={{backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)'}}
                                             >
                                                 {loading ? 'Resetting...' : 'Reset'}
                                             </Button>
