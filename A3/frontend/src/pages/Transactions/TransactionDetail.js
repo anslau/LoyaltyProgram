@@ -1,6 +1,6 @@
 import React from 'react';
 import { useContext, useEffect, useState } from 'react';
-import { Box, Typography, IconButton, Paper, Chip, Grid, Divider, CircularProgress, Button, TextField } from '@mui/material';
+import { Box, Typography, IconButton, Paper, Chip, Grid, Divider, CircularProgress, Button, TextField, Alert } from '@mui/material';
 import { ArrowBack as ArrowBackIcon } from '@mui/icons-material';
 import { useNavigate, useParams } from 'react-router-dom';
 import AuthContext from '../../context/AuthContext';
@@ -25,12 +25,13 @@ const TransactionDetail = () => {
     const [adjustmentData, setAdjustmentData] = useState({
         utorid: '',
         type: 'adjustment',
-        amount: null,
+        amount: '',
         relatedId: transactionId,
         remark: '',
         promotionIds: []
     });
     const [adjustmentLoading, setAdjustmentLoading] = useState(false);
+    const [adjustmentSuccess, setAdjustmentSuccess] = useState(false);
 
     // get the transaction
     useEffect(() => {
@@ -92,10 +93,10 @@ const TransactionDetail = () => {
     };
 
     const validateAdjustmentData = () => {
-        if (!adjustmentData.utorid) {
-            setAdjustmentError('Utorid is required');
-            return false;
-        }
+        // if (!adjustmentData.utorid) {
+        //     setAdjustmentError('Utorid is required');
+        //     return false;
+        // }
         if (!adjustmentData.amount) {
             setAdjustmentError('Amount is required');
             return false;
@@ -105,7 +106,8 @@ const TransactionDetail = () => {
     };
 
     // create an adjustment transaction
-    const handleCreateAdjustment = async () => {
+    const handleCreateAdjustment = async (e) => {
+        e.preventDefault();
         if (!validateAdjustmentData()) {
             return;
         }
@@ -113,7 +115,7 @@ const TransactionDetail = () => {
         setAdjustmentLoading(true);
         try {
             const newAdjustment = {
-                utorid: adjustmentData.utorid,
+                utorid: transaction.utorid,
                 type: "adjustment",
                 relatedId: Number(transactionId),
                 amount: Number(adjustmentData.amount),
@@ -130,18 +132,36 @@ const TransactionDetail = () => {
                 body: JSON.stringify(newAdjustment),
             });
             if (!response.ok) {
-                throw new Error('Failed to create adjustment');
+                setAdjustmentLoading(false);
+                setAdjustmentSuccess(false);
+                setAdjustmentError('Your promotion IDs are invalid. Please try again.');
+
+                // reset form data
+                setAdjustmentData({
+                    utorid: '',
+                    amount: '',
+                    promotionIds: '',
+                    remark: '',
+                });
+                return;
+
             }
 
             const data = await response.json();
+
+            setAdjustmentData(data);
             setAdjustmentLoading(false);
             setCreatingAdjustment(false);
-            
+            setAdjustmentSuccess(true);
+
+            setTimeout(() => {
+                navigate('/transactions');
+            }, 2000);
+
         } catch (error) {
             setAdjustmentError(error.message);
         }
     };
-
 
 
     // default colours for certain transaction types
@@ -244,7 +264,7 @@ const TransactionDetail = () => {
 
                             <Grid item xs={12}>
                                 <Typography variant="subtitle1" color="text.secondary">Created By</Typography>
-                                <Typography variant="body1" paragraph>{transaction.createBy}</Typography>
+                                <Typography variant="body1" paragraph>{transaction.createdBy}</Typography>
                             </Grid>
                         </Grid>
 
@@ -260,17 +280,19 @@ const TransactionDetail = () => {
                         {creatingAdjustment && (
                             <Box component="form" onSubmit={handleCreateAdjustment} sx={{ mt: 3 }}>
                                 <TextField
-                                    label="Utorid"
                                     fullWidth
                                     margin="normal"
-                                    value={adjustmentData.utorid}
-                                    onChange={(e) => setAdjustmentData({ ...adjustmentData, utorid: e.target.value })}
+                                    value={transaction.utorid}
+                                    disabled
+                                    //onChange={(e) => setAdjustmentData({ ...adjustmentData, utorid: e.target.value })}
+                                    label="Utorid of the user to adjust"
                                 />
                                 <TextField
                                     fullWidth
                                     margin="normal"
                                     disabled
                                     value="adjustment"
+                                    label="Type"
                                 />
                                 <TextField
                                     fullWidth
@@ -278,6 +300,7 @@ const TransactionDetail = () => {
                                     margin="normal"
                                     disabled
                                     value={transactionId}
+                                    label="Transaction ID"
                                 />
                                 <TextField
                                     label="Amount"
@@ -315,6 +338,19 @@ const TransactionDetail = () => {
                                 )}
                             </Box>
                         )}
+
+                        {adjustmentSuccess && (
+                            <Alert severity="success" sx={{ mt: 2 }}>
+                                {adjustmentSuccess} Success! Redirecting to transactions page...
+                            </Alert>
+                        )}
+
+                        {/* {adjustmentError && (
+                            <Alert severity="error" sx={{ mt: 2 }}>
+                                {adjustmentError}
+                            </Alert>
+                        )} */}
+
 
                     </Paper>
                 </>

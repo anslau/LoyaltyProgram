@@ -4,9 +4,10 @@ import {
     Box, Typography, Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper, Button, TextField, MenuItem, Stack, Chip,
     IconButton, CircularProgress, Pagination, FormGroup, FormControlLabel,
-    Checkbox
+    Checkbox, TableSortLabel
 } from "@mui/material";
 import { FilterList as FilterListIcon } from '@mui/icons-material';
+import UserAvatar from "../UserAvatar";
 
 // Dropdown constants
 const userRoles = [
@@ -36,7 +37,9 @@ const UserListTable = ({
         name: '',
         role: '',
         verified: '',
-        activated: ''
+        activated: '',
+        page: 1,
+        limit: 10
     });
 
     const [users, setUsers] = useState([]);
@@ -46,7 +49,12 @@ const UserListTable = ({
     const [showFilters, setShowFilters] = useState(false);
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(10);
+    const [clearFilter, setClearFilter] = useState(false);
 
+    const [orderBy, setOrderBy] = useState('id');
+    const [order, setOrder] = useState('asc');
+
+    // Fetch users from the API
     const fetchUsers = async () => {
         setLoading(true);
         setError(null);
@@ -61,8 +69,10 @@ const UserListTable = ({
         }
     };
 
+    // Fetch users when the component mounts or when filters change
     useEffect(() => {
         fetchUsers();
+        setPage(1);
     }, [page, limit]);
 
     const handleSearch = () => {
@@ -74,11 +84,14 @@ const UserListTable = ({
 
     const handlePageChange = (event, value) => {
         setPage(value);
+        setFilters({ ...filters, page: value });
     };
 
     const handleLimitChange = (event) => {
         setLimit(parseInt(event.target.value, 10));
         setPage(1);
+        setFilters({ ...filters, page: 1, limit: parseInt(event.target.value, 10) });
+
     };
 
     const toggleFilters = () => {
@@ -86,20 +99,38 @@ const UserListTable = ({
     };
 
     const clearFilters = () => {
+        setPage(1);
         setFilters({
             name: '',
             role: '',
-            verified: false,
-            activated: false
+            verified: '',
+            activated: ''
         });
+        setClearFilter(true);
     };
+
+    // automatically fetch users when filters are cleared
+    useEffect(() => {
+        fetchUsers();
+    }, [clearFilter]);
 
     const defaultColumns = [
         { key: 'id', label: 'User ID' },
         { key: 'utorid', label: 'Utorid' },
+        {
+            key: 'avatarUrl', label: 'Avatar', render: (value, user) => {
+                return (
+                    <UserAvatar
+                        name={user.name}
+                        avatarUrl={user.avatarUrl}
+                        size={32}
+                    />
+                );
+            }
+        },
         { key: 'name', label: 'Name' },
         { key: 'email', label: 'Email' },
-        { key: 'birthday', label: 'Birthday', render: (value) => value || 'N/A' },
+        { key: 'birthday', label: 'Birthday', render: (value) => value ? value.slice(0, 10) : 'N/A' },
         {
             key: 'role',
             label: 'Role',
@@ -113,15 +144,42 @@ const UserListTable = ({
             )
         },
         { key: 'points', label: 'Points' },
-        { key: 'createdAt', label: 'Created At' },
-        { key: 'lastLogin', label: 'Last Login', render: (value) => value || 'Never' },
-        { key: 'verified', label: 'Verified', render: (value) => value || 'No' },
-        { key: 'activated', label: 'Activated', render: (value) => value || 'No' },
-        { key: 'avatarUrl', label: 'Avatar', render: (value) => value || 'None' }
+        { key: 'createdAt', label: 'Created At', render: (value) => value ? value.slice(0, 10) : 'N/A' },
+        { key: 'lastLogin', label: 'Last Login', render: (value) => value ? value.slice(0, 10) : 'Never' },
+        { key: 'verified', label: 'Verified', render: (value) => value === true ? 'Yes' : 'No' }
     ];
 
     const mergedColumns = [...defaultColumns, ...columns];
-    const paginatedUsers = users.slice((page - 1) * limit, page * limit);
+
+    ////////// FROM MUI TABLE DOCUMENTATION /////////////////////////
+    // https://mui.com/material-ui/react-table/#sorting-amp-selecting
+    // sorts the table based on the column clicked by asc/desc
+    function descendingComparator(a, b, orderBy) {
+        if (b[orderBy] < a[orderBy]) {
+            return -1;
+        }
+        if (b[orderBy] > a[orderBy]) {
+            return 1;
+        }
+        return 0;
+    }
+
+    function getComparator(order, orderBy) {
+        return order === 'desc'
+            ? (a, b) => descendingComparator(a, b, orderBy)
+            : (a, b) => -descendingComparator(a, b, orderBy);
+    }
+
+    const handleRequestSort = (columnKey) => {
+        const isAsc = orderBy === columnKey && order === 'asc';
+        setOrder(isAsc ? 'desc' : 'asc');
+        setOrderBy(columnKey);
+    };
+
+    const sortedUsers = orderBy
+        ? [...users].sort(getComparator(order, orderBy))
+        : users;
+    /////////////////////////////////////////////////////////////////
 
     return (
         <div className="users-container">
@@ -145,15 +203,15 @@ const UserListTable = ({
                         sx={{ '& .MuiTextField-root': { m: 1, width: '25ch' }, mt: 2 }}
                     >
                         <TextField
-                            label="Name" value={filters.type}
-                            onChange={(e) => setFilters({ ...filters, type: e.target.value })}
+                            label="Name" value={filters.name}
+                            onChange={(e) => setFilters({ ...filters, name: e.target.value })}
                             helperText="Enter name or utorid"
                         >
                         </TextField>
 
                         <TextField
-                            select label="Role" value={filters.relatedId}
-                            onChange={(e) => setFilters({ ...filters, relatedId: e.target.value })}
+                            select label="Role" value={filters.role}
+                            onChange={(e) => setFilters({ ...filters, role: e.target.value })}
                             helperText="Select user role"
                         >
                             {userRoles.map((option) => (
@@ -163,7 +221,7 @@ const UserListTable = ({
 
                         <FormGroup>
                             <FormControlLabel control={
-                                <Checkbox checked={filters.verified || false}
+                                <Checkbox checked={filters.verified}
                                     onChange={(e) => {
                                         setFilters({ ...filters, verified: e.target.checked });
                                     }}
@@ -175,7 +233,7 @@ const UserListTable = ({
 
                         <FormGroup>
                             <FormControlLabel control={
-                                <Checkbox checked={filters.activated || false}
+                                <Checkbox checked={filters.activated}
                                     onChange={(e) => {
                                         setFilters({ ...filters, activated: e.target.checked });
                                     }}
@@ -207,8 +265,19 @@ const UserListTable = ({
                 <Table>
                     <TableHead>
                         <TableRow>
-                            {mergedColumns.map(col => (
+                            {/* {mergedColumns.map(col => (
                                 <TableCell key={col.key}>{col.label}</TableCell>
+                            ))} */}
+                            {mergedColumns.map((col) => (
+                                <TableCell key={col.key} sortDirection={orderBy === col.key ? order : false}>
+                                    <TableSortLabel
+                                        active={orderBy === col.key}
+                                        direction={orderBy === col.key ? order : 'asc'}
+                                        onClick={() => handleRequestSort(col.key)}
+                                    >
+                                        {col.label}
+                                    </TableSortLabel>
+                                </TableCell>
                             ))}
                         </TableRow>
                     </TableHead>
@@ -221,7 +290,7 @@ const UserListTable = ({
                         ) : users.length === 0 ? (
                             <TableRow><TableCell colSpan={mergedColumns.length} align="center">No users found</TableCell></TableRow>
                         ) : (
-                            paginatedUsers.map((t) => (
+                            sortedUsers.map((t) => (
                                 <TableRow key={t.id} hover onClick={() => onRowClick?.(t)}>
                                     {mergedColumns.map(col => (
                                         <TableCell key={col.key}>

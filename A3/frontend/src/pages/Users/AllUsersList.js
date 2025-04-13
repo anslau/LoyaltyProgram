@@ -13,6 +13,9 @@ const AllUsersList = () => {
     const { token } = useContext(AuthContext);
     
     const fetchUsers = async (filters) => {
+        // reset the filters
+        window.history.pushState(null, '', `/users?`); 
+        
         // build the query string from filters
         const queryString = {};
         Object.keys(filters).forEach(key => {
@@ -62,17 +65,17 @@ const AllUsersList = () => {
                 <UserListTable
                     fetchFunction={fetchUsers}
                     title="All Users"
-                    // columns={[
-                    //     {
-                    //         key: "id",
-                    //         label: "Details",
-                    //         render: (value) => (
-                    //             <Link to={`/users/${value}`} style={{ textDecoration: 'none', color: '#1976d2' }}>
-                    //                 Details
-                    //             </Link>
-                    //         ),
-                    //     }
-                    // ]}
+                    columns={[
+                        {
+                            key: "id",
+                            label: "Details",
+                            render: (value) => (
+                                <Link to={`/users/${value}`} style={{ textDecoration: 'none', color: '#1976d2' }}>
+                                    Details
+                                </Link>
+                            ),
+                        }
+                    ]}
                 />
             </Container>
         </div>

@@ -13,6 +13,9 @@ const AllTransactionsList = () => {
     const { token } = useContext(AuthContext);
     
     const fetchTransactions = async (filters) => {
+        // reset the filters
+        window.history.pushState(null, '', `/transactions?`); 
+        
         // build the query string from filters
         const queryString = {};
         Object.keys(filters).forEach(key => {
@@ -41,6 +44,24 @@ const AllTransactionsList = () => {
         return await response.json();
     }; 
 
+    const fetchRelatedTransaction = async (transactionId) => {
+        const response = await fetch(`${BACKEND_URL}/transactions/${transactionId}`,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch transaction');
+        }
+
+        return await response.json();
+    };
+
     return (
         <div className="dashboard-container">
             <nav className="dashboard-nav">
@@ -61,6 +82,7 @@ const AllTransactionsList = () => {
             <Container maxWidth="lg" sx={{ padding: 1 }}>
                 <TransactionTable
                     fetchFunction={fetchTransactions}
+                    fetchRelatedFunction={fetchRelatedTransaction}
                     title="All Transactions"
                     columns={[
                         
@@ -89,7 +111,7 @@ const AllTransactionsList = () => {
                         <TextField
                             label="Created By"
                             onChange={(e) => {
-                                setFilters({ ...filters, createBy: e.target.value });
+                                setFilters({ ...filters, createdBy: e.target.value });
                             }}
                             helperText="User who created the transaction"
                         />
@@ -99,7 +121,7 @@ const AllTransactionsList = () => {
                             onChange={(e) => {
                                 setFilters({ ...filters, name: e.target.value });
                             }}
-                            helperText="User who created the transaction"
+                            helperText="User who made the transaction"
                         />
                         
                         <FormGroup>

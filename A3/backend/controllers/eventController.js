@@ -65,10 +65,10 @@ async function retrieveEventsList(req, res){
     }
 
     const { name, location, started, ended, published, showFull, page, limit } = req.query;
-    const { role } = req.user;
+    const { role, id } = req.user;
 
     // only managers can access these
-    if ((role === 'regular' || role === 'cashier') && (published)){
+    if ((role === 'regular' || role === 'cashier') && published === 'false'){
         return res.status(403).json({ message: "Unauthorized" });
     }
 
@@ -88,7 +88,7 @@ async function retrieveEventsList(req, res){
 
     // get the events
     const filters = { name, location, started, ended, published, showFull, page, limit };
-    const events = await eventService.retrieveEventsList(filters, role);
+    const events = await eventService.retrieveEventsList(filters, role, id);
 
     return res.status(200).json(events);
 }
@@ -139,9 +139,9 @@ async function updateEvent(req, res){
     if (capacity !== undefined && capacity !== null && (capacity < 0 || !Number.isInteger(capacity))){
         return res.status(400).json({ message: "capacity must be a positive integer value" });
     }
-    if ((points || published) && role !== 'manager'){
-        return res.status(403).json({ message: "Unauthorized" });
-    }
+    // if ((points || published) && role !== 'manager'){
+    //     return res.status(403).json({ message: "Unauthorized" });
+    // }
     if (points && (points < 0 || !Number.isInteger(points))){
         return res.status(400).json({ message: "points must be a positive integer value" });
     }

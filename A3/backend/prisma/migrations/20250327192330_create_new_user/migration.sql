@@ -87,7 +87,7 @@ CREATE TABLE "Transaction" (
     "amount" REAL NOT NULL DEFAULT 0,
     "relatedId" INTEGER,
     "remark" TEXT NOT NULL DEFAULT '',
-    "createBy" TEXT NOT NULL,
+    "createdBy" TEXT NOT NULL,
     "processedBy" TEXT,
     "customerId" INTEGER NOT NULL,
     "suspicious" BOOLEAN NOT NULL DEFAULT false,
