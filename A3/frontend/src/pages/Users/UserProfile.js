@@ -198,7 +198,7 @@ const UserProfile = () => {
                 </div>
             </nav>
 
-            <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 2, gap: 4 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start', padding: 2, gap: 4 }}>
                 {loading ? (
                     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
                         <CircularProgress />
@@ -206,7 +206,7 @@ const UserProfile = () => {
                 ) : (
                     <>
                         <div className="user-profile-details">
-                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 2, borderRadius: 2, gap: 2 }}>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 2, borderRadius: 2, gap: 2}}>
                                 <UserAvatar name={user.name} avatarUrl={user.avatarUrl} size={256} />
                                 <Button variant="outlined" onClick={() => setQrCodeOpen(true)} style={{ marginRight: '20px' }}>
                                     QR Code
@@ -216,7 +216,7 @@ const UserProfile = () => {
                         </div>
 
                         <div className="user-profile-info">
-                            <Box component={"form"} onSubmit={handleSubmit} sx={{ padding: 2, backgroundColor: '#f5f5f5', borderRadius: 2, position: 'relative' }}>
+                            <Box component={"form"} onSubmit={handleSubmit} sx={{ padding: 2, backgroundColor: '#f5f5f5', borderRadius: 2, position: 'relative', minWidth: 400 }}>
                                 <IconButton color="primary" onClick={handleEditToggle} title="Edit" sx={{ position: 'absolute', top: 0, right: 0 }}>
                                     {!editMode && (<EditIcon />)}
                                 </IconButton>
@@ -228,7 +228,8 @@ const UserProfile = () => {
 
                                     <Grid item xs={12}>
                                         <Typography variant="h6">
-                                            <strong>Name:</strong> {editMode ? (
+                                            <strong>Name: </strong> 
+                                            {editMode ? (
                                                 <TextField
                                                     type="text"
                                                     size="medium"
