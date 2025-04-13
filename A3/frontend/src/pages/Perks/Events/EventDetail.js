@@ -901,7 +901,7 @@ const EventDetail = () => {
                                   handleAddGuestDialogOpen();
                                 }}
                               >
-                                <PersonAddIcon color="primary" sx={{ color: '#c48f8f'}}/>
+                                <PersonAddIcon sx={{ color: '#c48f8f'}}/>
                               </IconButton>
                             </Tooltip>
                           )
