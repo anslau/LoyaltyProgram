@@ -147,7 +147,7 @@ const Dashboard = () => {
           >
             View All Events
           </Link>
-                    <Link to="/transfer" style={{ textDecoration: 'none', color: '#1976d2', fontWeight: 'bold', marginLeft: '20px' }}>
+                    <Link to="/transfer" style={{ textDecoration: 'none', color: '#1976d2', fontWeight: 'bold' }}>
                         Transfer Points
                     </Link>
         </Box>
