@@ -147,14 +147,25 @@ const Dashboard = () => {
           >
             View All Events
           </Link>
-                    <Link to="/transfer" style={{ textDecoration: 'none', color: '#1976d2', fontWeight: 'bold' }}>
-                        Transfer Points
-                    </Link>
+          {activeRole && ['manager', 'superuser'].includes(activeRole) && (
+          <Link
+            to="/users"
+            style={{ textDecoration: 'none', color: '#1976d2', fontWeight: 'bold' }}
+          >
+            View All Users
+          </Link>
+        )}
+
+        <Link to="/transfer" style={{ textDecoration: 'none', color: '#1976d2', fontWeight: 'bold'}}>
+            Transfer Points
+        </Link>
+
         </Box>
 
         {/* If the active role is cashier, render the cashier functions */}
         {activeRole === 'cashier' && <CashierPage />}
       </div>
+
     </div>
   );
 };
