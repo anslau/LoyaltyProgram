@@ -4,13 +4,16 @@ import LogoutButton from '../components/auth/LogoutButton';
 import '../styles/auth.css';
 import { useState, useEffect, useContext } from 'react';
 import AuthContext from '../context/AuthContext';
-import { Grid, Card, CardContent, Typography, Chip } from '@mui/material';
+import { Grid, Card, CardContent, Typography, Chip, Button } from '@mui/material';
+import QrCode from '../components/qrCode';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
 
 const Dashboard = () => {
     const [transactions, setTransactions] = useState([]);
     const { token } = useContext(AuthContext);
+    const [user, setUser] = useState({});
+    const [qrCodeOpen, setQrCodeOpen] = useState(false);
 
     // fetching the three most recent transactions for the dashboard
     useEffect(() => {
@@ -29,6 +32,25 @@ const Dashboard = () => {
             })
             .catch((error) => {
                 console.error('Error fetching transactions:', error);
+            }
+        )
+    }, []);
+
+    // fetching the logged in user details for the qrCode
+    useEffect(() => {
+        fetch(`${BACKEND_URL}/users/me`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                setUser(data);
+            })
+            .catch((error) => {
+                console.error('Error fetching user:', error);
             }
         )
     }, []);
@@ -59,6 +81,12 @@ const Dashboard = () => {
                         <Link to="/perks" style={{ marginRight: '20px', textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}>
                             What's New
                         </Link>
+
+                        <Button variant="outlined" onClick={() => setQrCodeOpen(true)} style={{ marginRight: '20px' }}>
+                            QR Code
+                        </Button>
+                        <QrCode open={qrCodeOpen} onClose={() => setQrCodeOpen(false)} user={user} />
+                        
                         <LogoutButton />
                     </div>
                 </div>
@@ -117,6 +145,9 @@ const Dashboard = () => {
                     </Link>
                     <Link to="/users" style={{ textDecoration: 'none', color: '#1976d2', fontWeight: 'bold', marginLeft: '20px' }}>
                         View All Users
+                    </Link>
+                    <Link to="/transfer" style={{ textDecoration: 'none', color: '#1976d2', fontWeight: 'bold', marginLeft: '20px' }}>
+                        Transfer Points
                     </Link>
                 </div>
             </div>

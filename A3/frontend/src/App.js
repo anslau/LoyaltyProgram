@@ -15,6 +15,7 @@ import CreateEvent from './pages/Perks/Events/CreateEvent';
 import ProtectedRoute from './route/ProtectedRoute';
 import AllUsersList from './pages/Users/AllUsersList';
 import UserDetail from './pages/Users/UserDetail';
+import TransferPoints from './pages/TransferPoints';
 
 function App() { 
     return ( 
@@ -40,6 +41,7 @@ function App() {
                     <Route path="/transactions/:transactionId" element={<TransactionDetail />} />
                     <Route path="/users" element={<AllUsersList />} />
                     <Route path="/users/:userId" element={<UserDetail />} />
+                    <Route path="/transfer" element={<TransferPoints />} />
                 </Route>
                 
                 {/* Fallback for unmatched routes */}
