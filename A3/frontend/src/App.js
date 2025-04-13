@@ -1,6 +1,7 @@
 import './styles/App.css';
 import React from 'react'; 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'; 
+import { ActiveRoleProvider } from './context/ActiveRoleContext';
 
 import Login from './pages/Login/Login'; 
 import Dashboard from './pages/Dashboard'; 
@@ -23,6 +24,7 @@ import ResetConfirm from './pages/Login/ResetConfirm';
 
 function App() { 
     return ( 
+        <ActiveRoleProvider>
         <BrowserRouter>
             <Routes> 
                 {/* Redirect to dashboard if authenticated, otherwise to login */} 
@@ -61,6 +63,7 @@ function App() {
                 <Route path="*" element={<Navigate to="/" />} />
             </Routes>
         </BrowserRouter>
+        </ActiveRoleProvider>
     ); 
 }
   
