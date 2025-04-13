@@ -142,6 +142,16 @@ const TransferPoints = () => {
                                 }}
                                 fullWidth
                                 required
+                                sx={{ mb: 1,
+                                    '& .MuiOutlinedInput-root.Mui-focused': {
+                                      '& fieldset': {
+                                        borderColor: 'rgb(101, 82, 82)', 
+                                      },
+                                    },
+                                    '& label.Mui-focused': {
+                                      color: 'rgb(101, 82, 82)', 
+                                    }
+                                  }}
                             />
                         </Grid>
 
@@ -152,6 +162,16 @@ const TransferPoints = () => {
                                 type="text"
                                 disabled
                                 fullWidth
+                                sx={{ mb: 1,
+                                    '& .MuiOutlinedInput-root.Mui-focused': {
+                                      '& fieldset': {
+                                        borderColor: 'rgb(101, 82, 82)', 
+                                      },
+                                    },
+                                    '& label.Mui-focused': {
+                                      color: 'rgb(101, 82, 82)', 
+                                    }
+                                  }}
                             />
                         </Grid>
 
@@ -173,6 +193,16 @@ const TransferPoints = () => {
                                 }}
                                 fullWidth
                                 required
+                                sx={{ mb: 1,
+                                    '& .MuiOutlinedInput-root.Mui-focused': {
+                                      '& fieldset': {
+                                        borderColor: 'rgb(101, 82, 82)', 
+                                      },
+                                    },
+                                    '& label.Mui-focused': {
+                                      color: 'rgb(101, 82, 82)', 
+                                    }
+                                  }}
                             />
                         </Grid>
 
@@ -186,6 +216,16 @@ const TransferPoints = () => {
                                     setSuccess(false);
                                 }}
                                 fullWidth
+                                sx={{ mb: 1,
+                                    '& .MuiOutlinedInput-root.Mui-focused': {
+                                      '& fieldset': {
+                                        borderColor: 'rgb(101, 82, 82)', 
+                                      },
+                                    },
+                                    '& label.Mui-focused': {
+                                      color: 'rgb(101, 82, 82)', 
+                                    }
+                                  }}
                             />
                         </Grid>
 
@@ -194,14 +234,15 @@ const TransferPoints = () => {
                                 variant="outlined"
                                 onClick={() => navigate('/dashboard')}
                                 disabled={loading}
+                                sx={{ px: 4, color: 'rgb(101, 82, 82)', borderColor: 'rgb(101, 82, 82)' }}
                             >
                                 Back
                             </Button>
                             <Button
                                 type="submit"
                                 variant="contained"
-                                color="primary"
                                 disabled={loading}
+                                sx={{backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)'}}
                             >
                                 {loading ? 'Transferring...' : 'Transfer'}
                             </Button>
