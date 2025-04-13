@@ -78,7 +78,7 @@ const UserDetail = () => {
         };
 
         fetchUserDetails();
-    }, [userId, token]);
+    }, [userId, token, editMode]);
 
     // getting the logged in user's role
     useEffect(() => {
@@ -149,10 +149,11 @@ const UserDetail = () => {
                 throw new Error(errorData.message || 'Failed to update user');
             }
 
-            const data = await response.json();
-            setUser(data);
+            // const data = await response.json();
+            // setUser(data);
             setEditMode(false);
             setLoading(false);
+           
 
         } catch (error) {
             setError(error.message);
