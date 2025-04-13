@@ -64,9 +64,10 @@ const PromotionItem = ({ promotion }) => {
       </CardContent>
       <CardActions sx={{ justifyContent: 'flex-end', p: 2, pt: 0 }}>
         <Button 
+          variant="contained" 
           size="small" 
-          color="primary" 
           onClick={() => navigate(`/promotions/${promotion.id}`)}
+          sx={{backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)'}}
         >
           View Details
         </Button>

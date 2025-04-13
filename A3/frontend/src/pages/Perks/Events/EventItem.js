@@ -85,6 +85,7 @@ const EventItem = ({ event, onClick }) => {
             size="small" 
             onClick={onClick}
             disabled={hasEnded() || isFull()}
+            sx={{backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)'}}
           >
             View Details
           </Button>

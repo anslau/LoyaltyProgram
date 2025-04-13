@@ -321,7 +321,7 @@ const PromotionDetail = () => {
                 </Box>
                 
                 <Box>
-                  <IconButton color="primary" onClick={handleEditToggle} title="Edit">
+                  <IconButton color="primary" onClick={handleEditToggle} title="Edit" sx={{ color: '#c48f8f'}}>
                     <EditIcon />
                   </IconButton>
                   <IconButton color="error" onClick={handleDeleteDialogOpen} title="Delete">
@@ -386,6 +386,16 @@ const PromotionDetail = () => {
                     onChange={handleChange}
                     error={!!formErrors.name}
                     helperText={formErrors.name}
+                    sx={{
+                      '& .MuiOutlinedInput-root.Mui-focused': {
+                        '& fieldset': {
+                          borderColor: 'rgb(101, 82, 82)', 
+                        },
+                      },
+                      '& label.Mui-focused': {
+                        color: 'rgb(101, 82, 82)', 
+                      }
+                    }}
                   />
                 </Grid>
                 
@@ -402,11 +412,29 @@ const PromotionDetail = () => {
                     onChange={handleChange}
                     error={!!formErrors.description}
                     helperText={formErrors.description}
+                    sx={{
+                      '& .MuiOutlinedInput-root.Mui-focused': {
+                        '& fieldset': {
+                          borderColor: 'rgb(101, 82, 82)', 
+                        },
+                      },
+                      '& label.Mui-focused': {
+                        color: 'rgb(101, 82, 82)', 
+                      }
+                    }}
                   />
                 </Grid>
                 
                 <Grid item xs={12} sm={6}>
-                  <FormControl fullWidth required error={!!formErrors.type}>
+                  <FormControl fullWidth required error={!!formErrors.type} sx={{'& .MuiOutlinedInput-root.Mui-focused': {
+                    '& fieldset': {
+                      borderColor: 'rgb(101, 82, 82)', 
+                    },
+                  },
+                  '& label.Mui-focused': {
+                    color: 'rgb(101, 82, 82)', 
+                  } 
+                }}>
                     <InputLabel id="type-label">Promotion Type</InputLabel>
                     <Select
                       labelId="type-label"
@@ -415,9 +443,29 @@ const PromotionDetail = () => {
                       value={formData.type}
                       label="Promotion Type"
                       onChange={handleChange}
+                      sx={{ 
+                        '& .MuiOutlinedInput-root.Mui-focused': {
+                          '& fieldset': {
+                            borderColor: 'rgb(101, 82, 82)', 
+                          },
+                        },
+                        '& label.Mui-focused': {
+                          color: 'rgb(101, 82, 82)', 
+                        }
+                      }}
                     >
-                      <MenuItem value="automatic">Automatic</MenuItem>
-                      <MenuItem value="one-time">One-time</MenuItem>
+                      <MenuItem value="automatic"
+                      sx={{
+                        '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                        '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                      }}
+                      >Automatic</MenuItem>
+                      <MenuItem value="one-time"
+                      sx={{
+                        '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                        '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                      }}
+                      >One-time</MenuItem>
                     </Select>
                     {formErrors.type && (
                       <Typography variant="caption" color="error">
@@ -439,6 +487,16 @@ const PromotionDetail = () => {
                     error={!!formErrors.points}
                     helperText={formErrors.points}
                     InputProps={{ inputProps: { min: 0 } }}
+                    sx={{
+                      '& .MuiOutlinedInput-root.Mui-focused': {
+                        '& fieldset': {
+                          borderColor: 'rgb(101, 82, 82)', 
+                        },
+                      },
+                      '& label.Mui-focused': {
+                        color: 'rgb(101, 82, 82)', 
+                      }
+                    }}
                   />
                 </Grid>
                 
@@ -455,6 +513,16 @@ const PromotionDetail = () => {
                     error={!!formErrors.startTime}
                     helperText={formErrors.startTime}
                     InputLabelProps={{ shrink: true }}
+                    sx={{
+                      '& .MuiOutlinedInput-root.Mui-focused': {
+                        '& fieldset': {
+                          borderColor: 'rgb(101, 82, 82)', 
+                        },
+                      },
+                      '& label.Mui-focused': {
+                        color: 'rgb(101, 82, 82)', 
+                      }
+                    }}
                   />
                 </Grid>
                 
@@ -471,6 +539,16 @@ const PromotionDetail = () => {
                     error={!!formErrors.endTime}
                     helperText={formErrors.endTime}
                     InputLabelProps={{ shrink: true }}
+                    sx={{
+                      '& .MuiOutlinedInput-root.Mui-focused': {
+                        '& fieldset': {
+                          borderColor: 'rgb(101, 82, 82)', 
+                        },
+                      },
+                      '& label.Mui-focused': {
+                        color: 'rgb(101, 82, 82)', 
+                      }
+                    }}
                   />
                 </Grid>
                 
@@ -486,6 +564,16 @@ const PromotionDetail = () => {
                     error={!!formErrors.minSpending}
                     helperText={formErrors.minSpending || "Leave empty if not applicable"}
                     InputProps={{ inputProps: { min: 0, step: 0.01 } }}
+                    sx={{
+                      '& .MuiOutlinedInput-root.Mui-focused': {
+                        '& fieldset': {
+                          borderColor: 'rgb(101, 82, 82)', 
+                        },
+                      },
+                      '& label.Mui-focused': {
+                        color: 'rgb(101, 82, 82)', 
+                      }
+                    }}
                   />
                 </Grid>
                 
@@ -501,6 +589,16 @@ const PromotionDetail = () => {
                     error={!!formErrors.rate}
                     helperText={formErrors.rate || "Leave empty if not applicable"}
                     InputProps={{ inputProps: { min: 0, step: 0.01 } }}
+                    sx={{
+                      '& .MuiOutlinedInput-root.Mui-focused': {
+                        '& fieldset': {
+                          borderColor: 'rgb(101, 82, 82)', 
+                        },
+                      },
+                      '& label.Mui-focused': {
+                        color: 'rgb(101, 82, 82)', 
+                      }
+                    }}
                   />
                 </Grid>
                 
@@ -509,6 +607,7 @@ const PromotionDetail = () => {
                     variant="outlined"
                     onClick={handleEditToggle}
                     disabled={loading}
+                    sx={{ px: 4, color: 'rgb(101, 82, 82)', borderColor: 'rgb(101, 82, 82)' }}
                   >
                     Cancel
                   </Button>
@@ -517,6 +616,7 @@ const PromotionDetail = () => {
                     variant="contained"
                     color="primary"
                     disabled={loading}
+                    sx={{backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)'}}
                   >
                     {loading ? 'Saving...' : 'Save Changes'}
                   </Button>
