@@ -51,7 +51,7 @@ async function createEvent(event, id) {
 
 }
 
-async function retrieveEventsList(filters, role) {
+async function retrieveEventsList(filters, role, userId) {
     try{
         // handle filters
         const where = {};
@@ -68,17 +68,36 @@ async function retrieveEventsList(filters, role) {
             where.endTime = filters.ended === 'true' ? { lte: now } : { gt: now };
         }
 
+        // modified to allow events where the user is an organizer to be shown, 
+        // even if they are not a manager+
+        const conditionals = [];
         if (role === 'regular' || role === 'cashier'){
-            where.published = true;
+            // where.published = true;
+            conditionals.push({
+                OR: [
+                    { published: true },
+                    { organizers: { some: { user: { id: userId } } } }
+                ]
+            });
         }else if (filters.published){
             where.published = filters.published === 'true';
         }
         
         if (filters.showFull !== 'true') {
-            where.OR = [
-                { capacity: null }, 
-                { numGuests: { lt: prisma.event.fields.capacity } } 
-            ];
+            // where.OR = [
+            //     { capacity: null }, 
+            //     { numGuests: { lt: prisma.event.fields.capacity } } 
+            // ];
+            conditionals.push({
+                OR: [
+                    { capacity: null },
+                    { numGuests: { lt: prisma.event.fields.capacity } }
+                ]
+            });
+        }
+
+        if (conditionals.length > 0) {
+            where.AND = conditionals;
         }
 
         // for pagination
