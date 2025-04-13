@@ -96,8 +96,8 @@ const ResetConfirmForm = () => {
             component={Link} 
             to="/login"
             variant="contained" 
-            color="primary"
             fullWidth
+            sx={{backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)'}}
           >
             Go to Login
           </Button>
@@ -120,6 +120,16 @@ const ResetConfirmForm = () => {
             value={formData.utorid}
             onChange={handleChange}
             disabled={loading}
+            sx={{ mb: 1,
+              '& .MuiOutlinedInput-root.Mui-focused': {
+                '& fieldset': {
+                  borderColor: 'rgb(101, 82, 82)', 
+                },
+              },
+              '& label.Mui-focused': {
+                color: 'rgb(101, 82, 82)', 
+              }
+            }}
           />
           
           <TextField
@@ -132,6 +142,16 @@ const ResetConfirmForm = () => {
             value={formData.resetToken}
             onChange={handleChange}
             disabled={loading}
+            sx={{ mb: 1,
+              '& .MuiOutlinedInput-root.Mui-focused': {
+                '& fieldset': {
+                  borderColor: 'rgb(101, 82, 82)', 
+                },
+              },
+              '& label.Mui-focused': {
+                color: 'rgb(101, 82, 82)', 
+              }
+            }}
           />
           
           <TextField
@@ -147,6 +167,16 @@ const ResetConfirmForm = () => {
             onChange={handleChange}
             disabled={loading}
             helperText="8-20 characters with 1 uppercase, 1 lowercase, 1 number, and 1 special character"
+            sx={{ mb: 1,
+              '& .MuiOutlinedInput-root.Mui-focused': {
+                '& fieldset': {
+                  borderColor: 'rgb(101, 82, 82)', 
+                },
+              },
+              '& label.Mui-focused': {
+                color: 'rgb(101, 82, 82)', 
+              }
+            }}
           />
           
           <TextField
@@ -160,6 +190,16 @@ const ResetConfirmForm = () => {
             value={formData.confirmPassword}
             onChange={handleChange}
             disabled={loading}
+            sx={{ mb: 1,
+              '& .MuiOutlinedInput-root.Mui-focused': {
+                '& fieldset': {
+                  borderColor: 'rgb(101, 82, 82)', 
+                },
+              },
+              '& label.Mui-focused': {
+                color: 'rgb(101, 82, 82)', 
+              }
+            }}
           />
           
           {error && (
@@ -172,7 +212,7 @@ const ResetConfirmForm = () => {
             <Button 
               component={Link} 
               to="/reset-request"
-              color="primary"
+              sx={{ px: 4, color: 'rgb(101, 82, 82)'}}
             >
               Back to Request Token
             </Button>
@@ -182,6 +222,7 @@ const ResetConfirmForm = () => {
               color="primary"
               disabled={loading || !formData.utorid.trim() || !formData.resetToken.trim() || 
                 !formData.password || !formData.confirmPassword}
+              sx={{backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)'}}
             >
               {loading ? 'Processing...' : 'Reset Password'}
             </Button>

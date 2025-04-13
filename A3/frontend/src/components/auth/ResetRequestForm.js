@@ -78,7 +78,7 @@ const ResetRequestForm = () => {
             <Button 
               component={Link} 
               to="/login"
-              color="primary"
+              sx={{ color: 'rgb(101, 82, 82)' }}
             >
               Back to Login
             </Button>
@@ -86,7 +86,7 @@ const ResetRequestForm = () => {
               component={Link} 
               to="/reset-confirm"
               variant="contained" 
-              color="primary"
+              sx={{backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)'}}
             >
               Continue to Reset Password
             </Button>
@@ -111,6 +111,16 @@ const ResetRequestForm = () => {
             onChange={(e) => setUtorid(e.target.value)}
             disabled={loading}
             error={!!error}
+            sx={{
+              '& .MuiOutlinedInput-root.Mui-focused': {
+                '& fieldset': {
+                  borderColor: 'rgb(101, 82, 82)', 
+                },
+              },
+              '& label.Mui-focused': {
+                color: 'rgb(101, 82, 82)', 
+              }
+            }}
           />
           
           {error && (
@@ -123,7 +133,7 @@ const ResetRequestForm = () => {
             <Button 
               component={Link} 
               to="/login"
-              color="primary"
+              sx={{ color: 'rgb(101, 82, 82)' }}
             >
               Back to Login
             </Button>
@@ -132,6 +142,7 @@ const ResetRequestForm = () => {
               variant="contained" 
               color="primary"
               disabled={loading || !utorid.trim()}
+              sx={{backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)'}}
             >
               {loading ? 'Processing...' : 'Get Reset Token'}
             </Button>

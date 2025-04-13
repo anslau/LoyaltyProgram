@@ -86,7 +86,7 @@ export default function Login() {
                   Login
                 </Button>
               <Box sx={{ mt: 2, textAlign: 'right' }}>
-                <MuiLink component={Link} to="/reset-request" variant="body2">
+                <MuiLink component={Link} to="/reset-request" variant="body2" color="rgb(101, 82, 82)">
                   Forgot password?
                 </MuiLink>
               </Box>
