@@ -22,6 +22,9 @@ import OrganizerEvents from './pages/Organizer/OrganizerEvents';
 import EventManage     from './pages/Organizer/EventManage';
 import ResetRequest from './pages/Login/ResetRequest';
 import ResetConfirm from './pages/Login/ResetConfirm';
+import UserDetail from './pages/Users/UserDetail';
+import TransferPoints from './pages/TransferPoints';
+import UserProfile from './pages/Users/UserProfile';
 
 function App() { 
     return ( 
@@ -51,10 +54,13 @@ function App() {
                     <Route path="/transactions/:transactionId" element={<TransactionDetail />} />
                     <Route path="/users" element={<AllUsersList />} />
                     <Route path="/register" element={<Registration />} /> 
+                    <Route path="/users/:userId" element={<UserDetail />} />
+                    <Route path="/transfer" element={<TransferPoints />} />
+                    <Route path="/profile" element={<UserProfile />} />
                 </Route>
 
-                {/* Organizer/Manager event management page */}
-                    <Route element={<ProtectedRoute />}>
+                                {/* Organizer/Manager event management page */}
+                                <Route element={<ProtectedRoute />}>
                     <Route path="/organizer/events" element={<OrganizerEvents />} />
                     <Route path="/organizer/events/:eventId" element={<EventManage />} />
                 </Route>

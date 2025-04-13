@@ -6,7 +6,7 @@ import RoleSwitcher from '../components/RoleSwitcher';
 import '../styles/auth.css';
 import AuthContext from '../context/AuthContext';
 import ActiveRoleContext from '../context/ActiveRoleContext';
-import { Grid, Card, CardContent, Typography, Chip, Box } from '@mui/material';
+import { Grid, Card, CardContent, Typography, Chip, Button, Box } from '@mui/material';
 import CashierPage from './CashierPage';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
@@ -71,6 +71,9 @@ const Dashboard = () => {
               What's New
             </Link>
             <RoleSwitcher />
+                        <Link to="/profile" style={{ marginRight: '20px', textDecoration: 'none', color: '#1976d2', fontWeight: 'bold' }}>
+                            Profile
+                        </Link>
             <LogoutButton />
           </div>
         </div>
@@ -144,6 +147,9 @@ const Dashboard = () => {
           >
             View All Events
           </Link>
+                    <Link to="/transfer" style={{ textDecoration: 'none', color: '#1976d2', fontWeight: 'bold', marginLeft: '20px' }}>
+                        Transfer Points
+                    </Link>
         </Box>
 
         {/* If the active role is cashier, render the cashier functions */}
