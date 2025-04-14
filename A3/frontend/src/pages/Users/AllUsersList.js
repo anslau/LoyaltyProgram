@@ -50,10 +50,10 @@ const AllUsersList = () => {
                 <div className="nav-content">
                     <h1 className="dashboard-title">User Register</h1>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <Link to="/dashboard" style={{ marginRight: '20px', textDecoration: 'none', color: '#1976d2', fontWeight: 'bold' }}>
+                        <Link to="/dashboard" style={{ marginRight: '20px', textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}>
                         Dashboard
                         </Link>
-                        <Link to="/perks" style={{ marginRight: '20px', textDecoration: 'none', color: '#1976d2', fontWeight: 'bold' }}>
+                        <Link to="/perks" style={{ marginRight: '20px', textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}>
                         What's New
                         </Link>
                         <LogoutButton />
@@ -70,7 +70,7 @@ const AllUsersList = () => {
                             key: "id",
                             label: "Details",
                             render: (value) => (
-                                <Link to={`/users/${value}`} style={{ textDecoration: 'none', color: '#1976d2' }}>
+                                <Link to={`/users/${value}`} style={{ textDecoration: 'none', color: 'rgb(101, 82, 82)'}}>
                                     Details
                                 </Link>
                             ),

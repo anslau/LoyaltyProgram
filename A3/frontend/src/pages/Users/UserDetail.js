@@ -190,6 +190,16 @@ const UserDetail = () => {
                                     name="email"
                                     value={updatedUser.email}
                                     onChange={(e) => setUpdatedUser({ ...updatedUser, email: e.target.value })}
+                                    sx={{ mb: 1,
+                                        '& .MuiOutlinedInput-root.Mui-focused': {
+                                          '& fieldset': {
+                                            borderColor: 'rgb(101, 82, 82)', 
+                                          },
+                                        },
+                                        '& label.Mui-focused': {
+                                          color: 'rgb(101, 82, 82)', 
+                                        }
+                                      }}
                                 />
                             </Grid>
 
@@ -201,13 +211,28 @@ const UserDetail = () => {
                                     name="role"
                                     value={updatedUser.role}
                                     onChange={(e) => setUpdatedUser({ ...updatedUser, role: e.target.value })}
+                                    sx={{ mb: 1,
+                                        '& .MuiOutlinedInput-root.Mui-focused': {
+                                          '& fieldset': {
+                                            borderColor: 'rgb(101, 82, 82)', 
+                                          },
+                                        },
+                                        '& label.Mui-focused': {
+                                          color: 'rgb(101, 82, 82)', 
+                                        }
+                                      }}
                                 >
                                     {userRoles.map((option) => {
                                         // disable the options based on the current user's role
                                         const isDisabled = currentUserRole === "manager" && (option.value === "manager" || option.value === "superuser");
 
                                         return (
-                                            <MenuItem key={option.value} value={option.value} disabled={isDisabled}>
+                                            <MenuItem key={option.value} value={option.value} disabled={isDisabled}
+                                            sx={{
+                                                '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                                                '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                                              }}
+                                              >
                                                 {option.label}
                                             </MenuItem>
                                         );
@@ -222,6 +247,11 @@ const UserDetail = () => {
                                             <Checkbox checked={updatedUser.verified === true}
                                                 disabled={user.verified}
                                                 onChange={(e) => setUpdatedUser({ ...updatedUser, verified: e.target.checked })}
+                                                sx={{
+                                                    '&.Mui-checked': {
+                                                      color: '#c48f8f',
+                                                    },
+                                                  }}
                                             />
                                         }
                                         label="Verify"
@@ -235,6 +265,11 @@ const UserDetail = () => {
                                         control={
                                             <Checkbox checked={updatedUser.suspicious === true}
                                                 onChange={(e) => setUpdatedUser({ ...updatedUser, suspicious: e.target.checked })}
+                                                sx={{
+                                                    '&.Mui-checked': {
+                                                      color: '#c48f8f',
+                                                    },
+                                                  }}
                                             />
                                         }
                                         label="Marked Suspicious"
@@ -247,6 +282,7 @@ const UserDetail = () => {
                                     variant="outlined"
                                     onClick={handleEditToggle}
                                     disabled={loading}
+                                    sx={{ px: 4, color: 'rgb(101, 82, 82)', borderColor: 'rgb(101, 82, 82)' }}
                                 >
                                     Cancel
                                 </Button>
@@ -255,6 +291,7 @@ const UserDetail = () => {
                                     variant="contained"
                                     color="primary"
                                     disabled={loading}
+                                    sx={{ backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)' }}
                                 >
                                     {loading ? 'Saving...' : 'Save Changes'}
                                 </Button>
@@ -306,7 +343,7 @@ const UserDetail = () => {
                             </Box>
 
                             <Box>
-                                <IconButton color="primary" onClick={handleEditToggle} title="Edit">
+                                <IconButton color="primary" onClick={handleEditToggle} title="Edit" sx={{ color: '#c48f8f' }}>
                                     <EditIcon />
                                 </IconButton>
                             </Box>

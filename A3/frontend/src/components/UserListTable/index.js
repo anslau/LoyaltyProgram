@@ -189,7 +189,7 @@ const UserListTable = ({
 
             <Box sx={{ gap: 2 }}>
                 <IconButton
-                    color={showFilters ? 'primary' : 'default'}
+                    color={showFilters ? 'rgb(101, 82, 82)' : 'default'}
                     onClick={toggleFilters}
                     aria-label="toggle filters"
                 >
@@ -206,6 +206,16 @@ const UserListTable = ({
                             label="Name" value={filters.name}
                             onChange={(e) => setFilters({ ...filters, name: e.target.value })}
                             helperText="Enter name or utorid"
+                            sx={{
+                                '& .MuiOutlinedInput-root.Mui-focused': {
+                                    '& fieldset': {
+                                        borderColor: 'rgb(101, 82, 82)',
+                                    },
+                                },
+                                '& label.Mui-focused': {
+                                    color: 'rgb(101, 82, 82)',
+                                }
+                            }}
                         >
                         </TextField>
 
@@ -213,9 +223,24 @@ const UserListTable = ({
                             select label="Role" value={filters.role}
                             onChange={(e) => setFilters({ ...filters, role: e.target.value })}
                             helperText="Select user role"
+                            sx={{
+                                '& .MuiOutlinedInput-root.Mui-focused': {
+                                    '& fieldset': {
+                                        borderColor: 'rgb(101, 82, 82)',
+                                    },
+                                },
+                                '& label.Mui-focused': {
+                                    color: 'rgb(101, 82, 82)',
+                                }
+                            }}
                         >
                             {userRoles.map((option) => (
-                                <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
+                                <MenuItem key={option.value} value={option.value}
+                                sx={{
+                                    '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                                    '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                                  }}
+                                >{option.label}</MenuItem>
                             ))}
                         </TextField>
 
@@ -225,6 +250,11 @@ const UserListTable = ({
                                     onChange={(e) => {
                                         setFilters({ ...filters, verified: e.target.checked });
                                     }}
+                                    sx={{
+                                        '&.Mui-checked': {
+                                          color: '#c48f8f',
+                                        },
+                                      }}
                                 />
                             }
                                 label="Verified Users Only"
@@ -237,6 +267,11 @@ const UserListTable = ({
                                     onChange={(e) => {
                                         setFilters({ ...filters, activated: e.target.checked });
                                     }}
+                                    sx={{
+                                        '&.Mui-checked': {
+                                          color: '#c48f8f',
+                                        },
+                                      }}
                                 />
                             }
                                 label="Activated Users Only"
@@ -254,7 +289,7 @@ const UserListTable = ({
                             />
                         </Box>
 
-                        <Button variant="contained" onClick={handleSearch}>
+                        <Button variant="contained" onClick={handleSearch} sx={{ backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)' }}>
                             Search
                         </Button>
                     </Box>
