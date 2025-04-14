@@ -213,7 +213,7 @@ const TransactionDetail = () => {
                                 </Box>
                             </Box>
 
-                            <Button onClick={handleSuspiciousChange} variant="contained" size="small">
+                            <Button onClick={handleSuspiciousChange} variant="contained" size="small" sx={{backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)'}}>
                                 {suspicious ? 'Mark as Not Suspicious' : 'Mark as Suspicious'}
                             </Button>
 
@@ -272,6 +272,7 @@ const TransactionDetail = () => {
                             <Button
                                 variant="outlined"
                                 onClick={() => setCreatingAdjustment(prev => !prev)}
+                                sx={{ px: 4, color: 'rgb(101, 82, 82)', borderColor: 'rgb(101, 82, 82)' }}
                             >
                                 {creatingAdjustment ? 'Cancel' : 'Create New Adjustment'}
                             </Button>
@@ -286,6 +287,16 @@ const TransactionDetail = () => {
                                     disabled
                                     //onChange={(e) => setAdjustmentData({ ...adjustmentData, utorid: e.target.value })}
                                     label="Utorid of the user to adjust"
+                                    sx={{ mb: 1,
+                                        '& .MuiOutlinedInput-root.Mui-focused': {
+                                          '& fieldset': {
+                                            borderColor: 'rgb(101, 82, 82)', 
+                                          },
+                                        },
+                                        '& label.Mui-focused': {
+                                          color: 'rgb(101, 82, 82)', 
+                                        }
+                                      }}
                                 />
                                 <TextField
                                     fullWidth
@@ -293,6 +304,16 @@ const TransactionDetail = () => {
                                     disabled
                                     value="adjustment"
                                     label="Type"
+                                    sx={{ mb: 1,
+                                        '& .MuiOutlinedInput-root.Mui-focused': {
+                                          '& fieldset': {
+                                            borderColor: 'rgb(101, 82, 82)', 
+                                          },
+                                        },
+                                        '& label.Mui-focused': {
+                                          color: 'rgb(101, 82, 82)', 
+                                        }
+                                      }}
                                 />
                                 <TextField
                                     fullWidth
@@ -301,6 +322,16 @@ const TransactionDetail = () => {
                                     disabled
                                     value={transactionId}
                                     label="Transaction ID"
+                                    sx={{ mb: 1,
+                                        '& .MuiOutlinedInput-root.Mui-focused': {
+                                          '& fieldset': {
+                                            borderColor: 'rgb(101, 82, 82)', 
+                                          },
+                                        },
+                                        '& label.Mui-focused': {
+                                          color: 'rgb(101, 82, 82)', 
+                                        }
+                                      }}
                                 />
                                 <TextField
                                     label="Amount"
@@ -309,6 +340,16 @@ const TransactionDetail = () => {
                                     margin="normal"
                                     value={adjustmentData.amount}
                                     onChange={(e) => setAdjustmentData({ ...adjustmentData, amount: Number(e.target.value) })}
+                                    sx={{ mb: 1,
+                                        '& .MuiOutlinedInput-root.Mui-focused': {
+                                          '& fieldset': {
+                                            borderColor: 'rgb(101, 82, 82)', 
+                                          },
+                                        },
+                                        '& label.Mui-focused': {
+                                          color: 'rgb(101, 82, 82)', 
+                                        }
+                                      }}
                                 />
                                 <TextField
                                     label="Promotion IDs (comma-separated)"
@@ -316,6 +357,16 @@ const TransactionDetail = () => {
                                     margin="normal"
                                     value={adjustmentData.promotionIds}
                                     onChange={(e) => setAdjustmentData({ ...adjustmentData, promotionIds: e.target.value })}
+                                    sx={{ mb: 1,
+                                        '& .MuiOutlinedInput-root.Mui-focused': {
+                                          '& fieldset': {
+                                            borderColor: 'rgb(101, 82, 82)', 
+                                          },
+                                        },
+                                        '& label.Mui-focused': {
+                                          color: 'rgb(101, 82, 82)', 
+                                        }
+                                      }}
                                 />
                                 <TextField
                                     label="Remark"
@@ -323,12 +374,23 @@ const TransactionDetail = () => {
                                     margin="normal"
                                     value={adjustmentData.remark}
                                     onChange={(e) => setAdjustmentData({ ...adjustmentData, remark: e.target.value })}
+                                    sx={{ mb: 1,
+                                        '& .MuiOutlinedInput-root.Mui-focused': {
+                                          '& fieldset': {
+                                            borderColor: 'rgb(101, 82, 82)', 
+                                          },
+                                        },
+                                        '& label.Mui-focused': {
+                                          color: 'rgb(101, 82, 82)', 
+                                        }
+                                      }}
                                 />
                                 <Box sx={{ mt: 2 }}>
                                     <Button
                                         type="submit"
                                         variant="contained"
                                         disabled={adjustmentLoading}
+                                        sx={{backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)'}}
                                     >
                                         {adjustmentLoading ? <CircularProgress size={24} /> : 'Submit Adjustment'}
                                     </Button>

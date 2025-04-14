@@ -68,10 +68,10 @@ const AllTransactionsList = () => {
                 <div className="nav-content">
                     <h1 className="dashboard-title">Transaction History</h1>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <Link to="/dashboard" style={{ marginRight: '20px', textDecoration: 'none', color: '#1976d2', fontWeight: 'bold' }}>
+                        <Link to="/dashboard" style={{ marginRight: '20px', textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}>
                         Dashboard
                         </Link>
-                        <Link to="/perks" style={{ marginRight: '20px', textDecoration: 'none', color: '#1976d2', fontWeight: 'bold' }}>
+                        <Link to="/perks" style={{ marginRight: '20px', textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}>
                         What's New
                         </Link>
                         <LogoutButton />
@@ -100,7 +100,7 @@ const AllTransactionsList = () => {
                             key: "id",
                             label: "Details",
                             render: (value) => (
-                                <Link to={`/transactions/${value}`} style={{ textDecoration: 'none', color: '#1976d2' }}>
+                                <Link to={`/transactions/${value}`} style={{ textDecoration: 'none', color: 'rgb(101, 82, 82)' }}>
                                     Details
                                 </Link>
                             ),
@@ -114,6 +114,16 @@ const AllTransactionsList = () => {
                                 setFilters({ ...filters, createdBy: e.target.value });
                             }}
                             helperText="User who created the transaction"
+                            sx={{ mb: 1,
+                                '& .MuiOutlinedInput-root.Mui-focused': {
+                                  '& fieldset': {
+                                    borderColor: 'rgb(101, 82, 82)', 
+                                  },
+                                },
+                                '& label.Mui-focused': {
+                                  color: 'rgb(101, 82, 82)', 
+                                }
+                              }}
                         />
 
                         <TextField
@@ -122,6 +132,16 @@ const AllTransactionsList = () => {
                                 setFilters({ ...filters, name: e.target.value });
                             }}
                             helperText="User who made the transaction"
+                            sx={{ mb: 1,
+                                '& .MuiOutlinedInput-root.Mui-focused': {
+                                  '& fieldset': {
+                                    borderColor: 'rgb(101, 82, 82)', 
+                                  },
+                                },
+                                '& label.Mui-focused': {
+                                  color: 'rgb(101, 82, 82)', 
+                                }
+                              }}
                         />
                         
                         <FormGroup>
@@ -130,6 +150,11 @@ const AllTransactionsList = () => {
                                 onChange={(e) => {
                                     setFilters({ ...filters, suspicious: e.target.checked });
                                 }}
+                                sx={{
+                                    '&.Mui-checked': {
+                                      color: '#c48f8f', 
+                                    },
+                                  }}
                                 />
                             } 
                             label="Suspicious Transactions Only" 

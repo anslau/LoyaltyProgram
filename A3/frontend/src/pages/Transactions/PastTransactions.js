@@ -51,10 +51,10 @@ const PastTransactions = () => {
                 <div className="nav-content">
                     <h1 className="dashboard-title">Past Transactions</h1>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <Link to="/dashboard" style={{ marginRight: '20px', textDecoration: 'none', color: '#1976d2', fontWeight: 'bold' }}>
+                        <Link to="/dashboard" style={{ marginRight: '20px', textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}>
                         Dashboard
                         </Link>
-                        <Link to="/perks" style={{ marginRight: '20px', textDecoration: 'none', color: '#1976d2', fontWeight: 'bold' }}>
+                        <Link to="/perks" style={{ marginRight: '20px', textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}>
                         What's New
                         </Link>
                         <LogoutButton />
