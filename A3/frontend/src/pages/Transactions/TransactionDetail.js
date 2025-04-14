@@ -28,7 +28,7 @@ const TransactionDetail = () => {
         amount: '',
         relatedId: transactionId,
         remark: '',
-        promotionIds: []
+        promotionIds: ''
     });
     const [adjustmentLoading, setAdjustmentLoading] = useState(false);
     const [adjustmentSuccess, setAdjustmentSuccess] = useState(false);
@@ -100,6 +100,19 @@ const TransactionDetail = () => {
         if (!adjustmentData.amount) {
             setAdjustmentError('Amount is required');
             return false;
+        }else if (adjustmentData.promotionIds.length !== '') {
+            const promotionIds = adjustmentData.promotionIds.split(',').map(id => Number(id.trim()));
+            if (promotionIds.some(id => isNaN(id))) {
+                setAdjustmentError('Promotion IDs must be numbers');
+                setAdjustmentData({
+                    utorid: '',
+                    amount: '',
+                    promotionIds: '',
+                    remark: '',
+                });
+                return;
+                return false;
+            }
         }
 
         return true;
@@ -119,7 +132,7 @@ const TransactionDetail = () => {
                 type: "adjustment",
                 relatedId: Number(transactionId),
                 amount: Number(adjustmentData.amount),
-                promotionIds: adjustmentData.promotionIds,
+                promotionIds: adjustmentData.promotionIds.split(',').map(id => Number(id.trim())),
                 remark: adjustmentData.remark,
             };
 

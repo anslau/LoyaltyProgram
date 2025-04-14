@@ -226,14 +226,14 @@ async function updateUserPassword(req, res){
     // check that all fields were filled
     const { old: oldPassword, new : newPassword} = req.body;
     if (!oldPassword || !newPassword){
-        return res.status(400).json({ message: "old or new password is missing" });
+        return res.status(400).json({ message: "Old or new password is missing" });
     }
 
     // check that the new password is btw 8-20 chars, 1 upper, 1 lower, 1 number, 1 symbol
     // TODO: uncomment this code block
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W])[A-Za-z\d\W]{8,20}$/;
     if (!passwordRegex.test(newPassword)){
-        return res.status(400).json({ message: "Password must be 8-20 characters long with at least 1 upper, 1 lower, 1 number, and 1 symbol" });
+        return res.status(400).json({ message: "Include 8–20 characters with upper, lower, number & symbol" });
     }
 
     // try to update the password

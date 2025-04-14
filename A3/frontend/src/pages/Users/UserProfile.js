@@ -168,15 +168,17 @@ const UserProfile = () => {
             if (!response.ok) {
                 const errorData = await response.json();
                 setPasswordError(errorData.message);
+                setPasswordForm({ old: '', new: '' });
                 return;
             }
-            
+
             setLoading(false);
             setChangePassword(false);
             setPasswordSuccess(true);
 
         } catch (error) {
             setPasswordError(error.message);
+            
             setLoading(false);
         }
     };
@@ -206,7 +208,7 @@ const UserProfile = () => {
                 ) : (
                     <>
                         <div className="user-profile-details">
-                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 2, borderRadius: 2, gap: 2}}>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 2, borderRadius: 2, gap: 2 }}>
                                 <UserAvatar name={user.name} avatarUrl={user.avatarUrl} size={256} />
                                 <Button variant="outlined" onClick={() => setQrCodeOpen(true)} style={{ marginRight: '20px', borderColor: 'rgb(101, 82, 82)', color: 'rgb(101, 82, 82)' }}>
                                     QR Code
@@ -216,8 +218,8 @@ const UserProfile = () => {
                         </div>
 
                         <div className="user-profile-info">
-                            <Box component={"form"} onSubmit={handleSubmit} sx={{ padding: 2, backgroundColor: '#f5f5f5', borderRadius: 2, position: 'relative', minWidth: 400 }}>
-                                <IconButton color="#c48f8f" onClick={handleEditToggle} title="Edit" sx={{ position: 'absolute', top: 0, right: 0, color: '#c48f8f'}}>
+                            <Box component={"form"} onSubmit={handleSubmit} sx={{ padding: 2, backgroundColor: '#f5f5f5', borderRadius: 2, position: 'relative', minWidth: 450 }}>
+                                <IconButton color="#c48f8f" onClick={handleEditToggle} title="Edit" sx={{ position: 'absolute', top: 0, right: 0, color: '#c48f8f' }}>
                                     {!editMode && (<EditIcon />)}
                                 </IconButton>
 
@@ -228,7 +230,7 @@ const UserProfile = () => {
 
                                     <Grid item xs={12}>
                                         <Typography variant="h6">
-                                            <strong>Name: </strong> 
+                                            <strong>Name: </strong>
                                             {editMode ? (
                                                 <TextField
                                                     type="text"
@@ -239,16 +241,17 @@ const UserProfile = () => {
                                                         setError('');
                                                         setSuccess(false);
                                                     }}
-                                                    sx={{ mb: 1,
+                                                    sx={{
+                                                        mb: 1,
                                                         '& .MuiOutlinedInput-root.Mui-focused': {
-                                                          '& fieldset': {
-                                                            borderColor: 'rgb(101, 82, 82)', 
-                                                          },
+                                                            '& fieldset': {
+                                                                borderColor: 'rgb(101, 82, 82)',
+                                                            },
                                                         },
                                                         '& label.Mui-focused': {
-                                                          color: 'rgb(101, 82, 82)', 
+                                                            color: 'rgb(101, 82, 82)',
                                                         }
-                                                      }}
+                                                    }}
                                                 />
                                             ) : user.name}
                                         </Typography>
@@ -271,16 +274,17 @@ const UserProfile = () => {
                                                         setError('');
                                                         setSuccess(false);
                                                     }}
-                                                    sx={{ mb: 1,
+                                                    sx={{
+                                                        mb: 1,
                                                         '& .MuiOutlinedInput-root.Mui-focused': {
-                                                          '& fieldset': {
-                                                            borderColor: 'rgb(101, 82, 82)', 
-                                                          },
+                                                            '& fieldset': {
+                                                                borderColor: 'rgb(101, 82, 82)',
+                                                            },
                                                         },
                                                         '& label.Mui-focused': {
-                                                          color: 'rgb(101, 82, 82)', 
+                                                            color: 'rgb(101, 82, 82)',
                                                         }
-                                                      }}
+                                                    }}
                                                 />
                                             ) : user.email}
                                         </Typography>
@@ -297,18 +301,19 @@ const UserProfile = () => {
                                                             setUserForm({ ...userForm, birthday: e.target.value });
                                                             setError('');
                                                             setSuccess(false);
-                                                        } 
+                                                        }
                                                     }
-                                                    sx={{ mb: 1,
+                                                    sx={{
+                                                        mb: 1,
                                                         '& .MuiOutlinedInput-root.Mui-focused': {
-                                                          '& fieldset': {
-                                                            borderColor: 'rgb(101, 82, 82)', 
-                                                          },
+                                                            '& fieldset': {
+                                                                borderColor: 'rgb(101, 82, 82)',
+                                                            },
                                                         },
                                                         '& label.Mui-focused': {
-                                                          color: 'rgb(101, 82, 82)', 
+                                                            color: 'rgb(101, 82, 82)',
                                                         }
-                                                      }}
+                                                    }}
                                                 />
                                             ) : user.birthday ? user.birthday.slice(0, 10) : 'N/A'}
                                         </Typography>
@@ -345,38 +350,67 @@ const UserProfile = () => {
                                     </Grid>
 
                                     {editMode && (
-                                        <Grid item xs={12}>
-                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                                                <Button
-                                                    variant="contained"
-                                                    component="label"
-                                                    startIcon={<CloudUpload />}
-                                                    sx={{ marginTop: 2, backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)'}}
-                                                >
-                                                    Upload Avatar
-                                                    <VisuallyHiddenInput
-                                                        type="file"
-                                                        multiple
-                                                        onChange={(e) => {
-                                                            const file = e.target.files[0];
-                                                            if (file) {
-                                                                const reader = new FileReader();
-                                                                reader.onloadend = () => {
-                                                                    setUserForm({ ...userForm, avatar: reader.result });
-                                                                    setAvatarUploaded(true);
-                                                                };
-                                                                reader.readAsDataURL(file);
-                                                            }
-                                                        }}
-                                                    />
-                                                </Button>
-                                                {avatarUploaded && (
-                                                    <Typography variant="body2" sx={{ mt: 1 }}>
-                                                        <DoneIcon />
-                                                    </Typography>
-                                                )}
-                                            </Box>
-                                        </Grid>
+                                        // <Grid item xs={12}>
+                                        //     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                                        //         <Button
+                                        //             variant="contained"
+                                        //             component="label"
+                                        //             startIcon={<CloudUpload />}
+                                        //             sx={{ marginTop: 2, backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)' }}
+                                        //         >
+                                        //             Upload Avatar
+                                        //             <VisuallyHiddenInput
+                                        //                 type="file"
+                                        //                 multiple
+                                        //                 onChange={(e) => {
+                                        //                     const file = e.target.files[0];
+                                        //                     if (file) {
+                                        //                         const reader = new FileReader();
+                                        //                         reader.onloadend = () => {
+                                        //                             setUserForm({ ...userForm, avatar: reader.result });
+                                        //                             setAvatarUploaded(true);
+                                        //                         };
+                                        //                         reader.readAsDataURL(file);
+                                        //                     }
+                                        //                 }}
+                                        //             />
+                                        //         </Button>
+                                        //         {avatarUploaded && (
+                                        //             <Typography variant="body2" sx={{ mt: 1 }}>
+                                        //                 <DoneIcon />
+                                        //             </Typography>
+                                        //         )}
+                                        //     </Box>
+                                        // </Grid>
+
+                                        <Grid item xs={12} sx={{ maxWidth: 400, width: '100%' }}>
+                                        <Typography variant="h6">
+                                            <strong>Avatar URL: </strong> {
+                                                <TextField
+                                                    type="text"
+                                                    value={userForm.avatar}
+                                                    onChange={
+                                                        (e) => {
+                                                            setUserForm({ ...userForm, avatar: e.target.value });
+                                                            setError('');
+                                                            setSuccess(false);
+                                                        }
+                                                    }
+                                                    sx={{
+                                                        mb: 1,
+                                                        '& .MuiOutlinedInput-root.Mui-focused': {
+                                                            '& fieldset': {
+                                                                borderColor: 'rgb(101, 82, 82)',
+                                                            },
+                                                        },
+                                                        '& label.Mui-focused': {
+                                                            color: 'rgb(101, 82, 82)',
+                                                        }
+                                                    }}
+                                                />
+                                            }
+                                        </Typography>
+                                    </Grid>
                                     )}
 
                                     {editMode && (
@@ -392,7 +426,7 @@ const UserProfile = () => {
                                             <Button
                                                 type="submit"
                                                 variant="contained"
-                                                sx={{backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)'}}
+                                                sx={{ backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)' }}
                                                 disabled={loading}
                                             >
                                                 {loading ? 'Saving...' : 'Save Changes'}
@@ -445,16 +479,17 @@ const UserProfile = () => {
                                                             setPasswordError('');
                                                             setPasswordSuccess(false);
                                                         }}
-                                                        sx={{ mb: 1,
+                                                        sx={{
+                                                            mb: 1,
                                                             '& .MuiOutlinedInput-root.Mui-focused': {
-                                                              '& fieldset': {
-                                                                borderColor: 'rgb(101, 82, 82)', 
-                                                              },
+                                                                '& fieldset': {
+                                                                    borderColor: 'rgb(101, 82, 82)',
+                                                                },
                                                             },
                                                             '& label.Mui-focused': {
-                                                              color: 'rgb(101, 82, 82)', 
+                                                                color: 'rgb(101, 82, 82)',
                                                             }
-                                                          }}
+                                                        }}
                                                     />
                                                 </Typography>
                                             </Grid>
@@ -471,16 +506,17 @@ const UserProfile = () => {
                                                             setPasswordError('');
                                                             setPasswordSuccess(false);
                                                         }}
-                                                        sx={{ mb: 1,
+                                                        sx={{
+                                                            mb: 1,
                                                             '& .MuiOutlinedInput-root.Mui-focused': {
-                                                              '& fieldset': {
-                                                                borderColor: 'rgb(101, 82, 82)', 
-                                                              },
+                                                                '& fieldset': {
+                                                                    borderColor: 'rgb(101, 82, 82)',
+                                                                },
                                                             },
                                                             '& label.Mui-focused': {
-                                                              color: 'rgb(101, 82, 82)', 
+                                                                color: 'rgb(101, 82, 82)',
                                                             }
-                                                          }}
+                                                        }}
                                                     />
                                                 </Typography>
                                             </Grid>
@@ -499,7 +535,7 @@ const UserProfile = () => {
                                                 type="submit"
                                                 variant="contained"
                                                 disabled={loading}
-                                                sx={{backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)'}}
+                                                sx={{ backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)' }}
                                             >
                                                 {loading ? 'Resetting...' : 'Reset'}
                                             </Button>
@@ -513,15 +549,22 @@ const UserProfile = () => {
                                             </Grid>
                                         )}
 
-                                        {passwordSuccess && (
+                                        {/* {passwordSuccess && (
                                             <Grid item xs={12} sx={{ mt: 2 }}>
                                                 <Alert severity="success" sx={{ mt: 2 }}>
                                                     Password updated successfully!
                                                 </Alert>
                                             </Grid>
-                                        )}
+                                        )} */}
 
                                     </Box>
+                                )}
+                                {passwordSuccess && (
+                                    <Grid item xs={12} sx={{ mt: 2 }}>
+                                        <Alert severity="success" sx={{ mt: 2 }}>
+                                            Password updated successfully!
+                                        </Alert>
+                                    </Grid>
                                 )}
                             </div>
                         </div>

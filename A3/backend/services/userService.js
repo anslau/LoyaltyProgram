@@ -143,6 +143,7 @@ async function retrieveSpecificUser(id, clearance){
                 ...createdAt,
                 ...lastLogin,
                 verified: true,
+                suspicious: true,
                 ...avatarUrl,
                 promotions: {
                     where: {
@@ -222,9 +223,9 @@ async function updateSpecificUserInfo(id, data){
             update.role = data.role;
 
             // if the role is being changed to cashier, then suspicious should be false
-            if (data.role === 'cashier'){
-                update.suspicious = false;
-            }
+            // if (data.role === 'cashier'){
+            //     update.suspicious = false;
+            // }
         }
 
         // update the user
@@ -371,7 +372,7 @@ async function updateUserPassword(utorid, oldPassword, newPassword){
         });
 
         if (!user){
-            return { error: 'Provided password does not match the password on account', status: 403 };
+            return { error: 'Given does not match the password on account', status: 403 };
         }
 
         // update the password
