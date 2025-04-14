@@ -473,7 +473,7 @@ const EventsList = () => {
               count={totalPages} 
               page={page} 
               onChange={handlePageChange} 
-              color="primary" 
+              color="#c48f8f" 
               showFirstButton 
               showLastButton
             />

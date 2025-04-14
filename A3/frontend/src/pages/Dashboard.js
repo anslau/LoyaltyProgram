@@ -64,12 +64,22 @@ const Dashboard = () => {
         <div className="nav-content">
           <h1 className="dashboard-title">Dashboard</h1>
           <div style={{ display: 'flex', alignItems: 'center' }}>
+          {activeRole && ['manager', 'superuser'].includes(activeRole) && (
             <Link
               to="/perks"
               style={{ marginRight: '20px', textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}
             >
               What's New
             </Link>
+          )}
+          {activeRole && ['regular', 'cashier'].includes(activeRole) && (
+            <Link
+              to="/regularperks"
+              style={{ marginRight: '20px', textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}
+            >
+              What's New
+            </Link>
+            )}
             <Link to="/profile" style={{ marginRight: '20px', textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}>
               Profile
             </Link>
@@ -135,12 +145,22 @@ const Dashboard = () => {
               View All Transactions
             </Link>
           )}
+          {activeRole && ['manager', 'superuser'].includes(activeRole) && (
           <Link
             to="/promotions"
             style={{ textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}
           >
             View All Promotions
           </Link>
+          )}
+          {activeRole && ['regular', 'cashier'].includes(activeRole) && (
+          <Link
+            to="/regularpromotions"
+            style={{ textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}
+          >
+            View All Promotions
+          </Link>
+          )}
           <Link
             to="/events"
             style={{ textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}

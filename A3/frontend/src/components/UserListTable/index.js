@@ -344,7 +344,7 @@ const UserListTable = ({
                     count={count}
                     page={page}
                     onChange={handlePageChange}
-                    color="primary"
+                    color="#c48f8f"
                     showFirstButton
                     showLastButton
                 />
@@ -355,7 +355,16 @@ const UserListTable = ({
                     variant="outlined"
                     value={limit}
                     onChange={handleLimitChange}
-                    sx={{ marginLeft: 2 }}
+                    sx={{ marginLeft: 2,
+                        '& .MuiOutlinedInput-root.Mui-focused': {
+                            '& fieldset': {
+                                borderColor: 'rgb(101, 82, 82)',
+                            },
+                        },
+                        '& label.Mui-focused': {
+                            color: 'rgb(101, 82, 82)',
+                        }
+                    }}
                 />
             </Box>
         </div>

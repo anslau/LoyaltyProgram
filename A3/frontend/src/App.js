@@ -25,6 +25,8 @@ import ResetConfirm from './pages/Login/ResetConfirm';
 import UserDetail from './pages/Users/UserDetail';
 import TransferPoints from './pages/TransferPoints';
 import UserProfile from './pages/Users/UserProfile';
+import RegularUserPromotionPage from './pages/Perks/Promotions/RegularUserPromotionPage';
+import RegularUserPerksPage from './pages/Perks/RegularUserPerksPage';
 
 function App() { 
     return ( 
@@ -43,7 +45,9 @@ function App() {
                 <Route element={<ProtectedRoute />} >
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/perks" element={<PerksPage />} />
+                    <Route path="/regularperks" element={<RegularUserPerksPage />} />
                     <Route path="/promotions" element={<PromotionsPage />} />
+                    <Route path="/regularpromotions" element={<RegularUserPromotionPage />} />
                     <Route path="/events" element={<EventsPage />} />
                     <Route path="/events/:eventId" element={<EventDetail />} />
                     <Route path="/events/create" element={<CreateEvent />} />
