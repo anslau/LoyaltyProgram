@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import AuthContext from '../../context/AuthContext';
 import { useParams } from 'react-router-dom';
 import '../../styles/auth.css';
+import UserAvatar from '../../components/UserAvatar';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
 
@@ -61,13 +62,14 @@ const UserDetail = () => {
 
                 const data = await response.json();
                 setUser(data);
+                console.log('user', data);
 
                 // initialize the form for the updated user
                 setUpdatedUser({
-                    email: data.email || '',
-                    verified: data.verified || '',
-                    suspicious: data.suspicious || '',
-                    role: data.role || '',
+                    email: data.email,
+                    verified: data.verified,
+                    suspicious: data.suspicious === true,
+                    role: data.role,
                 });
 
             } catch (error) {
@@ -78,7 +80,7 @@ const UserDetail = () => {
         };
 
         fetchUserDetails();
-    }, [userId, token, editMode]);
+    }, [userId, token]);
 
     // getting the logged in user's role
     useEffect(() => {
@@ -129,10 +131,12 @@ const UserDetail = () => {
         const payload = {
             ...updatedUser,
             email: updatedUser.email,
-            verified: updatedUser.verified === true,
-            suspicious: updatedUser.suspicious === 'true' ? true : false,
+            verified: updatedUser.verified,
+            suspicious: updatedUser.suspicious,
             role: updatedUser.role
         }
+
+        console.log('payload', payload);
 
         try {
             const response = await fetch(`${BACKEND_URL}/users/${userId}`, {
@@ -150,10 +154,10 @@ const UserDetail = () => {
             }
 
             // const data = await response.json();
-            // setUser(data);
+            setUser({ ...user, email: updatedUser.email, verified: updatedUser.verified, suspicious: updatedUser.suspicious, role: updatedUser.role });
             setEditMode(false);
             setLoading(false);
-           
+
 
         } catch (error) {
             setError(error.message);
@@ -271,20 +275,33 @@ const UserDetail = () => {
                 <>
                     <Paper elevation={3} sx={{ p: 3 }}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 3 }}>
-                            <Box>
-                                <Typography variant="h5" gutterBottom>{user.name}</Typography>
-                                <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
-                                    <Chip
-                                        label={user.role}
-                                        color={chipColour(user.role)}
-                                        size="small"
-                                    />
-                                    <Chip
-                                        label={user.verified ? 'Verified' : 'Not Verified'}
-                                        color={user.verified ? 'success' : 'error'}
-                                        variant="outlined"
-                                        size="small"
-                                    />
+                            <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
+                                <UserAvatar
+                                    name={user.name}
+                                    avatarUrl={user.avatarUrl}
+                                    size={70}
+                                />
+                                <Box>
+                                    <Typography variant="h5" gutterBottom>{user.name}</Typography>
+                                    <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+                                        <Chip
+                                            label={user.role}
+                                            color={chipColour(user.role)}
+                                            size="small"
+                                        />
+                                        <Chip
+                                            label={user.verified ? 'Verified' : 'Not Verified'}
+                                            color={user.verified ? 'success' : 'error'}
+                                            variant="filled"
+                                            size="small"
+                                        />
+                                        <Chip
+                                            label={user.suspicious ? 'Suspicious' : 'Not Suspicious'}
+                                            color={user.suspicious ? 'warning' : 'primary'}
+                                            variant="filled"
+                                            size="small"
+                                        />
+                                    </Box>
                                 </Box>
                             </Box>
 
@@ -314,7 +331,7 @@ const UserDetail = () => {
                             {user.birthday && (
                                 <Grid item xs={12} sm={6}>
                                     <Typography variant="subtitle1" color="text.secondary">Birthday</Typography>
-                                    <Typography variant="body1">{user.birthday}</Typography>
+                                    <Typography variant="body1">{user.birthday ? user.birthday.slice(0, 10) : "N/A"}</Typography>
                                 </Grid>
                             )}
 
@@ -326,14 +343,13 @@ const UserDetail = () => {
 
                             <Grid item xs={12} sm={4}>
                                 <Typography variant="subtitle1" color="text.secondary">Created At</Typography>
-                                <Typography variant="body1">{user.createdAt}</Typography>
+                                <Typography variant="body1">{user.createdAt.slice(0, 10)}</Typography>
                             </Grid>
 
                             <Grid item xs={12} sm={4}>
                                 <Typography variant="subtitle1" color="text.secondary">Last Login</Typography>
-                                <Typography variant="body1">{user.lastLogin || 'Never'}</Typography>
+                                <Typography variant="body1">{user.lastLogin ? user.lastLogin.slice(0, 10) : 'Never'}</Typography>
                             </Grid>
-
 
                             {user.promotions && user.promotions.length > 0 && (
                                 <Grid item xs={12} sm={4}>
