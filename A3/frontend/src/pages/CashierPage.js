@@ -174,6 +174,16 @@ function CashierPage() {
                 value={purchaseUtorid}
                 onChange={(e) => setPurchaseUtorid(e.target.value)}
                 required
+                sx={{
+                  '& .MuiOutlinedInput-root.Mui-focused': {
+                      '& fieldset': {
+                          borderColor: 'rgb(101, 82, 82)',
+                      },
+                  },
+                  '& label.Mui-focused': {
+                      color: 'rgb(101, 82, 82)',
+                  }
+                }}
                 />
                 <TextField
                 label="Amount Spent (e.g. 19.99)"
@@ -181,13 +191,33 @@ function CashierPage() {
                 value={purchaseAmount}
                 onChange={(e) => setPurchaseAmount(e.target.value)}
                 required
+                sx={{
+                  '& .MuiOutlinedInput-root.Mui-focused': {
+                      '& fieldset': {
+                          borderColor: 'rgb(101, 82, 82)',
+                      },
+                  },
+                  '& label.Mui-focused': {
+                      color: 'rgb(101, 82, 82)',
+                  }
+                }}
                 />
                 <TextField
                     label="Promotion IDs (comma‑sep, optional)"
                     value={promoIds}
                     onChange={(e) => setPromoIds(e.target.value)}
+                    sx={{
+                      '& .MuiOutlinedInput-root.Mui-focused': {
+                          '& fieldset': {
+                              borderColor: 'rgb(101, 82, 82)',
+                          },
+                      },
+                      '& label.Mui-focused': {
+                          color: 'rgb(101, 82, 82)',
+                      }
+                    }}
                 />
-                <Button variant="contained" type="submit">
+                <Button variant="contained" type="submit" sx={{ backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)' }}>
                 Submit Purchase
                 </Button>
             </Box>
@@ -226,8 +256,18 @@ function CashierPage() {
                 value={redemptionId}
                 onChange={(e) => setRedemptionId(e.target.value)}
                 required
+                sx={{
+                  '& .MuiOutlinedInput-root.Mui-focused': {
+                      '& fieldset': {
+                          borderColor: 'rgb(101, 82, 82)',
+                      },
+                  },
+                  '& label.Mui-focused': {
+                      color: 'rgb(101, 82, 82)',
+                  }
+                }}
             />
-            <Button variant="contained" type="submit">
+            <Button variant="contained" type="submit" sx={{ backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)' }}>
                 Process
             </Button>
             </Box>
