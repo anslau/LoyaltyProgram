@@ -70,10 +70,10 @@ const Dashboard = () => {
             >
               What's New
             </Link>
+            <Link to="/profile" style={{ marginRight: '20px', textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}>
+              Profile
+            </Link>
             <RoleSwitcher />
-                        <Link to="/profile" style={{ marginRight: '20px', textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}>
-                            Profile
-                        </Link>
             <LogoutButton />
           </div>
         </div>

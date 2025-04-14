@@ -5,6 +5,7 @@ import LogoutButton from "../../components/auth/LogoutButton";
 import "../../styles/auth.css";
 import UserListTable from "../../components/UserListTable";
 import { Container } from "@mui/material";
+import RoleSwitcher from '../../components/RoleSwitcher';
 
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
@@ -56,6 +57,7 @@ const AllUsersList = () => {
                         <Link to="/perks" style={{ marginRight: '20px', textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}>
                         What's New
                         </Link>
+                        <RoleSwitcher />
                         <LogoutButton />
                     </div>
                 </div>

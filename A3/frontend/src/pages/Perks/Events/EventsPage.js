@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import LogoutButton from '../../../components/auth/LogoutButton';
 import EventsList from './EventsList';
 import '../../../styles/auth.css';
+import RoleSwitcher from '../../../components/RoleSwitcher';
 
 const EventsPage = () => {
   return (
@@ -18,6 +19,7 @@ const EventsPage = () => {
             <Link to="/promotions" style={{ marginRight: '20px', textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}>
               Promotions
             </Link>
+            <RoleSwitcher />
             <LogoutButton />
           </div>
         </div>

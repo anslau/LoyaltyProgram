@@ -5,6 +5,7 @@ import LogoutButton from '../../components/auth/LogoutButton';
 import QrCode from '../../components/qrCode';
 import { Box, CircularProgress, Button, IconButton, Grid, Typography, TextField, styled, Alert } from '@mui/material';
 import { Edit as EditIcon, CloudUpload, Done as DoneIcon } from '@mui/icons-material';
+import RoleSwitcher from '../../components/RoleSwitcher';
 import UserAvatar from '../../components/UserAvatar';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
@@ -195,6 +196,7 @@ const UserProfile = () => {
                         <Link to="/perks" style={{ marginRight: '20px', textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}>
                             What's New
                         </Link>
+                        <RoleSwitcher />
                         <LogoutButton />
                     </div>
                 </div>

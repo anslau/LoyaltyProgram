@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import LogoutButton from '../../components/auth/LogoutButton';
 import PromotionsList from './Promotions/PromotionsList';
 import EventsList from './Events/EventsList';
+import RoleSwitcher from '../../components/RoleSwitcher';
 import '../../styles/auth.css';
 
 function TabPanel(props) {
@@ -41,6 +42,7 @@ const PerksPage = () => {
             <Link to="/dashboard" style={{ marginRight: '20px', textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}>
               Dashboard
             </Link>
+            <RoleSwitcher />
             <LogoutButton />
           </div>
         </div>
