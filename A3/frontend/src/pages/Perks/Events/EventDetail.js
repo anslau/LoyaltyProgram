@@ -617,7 +617,8 @@ const EventDetail = () => {
       if (!updatedEvent.organizers) {
         updatedEvent.organizers = [];
       }
-      updatedEvent.organizers.push(response.data);
+      // updatedEvent.organizers.push(response.data.organizers);
+      updatedEvent.organizers.splice(0, updatedEvent.organizers.length, ...response.data.organizers);
       setEvent(updatedEvent);
 
       setAddOrganizerSuccess('Organizer added successfully!');
