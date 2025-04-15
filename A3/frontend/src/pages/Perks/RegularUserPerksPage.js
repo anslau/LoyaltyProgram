@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Box, Tabs, Tab, Typography, Container, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import LogoutButton from '../../components/auth/LogoutButton';
@@ -6,6 +6,8 @@ import PromotionsList from './Promotions/PromotionsList';
 import EventsList from './Events/EventsList';
 import RoleSwitcher from '../../components/RoleSwitcher';
 import '../../styles/auth.css';
+import ActiveRoleContext from '../../context/ActiveRoleContext';
+import AuthContext from '../../context/AuthContext';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -27,6 +29,8 @@ function TabPanel(props) {
 }
 
 const RegularUserPerksPage = () => {
+  const { activeRole } = useContext(ActiveRoleContext);
+  const { userDetails } = useContext(AuthContext);
   const [tabValue, setTabValue] = useState(0);
 
   const handleTabChange = (event, newValue) => {
@@ -78,20 +82,34 @@ const RegularUserPerksPage = () => {
           </Box>
           
           <TabPanel value={tabValue} index={0}>
+            {['manager', 'superuser'].includes(activeRole) && (
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+                <Button
+                  variant="contained"
+                  sx={{ color: 'rgb(101, 82, 82)', backgroundColor: '#ebc2c2' }}
+                  component={Link}
+                  to="/promotions/create"
+                >
+                  Create Promotion
+                </Button>
+              </Box>
+            )}
             <PromotionsList />
           </TabPanel>
           
           <TabPanel value={tabValue} index={1}>
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
-              <Button 
-                variant="contained" 
-                sx={{ color: 'rgb(101, 82, 82)', backgroundColor: '#ebc2c2' }}
-                component={Link} 
-                to="/events/create"
-              >
-                Create Event
-              </Button>
-            </Box>
+            {['manager', 'superuser'].includes(activeRole) && (
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+                <Button
+                  variant="contained"
+                  sx={{ color: 'rgb(101, 82, 82)', backgroundColor: '#ebc2c2' }}
+                  component={Link}
+                  to="/events/create"
+                >
+                  Create Event
+                </Button>
+              </Box>
+            )}
             <EventsList />
           </TabPanel>
         </Box>
