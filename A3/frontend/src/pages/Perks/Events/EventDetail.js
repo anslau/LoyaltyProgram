@@ -71,7 +71,7 @@ const EventDetail = () => {
   // Remove organizer state
   const [removeOrganizerLoading, setRemoveOrganizerLoading] = useState(false);
   
-  const { token, user } = useContext(AuthContext);
+  const { token, user, userDetails } = useContext(AuthContext);
   const navigate = useNavigate();
   
   // Temporarily set isManager to true to allow anyone to edit/delete
@@ -124,30 +124,64 @@ const EventDetail = () => {
     
     try {
       if (isAttending) {
+        // Cancel RSVP
         await axios.delete(`http://localhost:8000/events/${eventId}/guests/me`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
         });
+        
+        // Update state and UI
         setIsAttending(false);
         setRsvpSuccess('You have successfully cancelled your RSVP.');
+        
+        // Remove user from guests list
+        setEvent(prev => {
+          const updatedGuests = prev.guests.filter(g => g.userId !== user.id);
+          return {
+            ...prev,
+            guests: updatedGuests,
+            numGuests: Math.max(0, (prev.numGuests || 0) - 1)
+          };
+        });
+        
       } else {
+        // RSVP to event
         await axios.post(`http://localhost:8000/events/${eventId}/guests/me`, {}, {
           headers: {
             Authorization: `Bearer ${token}`
           }
         });
-        setIsAttending(true);
-        setRsvpSuccess('You have successfully RSVP\'d to this event!');
         
-        setEvent(prev => ({
-          ...prev,
-          numGuests: prev.numGuests + 1
-        }));
+        // Update state and UI
+        setIsAttending(true);
+        setRsvpSuccess("You have successfully RSVP'd to this event!");
+        
+        // Add current user to guests list if not already there
+        setEvent(prev => {
+          // Create a copy of the guests array, initializing if it doesn't exist
+          const updatedGuests = prev.guests ? [...prev.guests] : [];
+          
+          // Check if the user is already in the guest list
+          if (!updatedGuests.some(g => g.userId === user.id)) {
+            updatedGuests.push({
+              id: user.id,
+              userId: user.id,
+              name: userDetails?.name || user.name || 'Guest',
+              utorid: userDetails?.utorid || user.utorid || 'unknown'
+            });
+          }
+          
+          return {
+            ...prev,
+            guests: updatedGuests,
+            numGuests: updatedGuests.length
+          };
+        });
       }
     } catch (err) {
-      setRsvpError(err.response?.data?.message || 'Failed to process your RSVP. Please try again.');
       console.error('RSVP error:', err);
+      setRsvpError(err.response?.data?.message || 'An error occurred while processing your RSVP.');
     } finally {
       setRsvpLoading(false);
     }
