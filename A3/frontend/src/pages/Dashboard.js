@@ -300,6 +300,7 @@ const Dashboard = () => {
           >
             View All of Your Transactions
           </Link>
+          
           {activeRole && ['cashier', 'manager', 'superuser'].includes(activeRole) && (
             <Link
               to="/transactions"
@@ -312,6 +313,7 @@ const Dashboard = () => {
               View All Transactions
             </Link>
           )}
+
           <Link
             to="/promotions"
             style={{
@@ -322,6 +324,7 @@ const Dashboard = () => {
           >
             View All Promotions
           </Link>
+
           <Link
             to="/events"
             style={{
@@ -332,6 +335,20 @@ const Dashboard = () => {
           >
             View All Events
           </Link>
+
+        {activeRole && activeRole === 'organizer' && (
+        <Link
+            to="/organizer/events"
+            style={{
+            textDecoration: 'none',
+            color: '#1976d2',
+            fontWeight: 'bold',
+            }}
+        >
+            Organizer Events
+        </Link>
+        )}
+
           {activeRole && ['manager', 'superuser'].includes(activeRole) && (
             <Link
               to="/users"
@@ -357,7 +374,6 @@ const Dashboard = () => {
           </Link>
         </Box>
 
-        {/* If the active role is cashier, show CashierPage below */}
         {activeRole === 'cashier' && <CashierPage />}
       </Box>
     </div>
