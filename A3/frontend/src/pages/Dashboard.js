@@ -4,7 +4,7 @@ import AuthContext from '../context/AuthContext';
 import ActiveRoleContext from '../context/ActiveRoleContext';
 import RoleSwitcher from '../components/RoleSwitcher';
 import LogoutButton from '../components/auth/LogoutButton';
-import QRCode from 'qrcode.react';
+import QRCode from '../components/qrCode';
 import CashierPage from './CashierPage';
 
 import {
