@@ -142,11 +142,14 @@ const CreateEvent = () => {
     
     try {
       const payload = {
-        ...formData,
+        name: formData.name,
+        description: formData.description,
+        location: formData.location,
         capacity: formData.capacity ? Number(formData.capacity) : null,
         points: Number(formData.points),
         startTime: new Date(formData.startTime).toISOString(),
-        endTime: new Date(formData.endTime).toISOString()
+        endTime: new Date(formData.endTime).toISOString(),
+        published: formData.published
       };
       
       const response = await fetch('http://localhost:8000/events', {
@@ -411,7 +414,18 @@ const CreateEvent = () => {
                         checked={formData.published}
                         onChange={handleChange}
                         name="published"
-                        color="#ebc2c2"
+                        color="primary"
+                        sx={{ 
+                          '& .MuiSwitch-switchBase.Mui-checked': {
+                            color: '#ebc2c2',
+                            '&:hover': {
+                              backgroundColor: 'rgba(235, 194, 194, 0.08)',
+                            },
+                          },
+                          '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+                            backgroundColor: '#ebc2c2',
+                          }
+                        }}
                       />
                     }
                     label={formData.published ? "Published (visible to users)" : "Draft (not visible to users)"}

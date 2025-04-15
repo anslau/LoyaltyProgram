@@ -392,7 +392,7 @@ const EventsList = () => {
                   control={
                     <Checkbox
                       checked={filters.published === 'true'}
-                      onChange={(e) => setFilters({...filters, published: e.target.checked ? 'true' : 'false'})}
+                      onChange={(e) => setFilters({...filters, published: e.target.checked ? 'true' : ''})}
                       name="published"
                       sx={{
                         '&.Mui-checked': {

@@ -14,10 +14,10 @@ function validDate(date){
 }
 
 async function createEvent(req, res){
-    const { name, description, location, startTime, endTime, capacity, points } = req.body;
+    const { name, description, location, startTime, endTime, capacity, points, published} = req.body;
 
     // check for invalid fields
-    const validFields = ['name', 'description', 'location', 'startTime', 'endTime', 'capacity', 'points'];
+    const validFields = ['name', 'description', 'location', 'startTime', 'endTime', 'capacity', 'points', 'published'];
     if (!validateFields(req.body, validFields)){
         return res.status(400).json({ message: "Invalid field" });
     }
@@ -51,7 +51,7 @@ async function createEvent(req, res){
 
     // create the 
     const { id } = req.user;
-    const data = { name, description, location, startTime, endTime, capacity, points };
+    const data = { name, description, location, startTime, endTime, capacity, points, published };
     const event = await eventService.createEvent(data, id);
 
     return res.status(201).json(event);
