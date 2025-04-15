@@ -1302,29 +1302,6 @@ const EventDetail = () => {
             </Button>
           </DialogActions>
         </Dialog>
-
-        {isManager && (
-          <Tooltip title="Add Organizer">
-            <Fab
-              color="primary"
-              aria-label="add-organizer"
-              size="medium"
-              onClick={handleAddOrganizerDialogOpen}
-              sx={{
-                position: 'fixed',
-                bottom: 170, // Position above the add guest button
-                right: 20,
-                backgroundColor: '#ebc2c2',
-                color: 'rgb(101, 82, 82)',
-                '&:hover': {
-                  backgroundColor: '#e9b0b0',
-                }
-              }}
-            >
-              <OrganizerIcon />
-            </Fab>
-          </Tooltip>
-        )}
       </Container>
     </div>
   );
