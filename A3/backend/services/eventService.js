@@ -209,7 +209,9 @@ async function retrieveEvent(eventId, role, userId) {
             const { pointsRemain, pointsAwarded, published, guests, organizers, ...publicEvent } = event;
 
             // If the current user is a guest, include *only* them in the guests array
-            const guestsToShow = isCurrentUserGuest ? [currentUserGuestInfo] : [];
+            // Use the formatted list to find the current user's info
+            const currentUserFormattedGuestInfo = formattedGuests.find(guest => guest.id === userId);
+            const guestsToShow = isCurrentUserGuest && currentUserFormattedGuestInfo ? [currentUserFormattedGuestInfo] : [];
 
             return {
                 ...publicEvent,
@@ -221,8 +223,14 @@ async function retrieveEvent(eventId, role, userId) {
         }
 
         // For privileged users, return full details including the flag
-        const { numGuests, ...privilegedEvent } = event;
-        return { ...privilegedEvent, isCurrentUserGuest };
+        // **Format organizers and guests before returning**
+        const { organizers, guests, ...privilegedEventData } = event; // Separate organizers/guests
+        return {
+            ...privilegedEventData,
+            organizers: formattedOrganizers, // Use the formatted list
+            guests: formattedGuests,         // Use the formatted list
+            isCurrentUserGuest
+        };
 
     }catch(e){
         console.error(`error in retrieveEvent ${e.message}`);
