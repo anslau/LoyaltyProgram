@@ -269,9 +269,16 @@ const Dashboard = () => {
               type="number"
               value={redeemAmount}
               onChange={(e) => setRedeemAmount(e.target.value)}
-              sx={{ mr: 2, width: 200 }}
+              sx={{ mr: 2, width: 200, '& .MuiOutlinedInput-root.Mui-focused': {
+                                                                '& fieldset': {
+                                                                    borderColor: 'rgb(101, 82, 82)',
+                                                                },
+                                                            },
+                                                            '& label.Mui-focused': {
+                                                                color: 'rgb(101, 82, 82)',
+                                                            }}}
             />
-            <Button type="submit" variant="contained">
+            <Button type="submit" variant="contained" sx={{ backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)' }}>
               Submit
             </Button>
           </form>
