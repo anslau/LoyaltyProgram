@@ -229,6 +229,9 @@ async function updateUserPassword(req, res){
     if (!oldPassword || !newPassword){
         return res.status(400).json({ message: "Old or new password is missing" });
     }
+    if (oldPassword === newPassword){
+        return res.status(400).json({ message: "Old and new password cannot be the same" });
+    }
 
     // check that the new password is btw 8-20 chars, 1 upper, 1 lower, 1 number, 1 symbol
     // TODO: uncomment this code block

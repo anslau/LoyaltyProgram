@@ -3,8 +3,8 @@ import AuthContext from '../../context/AuthContext';
 import { Link } from 'react-router-dom';
 import LogoutButton from '../../components/auth/LogoutButton';
 import QrCode from '../../components/qrCode';
-import { Box, CircularProgress, Button, IconButton, Grid, Typography, TextField, styled, Alert } from '@mui/material';
-import { Edit as EditIcon, CloudUpload, Done as DoneIcon } from '@mui/icons-material';
+import { Box, CircularProgress, Button, IconButton, Grid, Typography, TextField, styled, Alert, InputAdornment } from '@mui/material';
+import { Edit as EditIcon, CloudUpload, Done as DoneIcon, Visibility, VisibilityOff } from '@mui/icons-material';
 import RoleSwitcher from '../../components/RoleSwitcher';
 import UserAvatar from '../../components/UserAvatar';
 
@@ -25,7 +25,9 @@ const UserProfile = () => {
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
     const [editMode, setEditMode] = useState(false);
-    const [avatarUploaded, setAvatarUploaded] = useState(false);
+    
+    const [showOldPassword, setShowOldPassword] = useState(false);
+    const [showNewPassword, setShowNewPassword] = useState(false);
 
     const [passwordForm, setPasswordForm] = useState({
         old: '',
@@ -473,7 +475,7 @@ const UserProfile = () => {
                                                 <Typography variant="h6">
                                                     <strong>Old Password:</strong>
                                                     <TextField
-                                                        type="text"
+                                                        type={showOldPassword ? 'text' : 'password'}
                                                         size="medium"
                                                         value={passwordForm.old}
                                                         onChange={(e) => {
@@ -481,6 +483,19 @@ const UserProfile = () => {
                                                             setPasswordError('');
                                                             setPasswordSuccess(false);
                                                         }}
+                                                        InputProps={{
+                                                            endAdornment: (
+                                                              <InputAdornment position="end">
+                                                                <IconButton
+                                                                  onClick={() => setShowOldPassword(!showOldPassword)}
+                                                                  onMouseDown={(e) => e.preventDefault()}
+                                                                  edge="end"
+                                                                >
+                                                                  {showOldPassword ? <VisibilityOff /> : <Visibility />}
+                                                                </IconButton>
+                                                              </InputAdornment>
+                                                            )
+                                                          }}
                                                         sx={{
                                                             mb: 1,
                                                             '& .MuiOutlinedInput-root.Mui-focused': {
@@ -500,13 +515,26 @@ const UserProfile = () => {
                                                 <Typography variant="h6">
                                                     <strong>New Password:</strong>
                                                     <TextField
-                                                        type="text"
+                                                        type={showNewPassword ? 'text' : 'password'}
                                                         size="medium"
                                                         value={passwordForm.new}
                                                         onChange={(e) => {
                                                             setPasswordForm({ ...passwordForm, new: e.target.value });
                                                             setPasswordError('');
                                                             setPasswordSuccess(false);
+                                                        }}
+                                                        InputProps={{ 
+                                                            endAdornment: (
+                                                                <InputAdornment position="end">
+                                                                    <IconButton
+                                                                        onClick={() => setShowNewPassword(!showNewPassword)}
+                                                                        onMouseDown={(e) => e.preventDefault()}
+                                                                        edge="end"
+                                                                    >
+                                                                        {showNewPassword ? <VisibilityOff /> : <Visibility />}
+                                                                    </IconButton>
+                                                                </InputAdornment>
+                                                            )
                                                         }}
                                                         sx={{
                                                             mb: 1,

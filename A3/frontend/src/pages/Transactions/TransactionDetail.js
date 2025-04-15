@@ -100,7 +100,7 @@ const TransactionDetail = () => {
         if (!adjustmentData.amount) {
             setAdjustmentError('Amount is required');
             return false;
-        }else if (adjustmentData.promotionIds.length !== '') {
+        }else if (adjustmentData.promotionIds !== '') {
             const promotionIds = adjustmentData.promotionIds.split(',').map(id => Number(id.trim()));
             if (promotionIds.some(id => isNaN(id))) {
                 setAdjustmentError('Promotion IDs must be numbers');
@@ -111,7 +111,6 @@ const TransactionDetail = () => {
                     remark: '',
                 });
                 return;
-                return false;
             }
         }
 
@@ -132,7 +131,7 @@ const TransactionDetail = () => {
                 type: "adjustment",
                 relatedId: Number(transactionId),
                 amount: Number(adjustmentData.amount),
-                promotionIds: adjustmentData.promotionIds.split(',').map(id => Number(id.trim())),
+                promotionIds: adjustmentData.promotionIds ? adjustmentData.promotionIds.split(',').map(id => Number(id.trim())) : [],
                 remark: adjustmentData.remark,
             };
 
