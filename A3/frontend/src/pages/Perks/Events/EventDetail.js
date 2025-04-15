@@ -6,7 +6,7 @@ import {
   DialogContentText, DialogTitle, Grid, IconButton,
   FormControlLabel, Switch, Card, CardContent, Stack,
   List, ListItem, ListItemText, ListItemAvatar, Avatar,
-  ListSubheader, Collapse, Tooltip, Fab
+  ListSubheader, Collapse, Tooltip, Fab, ListItemIcon
 } from '@mui/material';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
@@ -1066,10 +1066,14 @@ const EventDetail = () => {
                             }
                           >
                             <ListItemAvatar>
-                              <Avatar>{organizer.name.charAt(0).toUpperCase()}</Avatar>
+                              <Avatar sx={{ bgcolor: 'primary.dark', color: '#fff' }}>
+                                {organizer.name && typeof organizer.name === 'string' && organizer.name.length > 0
+                                  ? organizer.name.charAt(0).toUpperCase()
+                                  : <PersonIcon />}
+                              </Avatar>
                             </ListItemAvatar>
                             <ListItemText 
-                              primary={organizer.name} 
+                              primary={organizer.name || 'Unknown Organizer'} 
                               secondary={organizer.utorid} 
                             />
                           </ListItem>
@@ -1142,10 +1146,14 @@ const EventDetail = () => {
                             }
                           >
                             <ListItemAvatar>
-                              <Avatar>{guest.name.charAt(0).toUpperCase()}</Avatar>
+                              <Avatar sx={{ bgcolor: 'secondary.main', color: '#fff' }}>
+                                {guest.name && typeof guest.name === 'string' && guest.name.length > 0
+                                  ? guest.name.charAt(0).toUpperCase()
+                                  : <PersonIcon />}
+                              </Avatar>
                             </ListItemAvatar>
                             <ListItemText 
-                              primary={guest.name} 
+                              primary={guest.name || 'Unknown Guest'} 
                               secondary={guest.utorid} 
                             />
                           </ListItem>
