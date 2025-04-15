@@ -64,8 +64,7 @@ const EventDetail = () => {
   const { token, user } = useContext(AuthContext);
   const navigate = useNavigate();
   
-  // Temporarily set isManager to true to allow anyone to edit/delete
-  const isManager = true;
+  const isManager = ['manager', 'superuser'].includes(user?.role) || event?.organizers?.some(o => o.utorid === user?.utorid);
 
   useEffect(() => {
     const fetchEventDetails = async () => {

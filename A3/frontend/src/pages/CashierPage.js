@@ -72,7 +72,7 @@ function CashierPage() {
       }
 
       const data = await resp.json();
-      setPurchaseSuccess(`Purchase #${data.id} created! Earned points: ${data.amount}`);
+      setPurchaseSuccess(`Purchase #${data.id} created! Earned points: ${data.earned}`);
       setPurchaseUtorid('');
       setPurchaseAmount('');
       setPromoIds('');
