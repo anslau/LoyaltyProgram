@@ -141,6 +141,13 @@ const Dashboard = () => {
           >
             View All Promotions
           </Link>
+            <Link
+            to="/points"
+            style={{ textDecoration: 'none', color: '#1976d2', fontWeight: 'bold' }}
+            >
+            Redeem Your Points
+            </Link>
+
           <Link
             to="/events"
             style={{ textDecoration: 'none', color: '#1976d2', fontWeight: 'bold' }}
