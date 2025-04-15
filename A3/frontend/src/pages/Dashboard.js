@@ -406,7 +406,7 @@ const Dashboard = () => {
               to="/organizer/events"
               style={{
                 textDecoration: 'none',
-                color: '#1976d2',
+                color: '#c48f8f',
                 fontWeight: 'bold',
               }}
             >

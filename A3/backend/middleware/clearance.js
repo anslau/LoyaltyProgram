@@ -1,4 +1,4 @@
-const LEVELS = ['regular', 'cashier', 'manager', 'superuser'];
+const LEVELS = ['regular', 'organizer', 'cashier', 'manager', 'superuser'];
 
 const clearance = (required) => {
     return (req, res, next) => {

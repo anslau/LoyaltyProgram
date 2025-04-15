@@ -7,7 +7,7 @@ module.exports = async function seedUsers() {
       utorid: 'testuser',
       password: 'Password123!',
       email: 'testuser@utoronto.ca',
-      role: 'regular',
+      role: 'organizer',
       name: 'Test User',
       verified: true
     },

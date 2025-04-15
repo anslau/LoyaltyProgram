@@ -4,11 +4,12 @@ import AuthContext from '../context/AuthContext';
 import ActiveRoleContext from '../context/ActiveRoleContext';
 
 // Role hierarchy from lowest to highest
-const ROLE_HIERARCHY = ['regular', 'cashier', 'manager', 'superuser'];
+const ROLE_HIERARCHY = ['regular', 'organizer', 'cashier', 'manager', 'superuser'];
 
 // Role display names
 const ROLE_DISPLAY_NAMES = {
   regular: 'Regular User',
+  organizer: 'Event Organizer',
   cashier: 'Cashier',
   manager: 'Manager',
   superuser: 'Super User'

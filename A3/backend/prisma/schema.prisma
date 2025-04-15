@@ -9,6 +9,7 @@ generator client {
 
 enum Role {
   regular
+  organizer
   cashier
   manager
   superuser

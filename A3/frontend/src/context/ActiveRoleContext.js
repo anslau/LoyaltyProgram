@@ -16,7 +16,7 @@ export const ActiveRoleProvider = ({ children }) => {
       const storedRole = localStorage.getItem('activeRole');
       
       // Verify the stored role is valid for this user (not higher than their actual role)
-      const roleHierarchy = ['regular', 'cashier', 'manager', 'superuser'];
+      const roleHierarchy = ['regular', 'organizer', 'cashier', 'manager', 'superuser'];
       const userRoleIndex = roleHierarchy.indexOf(userDetails.role);
       const storedRoleIndex = roleHierarchy.indexOf(storedRole);
       

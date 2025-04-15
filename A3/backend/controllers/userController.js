@@ -48,7 +48,7 @@ async function retrieveUsersList(req, res){
     const { name, role, verified, activated, page, limit, orderBy, order } = req.query;
 
     // validate the filters
-    const validRoles = ['regular', 'cashier', 'manager', 'superuser'];
+    const validRoles = ['regular', 'organizer', 'cashier', 'manager', 'superuser'];
     const validBools = ['true', 'false'];
     if (role && !validRoles.includes(role)){
         return res.status(400).json({ message: "invalid role param" });
@@ -112,7 +112,7 @@ async function updateSpecificUserInfo(req, res){
 
     // check the user has clearance to change the role
     const managerRoles = ['regular', 'cashier']
-    const allRoles = ['regular', 'cashier', 'manager', 'superuser'];
+    const allRoles = ['regular', 'organizer', 'cashier', 'manager', 'superuser'];
     const { role: userRole } = req.user;
     if (role){
         if (!allRoles.includes(role)){
