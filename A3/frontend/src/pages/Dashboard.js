@@ -6,7 +6,7 @@ import RoleSwitcher from '../components/RoleSwitcher';
 import '../styles/auth.css';
 import AuthContext from '../context/AuthContext';
 import ActiveRoleContext from '../context/ActiveRoleContext';
-import { Grid, Card, CardContent, Typography, Chip, Button, Box } from '@mui/material';
+import { Grid, Card, CardContent, Typography, Chip, Button, Box, CircularProgress } from '@mui/material';
 import CashierPage from './CashierPage';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
@@ -15,11 +15,14 @@ const Dashboard = () => {
   const [transactions, setTransactions] = useState([]);
   const { token } = useContext(AuthContext);
   const { activeRole } = useContext(ActiveRoleContext);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
     // fetching the three most recent transactions for the dashboard
     useEffect(() => {
         // Only run if a token is available
         if (!token) return;
+        setLoading(true);
 
         fetch(`${BACKEND_URL}/users/me/transactions`, {
             method: 'GET',
@@ -38,12 +41,38 @@ const Dashboard = () => {
                 const allTransactions = data.results || [];
                 const recentTransactions = allTransactions.slice(-3).reverse();
                 setTransactions(recentTransactions);
+                setLoading(false);
             })
             .catch((error) => {
                 console.error('Error fetching transactions:', error);
             }
         )
     }, [token]);   
+
+    // getting the user name and role
+    useEffect(() => {
+        if (!token) return;
+        setLoading(true);
+
+        fetch(`${BACKEND_URL}/users/me`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then(async (response) => {
+                const text = await response.text();
+                return text ? JSON.parse(text) : { results: [] };
+            })
+            .then((data) => {
+                setUser(data);
+                setLoading(false);
+            })
+            .catch((error) => {
+                console.error('Error fetching user data:', error);
+            });
+    }, [token]);
 
   const chipColour = (type) => {
     switch (type) {
@@ -81,11 +110,27 @@ const Dashboard = () => {
 
       {/* Main Body */}
       <div className="dashboard-main">
+        {/* Welcome Message */}
+        {!loading ? (
+          <>
+            <Typography variant="h4" sx={{ mb: 2 }}>
+              Welcome back, {user.name}!
+            </Typography>
+            <Typography variant="h5" sx={{ mb: 2 }}>
+              This is your {activeRole} dashboard.
+            </Typography>
+          </>
+        ) : (
+          <Typography variant="h5" sx={{ mb: 2 }}>
+            <CircularProgress />
+          </Typography>
+        )}
+
         {/* Recent Transactions Section */}
         <Typography variant="h6" sx={{ mb: 2 }}>
           Your Recent Transactions
         </Typography>
-        {transactions.length > 0 ? (
+        {transactions.length > 0 && !loading ? (
           <Grid container spacing={3} sx={{ mb: 2 }}>
             {transactions.map((transaction) => (
               <Grid item xs={12} sm={6} md={4} key={transaction.id}>
@@ -115,8 +160,12 @@ const Dashboard = () => {
               </Grid>
             ))}
           </Grid>
-        ) : (
+        ) : transactions.length === 0 && !loading ? (
           <Typography sx={{ mb: 2 }}>No recent transactions available.</Typography>
+        ) : (
+          <Typography sx={{ mb: 2 }}>
+            <CircularProgress />
+          </Typography>
         )}
 
         {/* Navigation Links */}
