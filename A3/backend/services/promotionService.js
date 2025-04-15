@@ -83,7 +83,8 @@ async function retrievePromotionsList(id, filters, role) {
         // only managers will have these filters. one or the other
         if (filters.started !== undefined) {
             where.startTime = filters.started === 'true' ? { lte: new Date() } : { gt: new Date() };
-        } else if (filters.ended !== undefined) {
+        } 
+        if (filters.ended !== undefined) {
             where.endTime = filters.ended === 'true' ? { lte: new Date() } : { gt: new Date() };
         }
 

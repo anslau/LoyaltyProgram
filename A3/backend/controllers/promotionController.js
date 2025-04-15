@@ -85,13 +85,13 @@ async function retrievePromotionsList(req, res){
         return res.status(400).json({ message: "Invalid type: only automatic or one-time" });
     }
 
-    if (started && ended){ 
-        return res.status(400).json({ message: "Started and ended cannot be used together and must be boolean" });
-    }else if (started && !validBools.includes(started)){
-        return res.status(400).json({ message: "Started must be a boolean" });
-    }else if (ended && !validBools.includes(ended)){
-        return res.status(400).json({ message: "Ended must be a boolean" });
-    }
+    // if (started && ended){ 
+    //     return res.status(400).json({ message: "Started and ended cannot be used together and must be boolean" });
+    // }else if (started && !validBools.includes(started)){
+    //     return res.status(400).json({ message: "Started must be a boolean" });
+    // }else if (ended && !validBools.includes(ended)){
+    //     return res.status(400).json({ message: "Ended must be a boolean" });
+    // }
     if (page && isNaN(parseInt(page)) || page && page < 0 ){
         return res.status(400).json({ message: "invalid page param" });
     }
