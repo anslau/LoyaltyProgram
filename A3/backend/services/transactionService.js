@@ -344,7 +344,7 @@ async function createTransaction(data, requesterUtorid) {
 
 async function retrieveTransactions(filters){
     try{
-        const {name, createdBy, suspicious, promotionId, type, relatedId, amount, operator, page, limit} = filters;
+        const {name, createdBy, suspicious, promotionId, type, relatedId, amount, operator, page, limit, orderBy, order} = filters;
 
         // for pagination
         let pageNum = parseInt(page) || 1;
@@ -416,7 +416,8 @@ async function retrieveTransactions(filters){
             take,
             skip,
             orderBy: {
-                id: 'asc'
+                // id: 'desc'
+                [orderBy || 'id']: order || 'desc'
             }
         });
 

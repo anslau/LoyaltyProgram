@@ -200,13 +200,14 @@ async function retrieveEvent(eventId, role, userId) {
 
         if (lowerPrivilege.includes(role) && !event.published && !isOrganizer){
             return {error: "Event not found", status: 404};
-        }else if (lowerPrivilege.includes(role) && !isOrganizer && event.published){
-            const { pointsRemain, pointsAwarded, published, guests, ...publicEvent } = event;
-            return publicEvent;
         }
+        // }else if (lowerPrivilege.includes(role) && !isOrganizer && event.published){
+        //     const { pointsRemain, pointsAwarded, published, guests, ...publicEvent } = event;
+        //     return publicEvent;
+        // }
 
-        const { numGuests, ...publicEvent } = event;
-        return publicEvent;
+        // const { numGuests, ...publicEvent } = event;
+        return event;
 
     }catch(e){
         console.error(`error in retrieveEvent ${e.message}`);

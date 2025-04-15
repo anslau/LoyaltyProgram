@@ -1,10 +1,11 @@
-// src/pages/Dashboard.js
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import LogoutButton from '../components/auth/LogoutButton';
-import RoleSwitcher from '../components/RoleSwitcher';
 import AuthContext from '../context/AuthContext';
 import ActiveRoleContext from '../context/ActiveRoleContext';
+import RoleSwitcher from '../components/RoleSwitcher';
+import LogoutButton from '../components/auth/LogoutButton';
+import QRCode from 'qrcode.react';
+import CashierPage from './CashierPage';
 
 import {
   Grid,
@@ -19,78 +20,71 @@ import {
   CircularProgress
 } from '@mui/material';
 
-import QRCode from 'qrcode.react';
-import CashierPage from './CashierPage';
-
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
 
 const Dashboard = () => {
-  const { token, user } = useContext(AuthContext);
+  const { token, userDetails } = useContext(AuthContext);
   const { activeRole } = useContext(ActiveRoleContext);
 
-  // For points & redemption
+  // Single, unified loading + error states
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  // Points & redemption
   const [points, setPoints] = useState(0);
-  const [loadingPoints, setLoadingPoints] = useState(false);
-  const [pointsError, setPointsError] = useState('');
   const [redeemAmount, setRedeemAmount] = useState('');
   const [unprocessedRedemption, setUnprocessedRedemption] = useState(null);
 
-  // For user’s 3 most recent transactions
+  // Last 3 transactions
   const [transactions, setTransactions] = useState([]);
 
-  // Fetch user points & check for unprocessed redemption
-  useEffect(() => {
-    if (!token) return;
-    const fetchPointsAndRedemption = async () => {
-      try {
-        setLoadingPoints(true);
-        setPointsError('');
+  // 1) Fetch points + check for unprocessed redemption
+  const fetchPointsAndRedemption = async () => {
+    try {
+      setError('');
+      // Get user details from /users/me
+      // (You already have userDetails in AuthContext, but re-checking is okay
+      //  or you could rely on userDetails directly if it has .points.)
+      const resp = await fetch(`${BACKEND_URL}/users/me`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!resp.ok) {
+        throw new Error('Failed to get user data');
+      }
+      const data = await resp.json();
+      setPoints(data.points || 0);
 
-        // 1) Get user data
-        const resp = await fetch(`${BACKEND_URL}/users/me`, {
+      // Check if user has an unprocessed redemption (type=redemption & !processedBy)
+      const tResp = await fetch(
+        `${BACKEND_URL}/users/me/transactions?type=redemption&limit=20`,
+        {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
           },
-        });
-        if (!resp.ok) {
-          throw new Error('Failed to get user data');
         }
-        const userData = await resp.json();
-        setPoints(userData.points || 0);
-
-        // 2) Check for unprocessed redemption
-        const tResp = await fetch(
-          `${BACKEND_URL}/users/me/transactions?type=redemption&limit=20`,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        if (!tResp.ok) {
-          throw new Error('Failed to get redemption transactions');
-        }
-        const tData = await tResp.json();
-        const unprocessed = tData.results.find((tx) => !tx.processedBy);
-        setUnprocessedRedemption(unprocessed || null);
-      } catch (err) {
-        console.error(err);
-        setPointsError(err.message);
-      } finally {
-        setLoadingPoints(false);
+      );
+      if (!tResp.ok) {
+        throw new Error('Failed to get redemption transactions');
       }
-    };
-    fetchPointsAndRedemption();
-  }, [token]);
+      const tData = await tResp.json();
+      const unprocessed = tData.results.find((tx) => !tx.processedBy);
+      setUnprocessedRedemption(unprocessed || null);
+    } catch (err) {
+      console.error(err);
+      setError(err.message);
+    }
+  };
 
-  // Handle redemption form
+  // 2) Handle redemption form
   const handleRedeem = async (e) => {
     e.preventDefault();
-    setPointsError('');
+    setError('');
     if (!redeemAmount) {
-      setPointsError('Please enter an amount to redeem.');
+      setError('Please enter an amount to redeem.');
       return;
     }
     try {
@@ -115,32 +109,53 @@ const Dashboard = () => {
       setUnprocessedRedemption(data);
       setRedeemAmount('');
     } catch (err) {
-      setPointsError(err.message);
+      console.error(err);
+      setError(err.message);
     }
   };
 
-  // Fetch user’s last 3 transactions
+  // 3) Fetch user’s last 3 transactions
+  const fetchTransactions = async () => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/users/me/transactions`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error('Error fetching transactions');
+      }
+      const data = await response.json();
+      const all = data.results || [];
+      const recent = all.slice(-3).reverse();
+      setTransactions(recent);
+    } catch (err) {
+      console.error(err);
+      setError(err.message);
+    }
+  };
+
+  // Unified effect to fetch everything once we have a token
   useEffect(() => {
     if (!token) return;
-    fetch(`${BACKEND_URL}/users/me/transactions`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(async (response) => {
-        const text = await response.text();
-        return text ? JSON.parse(text) : { results: [] };
-      })
-      .then((data) => {
-        const allTransactions = data.results || [];
-        const recent = allTransactions.slice(-3).reverse();
-        setTransactions(recent);
-      })
-      .catch((error) => {
-        console.error('Error fetching transactions:', error);
-      });
+
+    const fetchAllData = async () => {
+      setLoading(true);
+      setError('');
+      try {
+        await fetchPointsAndRedemption();
+        await fetchTransactions();
+      } catch (err) {
+        // We already set error in each function's catch
+        console.error('Error fetching data:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAllData();
   }, [token]);
 
   // Helper to color-code transaction chips
@@ -156,6 +171,8 @@ const Dashboard = () => {
         return 'info';
       case 'event':
         return 'primary';
+      case 'promotion':
+        return 'secondary';
       default:
         return 'default';
     }
@@ -163,14 +180,39 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
-      {/* Navigation Bar */}
+      {/* Top Navigation */}
       <nav className="dashboard-nav">
         <div className="nav-content">
           <h1 className="dashboard-title">Dashboard</h1>
           <div style={{ display: 'flex', alignItems: 'center' }}>
-          {activeRole && ['manager', 'superuser'].includes(activeRole) && (
+            {activeRole && ['manager', 'superuser'].includes(activeRole) && (
+              <Link
+                to="/perks"
+                style={{
+                  marginRight: '20px',
+                  textDecoration: 'none',
+                  color: '#c48f8f',
+                  fontWeight: 'bold',
+                }}
+              >
+                What's New
+              </Link>
+            )}
+            {activeRole && ['regular', 'cashier'].includes(activeRole) && (
+              <Link
+                to="/regularperks"
+                style={{
+                  marginRight: '20px',
+                  textDecoration: 'none',
+                  color: '#c48f8f',
+                  fontWeight: 'bold',
+                }}
+              >
+                What's New
+              </Link>
+            )}
             <Link
-              to="/perks"
+              to="/profile"
               style={{
                 marginRight: '20px',
                 textDecoration: 'none',
@@ -178,28 +220,6 @@ const Dashboard = () => {
                 fontWeight: 'bold',
               }}
             >
-              What's New
-            </Link>
-          )}
-          {activeRole && ['regular', 'cashier'].includes(activeRole) && (
-            <Link
-              to="/regularperks"
-              style={{ 
-                marginRight: '20px', 
-                textDecoration: 'none', 
-                color: '#c48f8f', 
-                fontWeight: 'bold' }}
-            >
-              What's New
-            </Link>
-            )}
-            <Link to="/profile" 
-            style={{ 
-                marginRight: '20px', 
-                textDecoration: 'none', 
-                color: '#c48f8f', 
-                fontWeight: 'bold' 
-            }}>
               Profile
             </Link>
             <RoleSwitcher />
@@ -208,19 +228,37 @@ const Dashboard = () => {
         </div>
       </nav>
 
-      {/* Points + Redemption Section */}
+      {/* Welcome back + Role */}
       <Box sx={{ p: 2 }}>
-        <Typography variant="h5" sx={{ mb: 2 }}>
+        {!loading ? (
+          <>
+            <Typography variant="h4" sx={{ mb: 2 }}>
+              Welcome back, {userDetails?.name}!
+            </Typography>
+            <Typography variant="h5" sx={{ mb: 2 }}>
+              This is your {activeRole} dashboard.
+            </Typography>
+          </>
+        ) : (
+          <CircularProgress />
+        )}
+
+        {/* Show error if any */}
+        {error && (
+          <Alert severity="error" sx={{ mt: 2 }}>
+            {error}
+          </Alert>
+        )}
+
+        {/* Points & Redemption Section */}
+        <Typography variant="h6" sx={{ mt: 4 }}>
           Your Points
         </Typography>
-        {loadingPoints ? (
-          <CircularProgress />
-        ) : (
+        {!loading && (
           <Typography variant="body1" sx={{ mb: 2 }}>
             Current Balance: <strong>{points}</strong> points
           </Typography>
         )}
-        {pointsError && <Alert severity="error">{pointsError}</Alert>}
 
         {/* Redeem Form */}
         <Box sx={{ mt: 2 }}>
@@ -260,7 +298,9 @@ const Dashboard = () => {
         <Typography variant="h6" sx={{ mb: 2 }}>
           Your Recent Transactions
         </Typography>
-        {transactions.length > 0 ? (
+        {loading ? (
+          <CircularProgress />
+        ) : transactions.length > 0 ? (
           <Grid container spacing={3} sx={{ mb: 2 }}>
             {transactions.map((tx) => (
               <Grid item xs={12} sm={6} md={4} key={tx.id}>
@@ -301,20 +341,20 @@ const Dashboard = () => {
           </Typography>
         )}
 
+        {/* Links */}
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 4 }}>
+          {/* Always show "View All of Your Transactions" with query params */}
           <Link
-            to="/users/me/transactions"
-            style={{ 
-                textDecoration: 'none', 
-                color: '#c48f8f', 
-                fontWeight: 'bold' }}
+            to="/users/me/transactions?page=1&limit=10&orderBy=id&order=desc"
+            style={{ textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}
           >
             View All of Your Transactions
           </Link>
-          
+
+          {/* If cashier/manager/superuser, can see all transactions */}
           {activeRole && ['cashier', 'manager', 'superuser'].includes(activeRole) && (
             <Link
-              to="/transactions"
+              to="/transactions?page=1&limit=10&orderBy=id&order=desc"
               style={{
                 textDecoration: 'none',
                 color: '#c48f8f',
@@ -324,73 +364,77 @@ const Dashboard = () => {
               View All Transactions
             </Link>
           )}
-          {activeRole && ['manager', 'superuser'].includes(activeRole) && (
+
+          {/* Always show "View All Promotions" but pick route based on role */}
           <Link
-            to="/promotions"
-            style={{ 
-                textDecoration: 'none', 
-                color: '#c48f8f', 
-                fontWeight: 'bold' }}
+            to={
+              activeRole && ['manager', 'superuser'].includes(activeRole)
+                ? '/promotions?page=1&limit=10&orderBy=id&order=desc'
+                : '/regularpromotions?page=1&limit=10&orderBy=id&order=desc'
+            }
+            style={{
+              textDecoration: 'none',
+              color: '#c48f8f',
+              fontWeight: 'bold',
+            }}
           >
             View All Promotions
           </Link>
-          )}
-          {activeRole && ['regular', 'cashier'].includes(activeRole) && (
+
+          {/* Always show "View All Events" with query params */}
           <Link
-            to="/regularpromotions"
-            style={{ 
-                textDecoration: 'none', 
-                color: '#c48f8f', 
-                fontWeight: 'bold' }}
-          >
-            View All Promotions
-          </Link>
-          )}
-          <Link
-            to="/events"
-            style={{ 
-                textDecoration: 'none', 
-                color: '#c48f8f', 
-                fontWeight: 'bold' }}
+            to="/events?page=1&limit=10&orderBy=id&order=desc"
+            style={{
+              textDecoration: 'none',
+              color: '#c48f8f',
+              fontWeight: 'bold',
+            }}
           >
             View All Events
           </Link>
 
-        {activeRole && activeRole === 'organizer' && (
-        <Link
-            to="/organizer/events"
-            style={{
+          {/* If role=organizer, link to organizer events */}
+          {activeRole === 'organizer' && (
+            <Link
+              to="/organizer/events"
+              style={{
                 textDecoration: 'none',
                 color: '#1976d2',
                 fontWeight: 'bold',
-            }}
-        >
-            Organizer Events
-        </Link>
-        )}
+              }}
+            >
+              Organizer Events
+            </Link>
+          )}
 
+          {/* manager/superuser can see all users */}
           {activeRole && ['manager', 'superuser'].includes(activeRole) && (
+            <Link
+              to="/users?page=1&limit=10&orderBy=id&order=asc"
+              style={{
+                textDecoration: 'none',
+                color: '#c48f8f',
+                fontWeight: 'bold',
+              }}
+            >
+              View All Users
+            </Link>
+          )}
+
+          {/* Transfer Points (everyone) */}
           <Link
-            to="/users"
-            style={{ 
-                textDecoration: 'none', 
-                color: '#c48f8f', 
-                fontWeight: 'bold' 
+            to="/transfer"
+            style={{
+              textDecoration: 'none',
+              color: '#c48f8f',
+              fontWeight: 'bold',
             }}
           >
-            View All Users
-          </Link>
-        )}
-
-        <Link to="/transfer" 
-        style={{ 
-            textDecoration: 'none', 
-            color: '#c48f8f', 
-            fontWeight: 'bold'}}>
             Transfer Points
           </Link>
         </Box>
 
+        {/* Cashier Functions */}
         {activeRole === 'cashier' && <CashierPage />}
       </Box>
     </div>

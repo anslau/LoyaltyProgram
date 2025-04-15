@@ -6,7 +6,8 @@ import {
     IconButton, CircularProgress, Pagination, FormGroup, FormControlLabel,
     Checkbox, TableSortLabel
 } from "@mui/material";
-import { FilterList as FilterListIcon } from '@mui/icons-material';
+import { FilterList as FilterListIcon, ArrowBack as ArrowBackIcon } from '@mui/icons-material';
+import { Link } from "react-router-dom";
 import UserAvatar from "../UserAvatar";
 
 // Dropdown constants
@@ -59,7 +60,7 @@ const UserListTable = ({
         setLoading(true);
         setError(null);
         try {
-            const { results, count } = await fetchFunction(filters);
+            const { results, count } = await fetchFunction({...filters, orderBy, order});
             setUsers(results);
             setCount(Math.ceil(count / limit) || 1);
         } catch (err) {
@@ -73,7 +74,7 @@ const UserListTable = ({
     useEffect(() => {
         fetchUsers();
         setPage(1);
-    }, [page, limit]);
+    }, [page, limit, orderBy, order]);
 
     const handleSearch = () => {
         setPage(1);
@@ -174,6 +175,7 @@ const UserListTable = ({
         const isAsc = orderBy === columnKey && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(columnKey);
+        setFilters({ ...filters, page: 1 });
     };
 
     const sortedUsers = orderBy
@@ -184,7 +186,14 @@ const UserListTable = ({
     return (
         <div className="users-container">
             <Box sx={{ padding: 2 }}>
-                <Typography variant="h4" gutterBottom>{title}</Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <Link to="/dashboard" style={{ textDecoration: 'none', color: 'rgb(101, 82, 82)' }}>
+                        <IconButton>
+                            <ArrowBackIcon sx={{ fontSize: '2rem' }} />
+                        </IconButton>
+                    </Link>
+                    <Typography variant="h4">{title}</Typography>
+                </Box>
             </Box>
 
             <Box sx={{ gap: 2 }}>

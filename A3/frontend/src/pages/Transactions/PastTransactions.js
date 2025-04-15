@@ -15,7 +15,7 @@ const PastTransactions = () => {
     
     const fetchTransactions = async (filters) => {
         // reset the filters
-        window.history.pushState(null, '', `/users/me/transactions?`); 
+        // window.history.pushState(null, '', `/users/me/transactions?`); 
         
         // build the query string from filters
         const queryString = {};
@@ -25,7 +25,13 @@ const PastTransactions = () => {
             }
         });
         const query = new URLSearchParams(queryString).toString();
-        window.history.pushState(null, '', `/users/me/transactions?${query}`); 
+        // window.history.pushState(null, '', `/users/me/transactions?${query}`); 
+
+        const newUrl = `/users/me/transactions?${query ? `${query}` : ''}`;
+
+        if (window.location.pathname + window.location.search !== newUrl) {
+            window.history.pushState(null, '', newUrl);
+        }
 
         // fetch the transactions with the filters applied
         const response = await fetch(`${BACKEND_URL}/users/me/transactions?${query}`,

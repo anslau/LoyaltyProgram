@@ -74,9 +74,9 @@ async function retrievePromotionsList(req, res){
     const { id, role } = req.user;
 
     // only managers can access these
-    if ((role === 'regular' || role === 'cashier') && (started || ended)){
-        return res.status(403).json({ message: "Unauthorized" });
-    }
+    // if ((role === 'regular' || role === 'cashier') && (started || ended)){
+    //     return res.status(403).json({ message: "Unauthorized" });
+    // }
 
     // check for valid queries
     const validTypes = ['automatic', 'one-time'];

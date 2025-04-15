@@ -1,11 +1,12 @@
-
 import { useEffect, useState } from "react";
 import {
     Box, Typography, Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper, Button, TextField, MenuItem, Stack, Chip,
-    IconButton, CircularProgress, Pagination, Alert, TableSortLabel
+    IconButton, CircularProgress, Pagination, Alert, TableSortLabel,
+    Icon
 } from "@mui/material";
-import { FilterList as FilterListIcon } from '@mui/icons-material';
+import { FilterList as FilterListIcon, ArrowBack as ArrowBackIcon } from '@mui/icons-material';
+import { Link } from "react-router-dom";
 
 // Dropdown constants
 const transactionTypes = [
@@ -62,7 +63,7 @@ const TransactionTable = ({
     const [clearFilter, setClearFilter] = useState(false);
 
     const [orderBy, setOrderBy] = useState('id');
-    const [order, setOrder] = useState('asc');
+    const [order, setOrder] = useState('desc');
 
     // fetching the transactions based on the given filters
     // also handles getting the utorid of the related transaction
@@ -74,7 +75,7 @@ const TransactionTable = ({
         setLoading(true);
         setError(null);
         try {
-            const { results, count } = await fetchFunction(filters);
+            const { results, count } = await fetchFunction({...filters, orderBy, order});
 
             // if the transaction has a relatedId, we fetch the related transaction and 
             // get the utorid instead of displaying relatedId
@@ -106,7 +107,7 @@ const TransactionTable = ({
     // fetch transactions when the component mounts or when the page or limit changes
     useEffect(() => {
         fetchTransactions();
-    }, [page, limit]);
+    }, [page, limit, orderBy, order]);
 
     const handleSearch = () => {
         setPage(1);
@@ -211,6 +212,9 @@ const TransactionTable = ({
         const isAsc = orderBy === columnKey && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(columnKey);
+
+        setPage(1);
+        setFilters({ ...filters, page: 1 });
     };
 
     const sortedTransactions = orderBy
@@ -222,7 +226,15 @@ const TransactionTable = ({
     return (
         <div className="transactions-container">
             <Box sx={{ padding: 2 }}>
-                <Typography variant="h4" gutterBottom>{title}</Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <Link to="/dashboard" style={{ textDecoration: 'none', color: 'rgb(101, 82, 82)'}}>
+                        <IconButton>
+                            <ArrowBackIcon sx={{ fontSize: '2rem' }} />
+                        </IconButton>
+                    </Link>
+                    <Typography variant="h4" >{title}</Typography>
+                </Box>
+
             </Box>
 
             <Box sx={{ gap: 2 }}>
@@ -244,24 +256,25 @@ const TransactionTable = ({
                             select label="Type" value={filters.type}
                             onChange={(e) => setFilters({ ...filters, type: e.target.value })}
                             helperText="Select transaction type"
-                            sx={{ mb: 1,
+                            sx={{
+                                mb: 1,
                                 '& .MuiOutlinedInput-root.Mui-focused': {
-                                  '& fieldset': {
-                                    borderColor: 'rgb(101, 82, 82)', 
-                                  },
+                                    '& fieldset': {
+                                        borderColor: 'rgb(101, 82, 82)',
+                                    },
                                 },
                                 '& label.Mui-focused': {
-                                  color: 'rgb(101, 82, 82)', 
+                                    color: 'rgb(101, 82, 82)',
                                 }
-                              }}
+                            }}
                         >
                             {transactionTypes.map((option) => (
                                 <MenuItem key={option.value} value={option.value}
-                                sx={{
-                                    '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
-                                    '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
-                                  }}
-                                  >{option.label}</MenuItem>
+                                    sx={{
+                                        '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                                        '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                                    }}
+                                >{option.label}</MenuItem>
                             ))}
                         </TextField>
 
@@ -269,32 +282,34 @@ const TransactionTable = ({
                             label="Related ID" type="number" value={filters.relatedId}
                             onChange={(e) => setFilters({ ...filters, relatedId: e.target.value })}
                             helperText="Enter related ID"
-                            sx={{ mb: 1,
+                            sx={{
+                                mb: 1,
                                 '& .MuiOutlinedInput-root.Mui-focused': {
-                                  '& fieldset': {
-                                    borderColor: 'rgb(101, 82, 82)', 
-                                  },
+                                    '& fieldset': {
+                                        borderColor: 'rgb(101, 82, 82)',
+                                    },
                                 },
                                 '& label.Mui-focused': {
-                                  color: 'rgb(101, 82, 82)', 
+                                    color: 'rgb(101, 82, 82)',
                                 }
-                              }}
+                            }}
                         />
 
                         <TextField
                             label="Promotion ID" type="number" value={filters.promotionId}
                             onChange={(e) => setFilters({ ...filters, promotionId: e.target.value })}
                             helperText="Enter promotion ID"
-                            sx={{ mb: 1,
+                            sx={{
+                                mb: 1,
                                 '& .MuiOutlinedInput-root.Mui-focused': {
-                                  '& fieldset': {
-                                    borderColor: 'rgb(101, 82, 82)', 
-                                  },
+                                    '& fieldset': {
+                                        borderColor: 'rgb(101, 82, 82)',
+                                    },
                                 },
                                 '& label.Mui-focused': {
-                                  color: 'rgb(101, 82, 82)', 
+                                    color: 'rgb(101, 82, 82)',
                                 }
-                              }}
+                            }}
                         />
 
                         <Stack direction="row" spacing={2} sx={{ marginTop: 2 }}>
@@ -302,40 +317,42 @@ const TransactionTable = ({
                                 label="Amount" type="number" value={filters.amount}
                                 onChange={(e) => setFilters({ ...filters, amount: e.target.value })}
                                 helperText="Enter amount"
-                                sx={{ mb: 1,
+                                sx={{
+                                    mb: 1,
                                     '& .MuiOutlinedInput-root.Mui-focused': {
-                                      '& fieldset': {
-                                        borderColor: 'rgb(101, 82, 82)', 
-                                      },
+                                        '& fieldset': {
+                                            borderColor: 'rgb(101, 82, 82)',
+                                        },
                                     },
                                     '& label.Mui-focused': {
-                                      color: 'rgb(101, 82, 82)', 
+                                        color: 'rgb(101, 82, 82)',
                                     }
-                                  }}
+                                }}
                             />
 
                             <TextField
                                 select label="Operator" value={filters.operator}
                                 onChange={(e) => setFilters({ ...filters, operator: e.target.value })}
                                 helperText="Select operator"
-                                sx={{ mb: 1,
+                                sx={{
+                                    mb: 1,
                                     '& .MuiOutlinedInput-root.Mui-focused': {
-                                      '& fieldset': {
-                                        borderColor: 'rgb(101, 82, 82)', 
-                                      },
+                                        '& fieldset': {
+                                            borderColor: 'rgb(101, 82, 82)',
+                                        },
                                     },
                                     '& label.Mui-focused': {
-                                      color: 'rgb(101, 82, 82)', 
+                                        color: 'rgb(101, 82, 82)',
                                     }
-                                  }}
+                                }}
                             >
                                 {operators.map((option) => (
                                     <MenuItem key={option.value} value={option.value}
-                                    sx={{
-                                        '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
-                                        '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
-                                      }}
-                                      >{option.label}</MenuItem>
+                                        sx={{
+                                            '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                                            '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                                        }}
+                                    >{option.label}</MenuItem>
                                 ))}
                             </TextField>
                         </Stack>
@@ -351,7 +368,7 @@ const TransactionTable = ({
                             />
                         </Box>
 
-                        <Button variant="contained" onClick={handleSearch} sx={{backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)'}}>
+                        <Button variant="contained" onClick={handleSearch} sx={{ backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)' }}>
                             Search
                         </Button>
                     </Box>

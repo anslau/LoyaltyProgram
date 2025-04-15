@@ -94,7 +94,7 @@ async function retrievePromotionsList(id, filters, role) {
                 id: true,
                 name: true,
                 type: true,
-                startTime: role !== 'regular' && role !== 'cashier',
+                startTime: true,
                 endTime: true,
                 minSpending: true,
                 rate: true,
@@ -130,21 +130,21 @@ async function retrieveSpecificPromotion(promotionId, role) {
     try {
         // regular and cashiers can only see active promotions
         const now = new Date();
-        const startTime = role === 'regular' || role === 'cashier' ? { startTime: { lte: now } } : {};
-        const endTime = role === 'regular' || role === 'cashier' ? { endTime: { gt: now } } : {};
+        // const startTime = role === 'regular' || role === 'cashier' ? { startTime: { lte: now } } : {};
+        // const endTime = role === 'regular' || role === 'cashier' ? { endTime: { gt: now } } : {};
 
         // get the promotion
         const promotion = await prisma.promotion.findUnique({
             where: {
                 id: parseInt(promotionId),
-                ...startTime,
-                ...endTime
+                // ...startTime,
+                // ...endTime
             },
             select: {
                 name: true,
                 description: true,
                 type: true,
-                startTime: role !== 'regular' && role !== 'cashier',
+                startTime: true,
                 endTime: true,
                 minSpending: true,
                 rate: true,

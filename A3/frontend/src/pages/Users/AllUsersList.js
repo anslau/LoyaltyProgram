@@ -15,7 +15,7 @@ const AllUsersList = () => {
     
     const fetchUsers = async (filters) => {
         // reset the filters
-        window.history.pushState(null, '', `/users?`); 
+        // window.history.pushState(null, '', `/users?`); 
         
         // build the query string from filters
         const queryString = {};
@@ -25,7 +25,12 @@ const AllUsersList = () => {
             }
         });
         const query = new URLSearchParams(queryString).toString();
-        window.history.pushState(null, '', `/users?${query}`); 
+        // window.history.pushState(null, '', `/users?${query}`); 
+        const newUrl = `/users?${query ? `${query}` : ''}`;
+
+        if (window.location.pathname + window.location.search !== newUrl) {
+            window.history.pushState(null, '', newUrl);
+        }
 
         // fetch the transactions with the filters applied
         const response = await fetch(`${BACKEND_URL}/users?${query}`,

@@ -120,6 +120,12 @@ const EventDetail = () => {
         });
         setIsAttending(false);
         setRsvpSuccess('You have successfully cancelled your RSVP.');
+
+        setEvent(prev => ({
+          ...prev,
+          guests: prev.guests.filter(guest => guest.userId !== user.id),
+          numGuests: prev.numGuests - 1
+        }));
       } else {
         await axios.post(`http://localhost:8000/events/${eventId}/guests/me`, {}, {
           headers: {
@@ -813,7 +819,7 @@ const EventDetail = () => {
                   <Box>
                     <Typography variant="subtitle2">Capacity</Typography>
                     <Typography variant="body1">
-                      {event.capacity ? `${event.numGuests}/${event.capacity}` : 'Unlimited'}
+                      {event.capacity ? `${event.numGuests ?? 0}/${event.capacity}` : 'Unlimited'}
                     </Typography>
                   </Box>
                   <Box>
