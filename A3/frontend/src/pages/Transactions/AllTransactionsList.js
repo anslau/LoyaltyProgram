@@ -107,7 +107,7 @@ const AllTransactionsList = () => {
                             key: "id",
                             label: "Details",
                             render: (value) => (
-                                <Link to={`/transactions/${value}`} style={{ textDecoration: 'none', color: 'rgb(101, 82, 82)' }}>
+                                <Link to={`/transactions/${value}`} style={{ textDecoration: 'none', color: '#c48f8f' }}>
                                     Details
                                 </Link>
                             ),
