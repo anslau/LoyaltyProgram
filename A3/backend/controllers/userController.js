@@ -39,13 +39,13 @@ async function registerNewUser(req, res){
 
 async function retrieveUsersList(req, res){
     // check that only valid filters are passed
-    const validFields = ['name', 'role', 'verified', 'activated', 'page', 'limit'];
+    const validFields = ['name', 'role', 'verified', 'activated', 'page', 'limit', 'orderBy', 'order'];
     if (!validateFields(req.query, validFields)){
         return res.status(400).json({ message: "Invalid field" });
     }
 
     // get the filters and pagination info
-    const { name, role, verified, activated, page, limit } = req.query;
+    const { name, role, verified, activated, page, limit, orderBy, order } = req.query;
 
     // validate the filters
     const validRoles = ['regular', 'cashier', 'manager', 'superuser'];
@@ -67,7 +67,8 @@ async function retrieveUsersList(req, res){
     }
 
     // retrieve the users
-    const users = await userService.retrieveUsersList(name, role, verified, activated, page, limit);
+    const filters = { name, role, verified, activated, page, limit, orderBy, order };
+    const users = await userService.retrieveUsersList(filters);
     if (users.error){
         return res.status(users.status).json({ message: users.error });
     }
@@ -311,13 +312,13 @@ async function createRedemption(req, res){
 
 async function retrieveOwnTransactions(req, res){
     // validate filters
-    const validFilters = ['type', 'relatedId', 'promotionId', 'amount', 'operator', 'page', 'limit'];
+    const validFilters = ['type', 'relatedId', 'promotionId', 'amount', 'operator', 'page', 'limit', 'orderBy', 'order'];
     if (!validateFields(req.query, validFilters)) {
         return res.status(400).json({ message: "Invalid filter" });
     }
     
     // get the filter parameters
-    const { type, relatedId, promotionId, amount, operator, page, limit } = req.query;
+    const { type, relatedId, promotionId, amount, operator, page, limit, orderBy, order } = req.query;
 
     // check that filters are valid
     // promotionId must be a number
@@ -365,7 +366,7 @@ async function retrieveOwnTransactions(req, res){
     }
 
     // get the transactions
-    const filters = { type, relatedId, promotionId, amount, operator, page, limit };
+    const filters = { type, relatedId, promotionId, amount, operator, page, limit, orderBy, order };
     const { id } = req.user;
     const transactions = await userService.retrieveOwnTransactions(filters, id);
     

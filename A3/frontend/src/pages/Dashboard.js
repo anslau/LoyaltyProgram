@@ -122,14 +122,14 @@ const Dashboard = () => {
         {/* Navigation Links */}
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 4 }}>
           <Link
-            to="/users/me/transactions"
+            to="/users/me/transactions?page=1&limit=10&orderBy=id&order=desc"
             style={{ textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}
           >
             View All of Your Transactions
           </Link>
-          {activeRole && ['cashier', 'manager', 'superuser'].includes(activeRole) && (
+          {activeRole && ['manager', 'superuser'].includes(activeRole) && (
             <Link
-              to="/transactions"
+              to="/transactions?page=1&limit=10&orderBy=id&order=desc"
               style={{ textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}
             >
               View All Transactions
@@ -149,7 +149,7 @@ const Dashboard = () => {
           </Link>
           {activeRole && ['manager', 'superuser'].includes(activeRole) && (
           <Link
-            to="/users"
+            to="/users?page=1&limit=10&orderBy=id&order=asc"
             style={{ textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}
           >
             View All Users

@@ -55,12 +55,14 @@ async function registerNewUser(utorid, name, email){
 
 }
 
-async function retrieveUsersList(name, role, verified, activated, page, limit) {
+async function retrieveUsersList(filters) {
     try{
+        const { name, role, verified, activated, page, limit, orderBy, order } = filters;
         // for pagination
         let pageNum = parseInt(page) || 1;
         let take = parseInt(limit) || 10;
         const skip = (pageNum - 1) * take;
+        
 
         // check if the name exists. if it does, see whether it matches the name or utorid
         const nameFilter = name
@@ -90,7 +92,8 @@ async function retrieveUsersList(name, role, verified, activated, page, limit) {
             skip,
             take,
             orderBy: {
-                id: 'asc'
+                // id: 'asc'
+                [orderBy || 'id']: order || 'asc'
             }
         });
 
@@ -568,7 +571,7 @@ async function createRedemption(userId, type, amount, remark){
 async function retrieveOwnTransactions(filters, userId){
     try{
         // get the filters
-        const { type, relatedId, promotionId, amount, operator, page, limit } = filters;
+        const { type, relatedId, promotionId, amount, operator, page, limit, orderBy, order } = filters;
 
         // for pagination
         let pageNum = parseInt(page) || 1;
@@ -625,7 +628,8 @@ async function retrieveOwnTransactions(filters, userId){
             skip,
             take,
             orderBy: {
-                id: 'asc'
+                // id: 'asc'
+                [orderBy || 'id']: order || 'desc'
             }
         });
 
