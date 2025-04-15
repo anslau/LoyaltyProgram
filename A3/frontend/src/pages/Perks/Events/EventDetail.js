@@ -61,6 +61,13 @@ const EventDetail = () => {
   // Remove guest state
   const [removeGuestLoading, setRemoveGuestLoading] = useState(false);
   
+  // Add organizer dialog state
+  const [addOrganizerDialogOpen, setAddOrganizerDialogOpen] = useState(false);
+  const [addOrganizerUtorid, setAddOrganizerUtorid] = useState('');
+  const [addOrganizerLoading, setAddOrganizerLoading] = useState(false);
+  const [addOrganizerError, setAddOrganizerError] = useState(null);
+  const [addOrganizerSuccess, setAddOrganizerSuccess] = useState(null);
+  
   const { token, user } = useContext(AuthContext);
   const navigate = useNavigate();
   
@@ -422,6 +429,64 @@ const EventDetail = () => {
     if (hasEventStarted()) return { label: 'In Progress', color: 'warning' };
     if (isEventFull()) return { label: 'Full', color: 'error' };
     return { label: 'Upcoming', color: 'success' };
+  };
+
+  const handleAddOrganizerDialogOpen = () => {
+    setAddOrganizerDialogOpen(true);
+    setAddOrganizerUtorid('');
+    setAddOrganizerError(null);
+    setAddOrganizerSuccess(null);
+  };
+  
+  const handleAddOrganizerDialogClose = () => {
+    setAddOrganizerDialogOpen(false);
+  };
+  
+  const handleAddOrganizer = async () => {
+    if (!addOrganizerUtorid.trim()) {
+      setAddOrganizerError('UTORid is required');
+      return;
+    }
+    
+    setAddOrganizerLoading(true);
+    setAddOrganizerError(null);
+    setAddOrganizerSuccess(null);
+    
+    try {
+      const response = await axios.post(`http://localhost:8000/events/${eventId}/organizers`, 
+        { utorid: addOrganizerUtorid.trim() },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
+      
+      // Update the event data with the new organizer
+      const updatedEvent = {...event};
+      if (!updatedEvent.organizers) {
+        updatedEvent.organizers = [];
+      }
+      updatedEvent.organizers.push(response.data);
+      setEvent(updatedEvent);
+      
+      setAddOrganizerSuccess('Organizer added successfully!');
+      
+      // Clear the input after success
+      setAddOrganizerUtorid('');
+      
+      // Close dialog after a delay
+      setTimeout(() => {
+        handleAddOrganizerDialogClose();
+        setAddOrganizerSuccess(null);
+      }, 2000);
+    } catch (err) {
+      setAddOrganizerError(err.response?.data?.message || 'Failed to add organizer. Please try again.');
+      console.error('Add organizer error:', err);
+    } finally {
+      setAddOrganizerLoading(false);
+    }
   };
 
   if (loading) {
@@ -847,6 +912,22 @@ const EventDetail = () => {
                         button 
                         onClick={() => setShowOrganizers(!showOrganizers)}
                         sx={{ bgcolor: 'background.paper' }}
+                        secondaryAction={
+                          isManager && (
+                            <Tooltip title="Add organizer">
+                              <IconButton 
+                                edge="end" 
+                                aria-label="add organizer" 
+                                onClick={(e) => {
+                                  e.stopPropagation(); // Prevent toggling the collapse
+                                  handleAddOrganizerDialogOpen();
+                                }}
+                              >
+                                <PersonAddIcon sx={{ color: '#c48f8f'}}/>
+                              </IconButton>
+                            </Tooltip>
+                          )
+                        }
                       >
                         <ListItemAvatar>
                           <Avatar sx={{ bgcolor: 'primary.main' }}>
@@ -985,7 +1066,7 @@ const EventDetail = () => {
                   size="large" 
                   onClick={handleRSVP}
                   disabled={!canRSVP || rsvpLoading}
-                  sx={{ minWidth: 200 }}
+                  sx={{ minWidth: 200, backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)' }}
                 >
                   {rsvpLoading ? (
                     <CircularProgress size={24} color="inherit" />
@@ -1104,6 +1185,92 @@ const EventDetail = () => {
             </Button>
           </DialogActions>
         </Dialog>
+        
+        {/* Add Organizer Dialog */}
+        <Dialog
+          open={addOrganizerDialogOpen}
+          onClose={handleAddOrganizerDialogClose}
+          aria-labelledby="add-organizer-dialog-title"
+        >
+          <DialogTitle id="add-organizer-dialog-title">
+            Add Organizer to Event
+          </DialogTitle>
+          <DialogContent>
+            {addOrganizerSuccess && (
+              <Alert severity="success" sx={{ mb: 2 }}>
+                {addOrganizerSuccess}
+              </Alert>
+            )}
+            {addOrganizerError && (
+              <Alert severity="error" sx={{ mb: 2 }}>
+                {addOrganizerError}
+              </Alert>
+            )}
+            <DialogContentText sx={{ mb: 2 }}>
+              Enter the UTORid of the user you want to add as an organizer to this event.
+            </DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="organizer-utorid"
+              label="UTORid"
+              type="text"
+              fullWidth
+              variant="outlined"
+              value={addOrganizerUtorid}
+              onChange={(e) => setAddOrganizerUtorid(e.target.value)}
+              error={!!addOrganizerError}
+              disabled={addOrganizerLoading}
+              sx={{ mb: 1,
+                '& .MuiOutlinedInput-root.Mui-focused': {
+                  '& fieldset': {
+                    borderColor: 'rgb(101, 82, 82)', 
+                  },
+                },
+                '& label.Mui-focused': {
+                  color: 'rgb(101, 82, 82)', 
+                }
+              }}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleAddOrganizerDialogClose} disabled={addOrganizerLoading} sx={{ color: 'rgb(101, 82, 82)'}}>
+              Cancel
+            </Button>
+            <Button 
+              onClick={handleAddOrganizer} 
+              color="primary" 
+              disabled={addOrganizerLoading || !addOrganizerUtorid.trim()}
+              variant="contained"
+              sx={{backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)'}}
+            >
+              {addOrganizerLoading ? <CircularProgress size={24} /> : 'Add Organizer'}
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        {isManager && (
+          <Tooltip title="Add Organizer">
+            <Fab
+              color="primary"
+              aria-label="add-organizer"
+              size="medium"
+              onClick={handleAddOrganizerDialogOpen}
+              sx={{
+                position: 'fixed',
+                bottom: 170, // Position above the add guest button
+                right: 20,
+                backgroundColor: '#ebc2c2',
+                color: 'rgb(101, 82, 82)',
+                '&:hover': {
+                  backgroundColor: '#e9b0b0',
+                }
+              }}
+            >
+              <OrganizerIcon />
+            </Fab>
+          </Tooltip>
+        )}
       </Container>
     </div>
   );
