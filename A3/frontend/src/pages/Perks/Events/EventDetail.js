@@ -149,7 +149,7 @@ const EventDetail = () => {
       setError('Authentication token not found. Please log in.');
       setLoading(false);
     }
-  }, [eventId, token, user?.id, refreshEvent]); // Add safe navigation for user.id
+  }, [eventId, token, user?.id, refreshEvent, rsvpSuccess]); // Add safe navigation for user.id
 
   const handleAwardPoints = async () => {
     setAwardPointsLoading(true);
