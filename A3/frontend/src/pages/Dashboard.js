@@ -359,7 +359,7 @@ const Dashboard = () => {
           </Link>
 
           {/* If cashier/manager/superuser, can see all transactions */}
-          {activeRole && ['cashier', 'manager', 'superuser'].includes(activeRole) && (
+          {activeRole && ['manager', 'superuser'].includes(activeRole) && (
             <Link
               to="/transactions?page=1&limit=10&orderBy=id&order=desc"
               style={{
