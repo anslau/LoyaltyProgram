@@ -59,7 +59,7 @@ function RegisterForm() {
       // data.resetToken is presumably the token for activation
       setResetToken(data.resetToken);
       setSuccessMsg(`User '${utorid}' registered successfully!`);
-      navigate(`/reset-confirm/${data.resetToken}?utorid=${utorid}`);
+      navigate(`/reset-request/${data.resetToken}?utorid=${utorid}`);
 
     } catch (err) {
       setError(err.message);
