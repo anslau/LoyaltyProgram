@@ -59,8 +59,8 @@ function App() {
                     <Route path="/profile" element={<UserProfile />} />
                 </Route>
 
-                                {/* Organizer/Manager event management page */}
-                                <Route element={<ProtectedRoute />}>
+                {/* Organizer/Manager event management page */}
+                <Route element={<ProtectedRoute />}>
                     <Route path="/organizer/events" element={<OrganizerEvents />} />
                     <Route path="/organizer/events/:eventId" element={<EventManage />} />
                 </Route>
