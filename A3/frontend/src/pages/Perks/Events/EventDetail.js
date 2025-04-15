@@ -99,11 +99,12 @@ const EventDetail = () => {
           published: response.data.published
         });
         
-        if (response.data.guests) {
-          const isUserAttending = response.data.guests.some(
-            guest => guest.userId === user.id
-          );
-          setIsAttending(isUserAttending);
+        // Use the new flag from the backend to determine attendance status
+        if (response.data.isCurrentUserGuest !== undefined) {
+          setIsAttending(response.data.isCurrentUserGuest);
+        } else {
+          // Fallback for safety, though the backend should always send it now
+          setIsAttending(false);
         }
         
         setLoading(false);
@@ -114,14 +115,19 @@ const EventDetail = () => {
       }
     };
 
-    fetchEventDetails();
-  }, [eventId, token, user.id]);
+    if (token && eventId) { // Ensure token and eventId are present
+        fetchEventDetails();
+    } else if (!token) {
+        setError('Authentication token not found. Please log in.');
+        setLoading(false);
+    }
+  }, [eventId, token, user.id]); // Keep dependencies
 
   const handleRSVP = async () => {
     setRsvpLoading(true);
     setRsvpSuccess(null);
     setRsvpError(null);
-    
+
     try {
       if (isAttending) {
         // Cancel RSVP
@@ -130,60 +136,85 @@ const EventDetail = () => {
             Authorization: `Bearer ${token}`
           }
         });
-        
+
         // Update state and UI
         setIsAttending(false);
         setRsvpSuccess('You have successfully cancelled your RSVP.');
-        
-        // Remove user from guests list
+
+        // Remove user from guests list *safely*
         setEvent(prev => {
-          const updatedGuests = prev.guests.filter(g => g.userId !== user.id);
+          // Check if prev.guests exists and is an array before filtering
+          const currentGuests = Array.isArray(prev?.guests) ? prev.guests : [];
+          const updatedGuests = currentGuests.filter(g => g.userId !== user.id && g.id !== user.id); // Check both userId and id just in case
+
+          // Ensure numGuests is updated correctly, even if guests array was initially empty/undefined
+          const currentNumGuests = prev?.numGuests || 0;
+
           return {
             ...prev,
-            guests: updatedGuests,
-            numGuests: Math.max(0, (prev.numGuests || 0) - 1)
+            guests: updatedGuests, // Will be empty if user was the only one shown
+            // Decrement numGuests, ensuring it doesn't go below 0
+            numGuests: Math.max(0, currentNumGuests - 1)
           };
         });
-        
+
       } else {
         // RSVP to event
-        await axios.post(`http://localhost:8000/events/${eventId}/guests/me`, {}, {
+        // Use the response data which might contain the added guest info
+        const response = await axios.post(`http://localhost:8000/events/${eventId}/guests/me`, {}, {
           headers: {
             Authorization: `Bearer ${token}`
           }
         });
-        
+
         // Update state and UI
         setIsAttending(true);
         setRsvpSuccess("You have successfully RSVP'd to this event!");
-        
+
         // Add current user to guests list if not already there
         setEvent(prev => {
-          // Create a copy of the guests array, initializing if it doesn't exist
-          const updatedGuests = prev.guests ? [...prev.guests] : [];
-          
-          // Check if the user is already in the guest list
-          if (!updatedGuests.some(g => g.userId === user.id)) {
-            updatedGuests.push({
+          // Initialize guests array if it doesn't exist or isn't an array
+          const currentGuests = Array.isArray(prev?.guests) ? [...prev.guests] : [];
+
+          // Check if the user is already in the guest list (client-side check)
+          const userAlreadyInList = currentGuests.some(g => (g.userId === user.id || g.id === user.id));
+
+          if (!userAlreadyInList) {
+            // Prefer data from API response if available, otherwise use context data
+            const guestToAdd = response.data?.guestAdded || {
               id: user.id,
-              userId: user.id,
+              userId: user.id, // Ensure userId is present if needed elsewhere
               name: userDetails?.name || user.name || 'Guest',
               utorid: userDetails?.utorid || user.utorid || 'unknown'
-            });
+            };
+            currentGuests.push(guestToAdd);
           }
-          
+
+          // Use numGuests from API response if available, otherwise increment
+          const updatedNumGuests = response.data?.numGuests !== undefined
+            ? response.data.numGuests
+            : (prev?.numGuests || 0) + (userAlreadyInList ? 0 : 1);
+
+
           return {
             ...prev,
-            guests: updatedGuests,
-            numGuests: updatedGuests.length
+            guests: currentGuests,
+            numGuests: updatedNumGuests
           };
         });
       }
     } catch (err) {
       console.error('RSVP error:', err);
-      setRsvpError(err.response?.data?.message || 'An error occurred while processing your RSVP.');
+      // Try to get a more specific error message from the response
+      const errorMessage = err.response?.data?.error || err.response?.data?.message || 'An error occurred while processing your RSVP.';
+      setRsvpError(errorMessage);
     } finally {
       setRsvpLoading(false);
+      // Clear messages after a delay
+      setTimeout(() => {
+          setRsvpSuccess(null);
+          setRsvpError(null);
+      }, 3000);
     }
   };
   

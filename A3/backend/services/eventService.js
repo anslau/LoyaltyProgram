@@ -190,23 +190,39 @@ async function retrieveEvent(eventId, role, userId) {
             return {error: "Event not found", status: 404};
         }    
 
+        // Calculate if the current user is a guest *before* filtering
+        const currentUserGuestInfo = event.guests.find(guest => guest.user.id === userId)?.user;
+        const isCurrentUserGuest = !!currentUserGuestInfo; // True if currentUserGuestInfo is found
+
         // if the user is not a manager/superuser/organizer, they can only see published events
         const lowerPrivilege = ['regular', 'cashier'];
         const isOrganizer = event.organizers.some(organizer => organizer.user.id === userId);
 
         // formatting the organizers and guests
-        event.organizers = event.organizers.map(organizer => organizer.user);
-        event.guests = event.guests.map(guest => guest.user);
+        const formattedOrganizers = event.organizers.map(organizer => organizer.user);
+        const formattedGuests = event.guests.map(guest => guest.user);
 
         if (lowerPrivilege.includes(role) && !event.published && !isOrganizer){
             return {error: "Event not found", status: 404};
         }else if (lowerPrivilege.includes(role) && !isOrganizer && event.published){
-            const { pointsRemain, pointsAwarded, published, guests, ...publicEvent } = event;
-            return publicEvent;
+            // Strip sensitive info for regular users
+            const { pointsRemain, pointsAwarded, published, guests, organizers, ...publicEvent } = event;
+
+            // If the current user is a guest, include *only* them in the guests array
+            const guestsToShow = isCurrentUserGuest ? [currentUserGuestInfo] : [];
+
+            return {
+                ...publicEvent,
+                organizers: formattedOrganizers, // Still return organizers
+                guests: guestsToShow,           // Return only self or empty array
+                numGuests: event.numGuests,     // Return the correct total number of guests
+                isCurrentUserGuest              // Keep the flag
+            };
         }
 
-        const { numGuests, ...publicEvent } = event;
-        return publicEvent;
+        // For privileged users, return full details including the flag
+        const { numGuests, ...privilegedEvent } = event;
+        return { ...privilegedEvent, isCurrentUserGuest };
 
     }catch(e){
         console.error(`error in retrieveEvent ${e.message}`);
