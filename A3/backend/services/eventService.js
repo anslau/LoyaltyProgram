@@ -619,7 +619,7 @@ async function addGuest(role, eventId, utorid, requesterId) {
 
 }
 
-async function removeGuest(eventId, userId, requesterId) {
+async function removeGuest(eventId, userId, requesterId, requesterRole) {
     try{
         // make sure the event exists
         const event = await prisma.event.findUnique({
@@ -653,10 +653,10 @@ async function removeGuest(eventId, userId, requesterId) {
             return {error: "Event not found", status: 404};
         }
 
-        // check that the requester is not an organizer for this event
+        // Allow managers to remove guests even if they are organizers
         const isOrganizer = event.organizers.some(organizer => organizer.user.id === requesterId);
-        if (isOrganizer){
-            return {error: "Organizers cannot remove guests", status: 403};
+        if (requesterRole !== 'manager' && isOrganizer){ // Check if the requester is NOT a manager AND is an organizer
+            return {error: "Organizers cannot remove guests (unless they are managers)", status: 403};
         }
 
         // check that the user is a guest for this event

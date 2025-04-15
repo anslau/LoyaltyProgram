@@ -239,15 +239,15 @@ async function addGuest(req, res){
 
 async function removeGuest(req, res){
     const { eventId, userId } = req.params;
-    const { id } = req.user;
+    const { id: requesterId, role: requesterRole } = req.user;
 
     // check that data is valid
     if (!Number.isInteger(parseInt(eventId)) || !Number.isInteger(parseInt(userId))){
         return res.status(400).json({ message: "eventid and userid must be an integer" });
     }
 
-    // remove the guest
-    const guest = await eventService.removeGuest(parseInt(eventId), parseInt(userId), id);
+    // remove the guest, passing the requester's role
+    const guest = await eventService.removeGuest(parseInt(eventId), parseInt(userId), requesterId, requesterRole);
     if (guest.error){
         return res.status(guest.status).json({ message: guest.error });
     }
