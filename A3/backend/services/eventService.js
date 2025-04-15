@@ -123,7 +123,8 @@ async function retrieveEventsList(filters, role, userId) {
             skip,
             take,
             orderBy: {
-                id: 'asc'
+                // id: 'asc'
+                [filters.orderBy ? filters.orderBy : 'startTime']: filters.order ? filters.order : 'asc'
             }
         });
 
