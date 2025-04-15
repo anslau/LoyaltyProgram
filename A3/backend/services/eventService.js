@@ -710,7 +710,16 @@ async function addCurrentUserAsGuest(eventId, userId) {
                 endTime: true,
                 numGuests: true,
                 capacity: true,
-                guests: {
+                guests: { // Keep selecting guests to check if already attending
+                    select: {
+                        user: {
+                            select: {
+                                id: true
+                            }
+                        }
+                    }
+                },
+                organizers: { // Select organizers to check if user is one
                     select: {
                         user: {
                             select: {
@@ -724,6 +733,12 @@ async function addCurrentUserAsGuest(eventId, userId) {
 
         if (!event){
             return {error: "Event not found", status: 404};
+        }
+
+        // Check if the user is an organizer for this event
+        const isOrganizer = event.organizers.some(organizer => organizer.user.id === userId);
+        if (isOrganizer) {
+            return {error: "Organizers cannot RSVP to their own events", status: 403}; 
         }
 
         // check that the user is not already on the guest list

@@ -85,7 +85,11 @@ const EventDetail = () => {
   const { token, user, userDetails } = useContext(AuthContext);
   const navigate = useNavigate();
   console.log(event)
-  // Temporarily set isManager to true to allow anyone to edit/delete
+
+  // Determine if the current user is an organizer
+  const isCurrentUserOrganizer = event?.organizers?.some(org => org.id === user?.id);
+
+  // Set isManager to true to allow anyone to edit/delete
   const isManager = true;
 
   useEffect(() => {
@@ -132,7 +136,7 @@ const EventDetail = () => {
       setError('Authentication token not found. Please log in.');
       setLoading(false);
     }
-  }, [eventId, token, user.id, refreshEvent]); // Keep dependencies
+  }, [eventId, token, user?.id, refreshEvent]); // Add safe navigation for user.id
 
   const handleAwardPoints = async () => {
     setAwardPointsLoading(true);
@@ -705,8 +709,16 @@ const EventDetail = () => {
     );
   }
 
+  if (!event) {
+    return <Container><Typography>Event not found.</Typography></Container>;
+  }
+
   const status = getEventStatus();
   const canRSVP = !hasEventEnded() && (!isEventFull() || isAttending);
+
+  // Determine if the current user can manage participants (add/remove guests/organizers, award points)
+  // This is true if they are a manager OR an organizer of this specific event
+  const canManageParticipants = isManager || isCurrentUserOrganizer;
 
   return (
     <div className="dashboard-container">
@@ -1300,7 +1312,7 @@ const EventDetail = () => {
                   color={isAttending ? "error" : "primary"}
                   size="large"
                   onClick={handleRSVP}
-                  disabled={!canRSVP || rsvpLoading}
+                  disabled={rsvpLoading || isCurrentUserOrganizer}
                   sx={{ minWidth: 200, backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)' }}
                 >
                   {rsvpLoading ? (
@@ -1321,6 +1333,12 @@ const EventDetail = () => {
                   {hasEventEnded()
                     ? "This event has already ended."
                     : "This event is at full capacity."}
+                </Typography>
+              )}
+
+              {isCurrentUserOrganizer && (
+                <Typography variant="caption" display="block" align="center" sx={{ mt: 1, color: 'text.secondary' }}>
+                  Organizers cannot RSVP to their own events.
                 </Typography>
               )}
             </Paper>
