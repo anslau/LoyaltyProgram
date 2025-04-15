@@ -229,7 +229,7 @@ const Dashboard = () => {
       </nav>
 
       {/* Welcome back + Role */}
-      <Box sx={{ p: 2 }}>
+      <Box sx={{ pl: 10, pr: 2, pt: 2, pb: 2 }}>
         {!loading ? (
           <>
             <Typography variant="h4" sx={{ mb: 2 }}>
@@ -301,7 +301,7 @@ const Dashboard = () => {
       </Box>
 
       {/* Recent Transactions */}
-      <Box sx={{ p: 2 }}>
+      <Box sx={{ pl: 10, pr: 2, pt: 2, pb: 2 }}>
         <Typography variant="h6" sx={{ mb: 2 }}>
           Your Recent Transactions
         </Typography>

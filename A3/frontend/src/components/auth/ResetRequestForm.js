@@ -84,7 +84,7 @@ const ResetRequestForm = () => {
             </Button>
             <Button 
               component={Link} 
-              to="/reset-confirm"
+              to={`/reset-confirm/${resetToken}`} 
               variant="contained" 
               sx={{backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)'}}
             >
