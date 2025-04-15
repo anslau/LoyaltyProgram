@@ -42,7 +42,7 @@ module.exports = async function seedTransactions(users, promotions, events) {
     }
   });
 
-  // Transfer
+  // Transfer (gift) from regularUser to eventGuestUser
   await prisma.transaction.create({
     data: {
       utorid: users.regularUser.utorid,
@@ -55,6 +55,7 @@ module.exports = async function seedTransactions(users, promotions, events) {
     }
   });
 
+  // Transfer (receive) for eventGuestUser
   await prisma.transaction.create({
     data: {
       utorid: users.eventGuestUser.utorid,
@@ -63,7 +64,7 @@ module.exports = async function seedTransactions(users, promotions, events) {
       relatedId: users.regularUser.id,
       createdBy: users.regularUser.utorid,
       remark: 'Received points',
-      customerId: users.regularUser.id
+      customerId: users.eventGuestUser.id
     }
   });
 
@@ -88,7 +89,7 @@ module.exports = async function seedTransactions(users, promotions, events) {
       amount: 999,
       createdBy: users.zeroPointsUser.utorid,
       remark: 'Exploit attempt',
-      customerId: users.regularUser.id
+      customerId: users.zeroPointsUser.id
     }
   });
 
@@ -100,7 +101,7 @@ module.exports = async function seedTransactions(users, promotions, events) {
     }
   });
 
-  // Fill with more transactions for pagination
+  // Fill with more transactions for pagination (regularUser)
   for (let i = 1; i <= 25; i++) {
     await prisma.transaction.create({
       data: {
@@ -115,6 +116,7 @@ module.exports = async function seedTransactions(users, promotions, events) {
     });
   }
 
+  // Fill with more transactions for pagination (eventGuestUser)
   for (let i = 1; i <= 10; i++) {
     await prisma.transaction.create({
       data: {
@@ -124,7 +126,7 @@ module.exports = async function seedTransactions(users, promotions, events) {
         amount: pointsFromSpent(3 + i),
         createdBy: users.cashierUser2.utorid,
         remark: `Paginated guest purchase ${i}`,
-        customerId: users.regularUser.id
+        customerId: users.eventGuestUser.id
       }
     });
   }
