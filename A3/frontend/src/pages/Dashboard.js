@@ -400,20 +400,6 @@ const Dashboard = () => {
             View All Events
           </Link>
 
-          {/* If role=organizer, link to organizer events */}
-          {activeRole === 'organizer' && (
-            <Link
-              to="/organizer/events"
-              style={{
-                textDecoration: 'none',
-                color: '#c48f8f',
-                fontWeight: 'bold',
-              }}
-            >
-              Organizer Events
-            </Link>
-          )}
-
           {/* manager/superuser can see all users */}
           {activeRole && ['manager', 'superuser'].includes(activeRole) && (
             <Link
