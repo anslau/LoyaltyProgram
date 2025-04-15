@@ -79,9 +79,24 @@ const RoleSwitcher = () => {
         value={activeRole}
         onChange={handleRoleChange}
         label="Interface"
+        sx={{ 
+          '& .MuiOutlinedInput-root.Mui-focused': {
+            '& fieldset': {
+              borderColor: 'rgb(101, 82, 82)', 
+            },
+          },
+          '& label.Mui-focused': {
+            color: 'rgb(101, 82, 82)', 
+          }
+        }}
       >
         {availableRoles.map(role => (
-          <MenuItem key={role} value={role}>
+          <MenuItem key={role} value={role}
+          sx={{
+            '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+            '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+          }}
+          >
             {ROLE_DISPLAY_NAMES[role]}
           </MenuItem>
         ))}

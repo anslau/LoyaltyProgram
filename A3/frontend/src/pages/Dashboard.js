@@ -198,7 +198,7 @@ const Dashboard = () => {
                 What's New
               </Link>
             )}
-            {activeRole && ['regular', 'cashier'].includes(activeRole) && (
+            {activeRole && ['regular', 'organizer', 'cashier'].includes(activeRole) && (
               <Link
                 to="/regularperks"
                 style={{
