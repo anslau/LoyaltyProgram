@@ -487,11 +487,11 @@ const EventDetail = () => {
       if (!updatedEvent.guests) {
         updatedEvent.guests = [];
       }
-      updatedEvent.guests.push(response.data);
+      updatedEvent.guests.push(response.data.guestAdded);
       updatedEvent.numGuests = (updatedEvent.numGuests || 0) + 1;
       setEvent(updatedEvent);
 
-      setAddGuestSuccess(`${response.data.name} has been added to the event`);
+      setAddGuestSuccess(`${response.data.guestAdded.name} has been added to the event`);
 
       // Clear the input field after successful addition
       setAddGuestUtorid('');
