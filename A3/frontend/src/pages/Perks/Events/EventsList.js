@@ -72,6 +72,13 @@ const EventsList = () => {
       if (filters.ended) queryParams.append('ended', filters.ended);
       if (filters.published) queryParams.append('published', filters.published);
       if (filters.showFull) queryParams.append('showFull', filters.showFull);
+
+      // update the url with the filtering params
+      const query = queryParams.toString();
+      const newUrl = `/events?${query ? `${query}` : ''}`;
+      if (window.location.pathname + window.location.search !== newUrl) {
+        window.history.pushState(null, '', newUrl);
+      }
       
       const response = await axios.get(`http://localhost:8000/events?${queryParams.toString()}`, {
         headers: {

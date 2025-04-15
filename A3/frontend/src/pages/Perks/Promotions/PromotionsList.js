@@ -65,6 +65,13 @@ const PromotionsList = () => {
       if (filters.type) queryParams.append('type', filters.type);
       if (filters.started) queryParams.append('started', filters.started);
       if (filters.ended) queryParams.append('ended', filters.ended);
+
+      // update the url with the filtering params
+      const query = queryParams.toString();
+      const newUrl = `/promotions?${query ? `${query}` : ''}`;
+      if (window.location.pathname + window.location.search !== newUrl) {
+        window.history.pushState(null, '', newUrl);
+      }
       
       const response = await axios.get(`http://localhost:8000/promotions?${queryParams.toString()}`, {
         headers: {
