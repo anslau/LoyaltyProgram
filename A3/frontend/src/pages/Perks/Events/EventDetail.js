@@ -68,6 +68,9 @@ const EventDetail = () => {
   const [addOrganizerError, setAddOrganizerError] = useState(null);
   const [addOrganizerSuccess, setAddOrganizerSuccess] = useState(null);
   
+  // Remove organizer state
+  const [removeOrganizerLoading, setRemoveOrganizerLoading] = useState(false);
+  
   const { token, user } = useContext(AuthContext);
   const navigate = useNavigate();
   
@@ -486,6 +489,40 @@ const EventDetail = () => {
       console.error('Add organizer error:', err);
     } finally {
       setAddOrganizerLoading(false);
+    }
+  };
+
+  const handleRemoveOrganizer = async (userId) => {
+    setRemoveOrganizerLoading(true);
+    
+    try {
+      await axios.delete(`http://localhost:8000/events/${eventId}/organizers/${userId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      // Update the event data by removing the organizer
+      const updatedEvent = {...event};
+      updatedEvent.organizers = updatedEvent.organizers.filter(organizer => organizer.id !== userId);
+      setEvent(updatedEvent);
+      
+      setUpdateSuccess('Organizer has been removed from the event');
+      
+      // Clear success message after a delay
+      setTimeout(() => {
+        setUpdateSuccess(null);
+      }, 3000);
+    } catch (err) {
+      setUpdateError(err.response?.data?.message || 'Failed to remove organizer. Please try again.');
+      console.error('Remove organizer error:', err);
+      
+      // Clear error message after a delay
+      setTimeout(() => {
+        setUpdateError(null);
+      }, 3000);
+    } finally {
+      setRemoveOrganizerLoading(false);
     }
   };
 
@@ -945,7 +982,24 @@ const EventDetail = () => {
                     <Collapse in={showOrganizers} timeout="auto">
                       {event.organizers && event.organizers.length > 0 ? (
                         event.organizers.map((organizer) => (
-                          <ListItem key={organizer.id} sx={{ pl: 4 }}>
+                          <ListItem 
+                            key={organizer.id} 
+                            sx={{ pl: 4 }}
+                            secondaryAction={
+                              isManager && (
+                                <Tooltip title="Remove organizer">
+                                  <IconButton 
+                                    edge="end" 
+                                    aria-label="remove organizer" 
+                                    onClick={() => handleRemoveOrganizer(organizer.id)}
+                                    disabled={removeOrganizerLoading}
+                                  >
+                                    <PersonRemoveIcon color="error" />
+                                  </IconButton>
+                                </Tooltip>
+                              )
+                            }
+                          >
                             <ListItemAvatar>
                               <Avatar>{organizer.name.charAt(0).toUpperCase()}</Avatar>
                             </ListItemAvatar>
