@@ -13,12 +13,32 @@ const PromotionItem = ({ promotion }) => {
     });
   };
 
-  const isActive = () => {
+  // const isActive = () => {
+  //   const now = new Date();
+  //   const startDate = new Date(promotion.startTime);
+  //   const endDate = new Date(promotion.endTime);
+  //   return now >= startDate && now <= endDate;
+  // };
+
+  const promotionStatus = () => {
     const now = new Date();
     const startDate = new Date(promotion.startTime);
     const endDate = new Date(promotion.endTime);
-    return now >= startDate && now <= endDate;
+
+    if (now < startDate) {
+      return 'Upcoming';
+    }
+    if (now >= startDate && now <= endDate) {
+      return 'Active';
+    }
+    return 'Ended';
   };
+
+  const statusColour = {
+    Active: 'success',
+    Upcoming: 'primary',
+    Ended: 'error'
+  }
 
   return (
     <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -28,8 +48,10 @@ const PromotionItem = ({ promotion }) => {
             {promotion.name}
           </Typography>
           <Chip 
-            label={isActive() ? 'Active' : 'Upcoming'} 
-            color={isActive() ? 'success' : 'primary'} 
+            // label={isActive() ? 'Active' : 'Upcoming'} 
+            // color={isActive() ? 'success' : 'primary'} 
+            label={promotionStatus()}
+            color={statusColour[promotionStatus()]}
             size="small" 
           />
         </Box>

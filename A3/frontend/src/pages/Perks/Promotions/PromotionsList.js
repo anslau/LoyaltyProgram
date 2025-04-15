@@ -24,11 +24,15 @@ import axios from 'axios';
 import AuthContext from '../../../context/AuthContext';
 import PromotionItem from './PromotionItem';
 
+import ActiveRoleContext from '../../../context/ActiveRoleContext';
+
 const PromotionsList = () => {
   const [promotions, setPromotions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { token } = useContext(AuthContext);
+  const { activeRole } = useContext(ActiveRoleContext);
+  const promoPrivelage = activeRole !== 'regular';
   
   // Pagination state
   const [page, setPage] = useState(1);
@@ -184,60 +188,63 @@ const PromotionsList = () => {
               <FilterListIcon />
             </IconButton>
             
-            <FormControl variant="outlined" size="small" sx={{ minWidth: 180, '& .MuiOutlinedInput-root.Mui-focused': {
-                    '& fieldset': {
-                      borderColor: 'rgb(101, 82, 82)', 
+            {promoPrivelage && (
+              <FormControl variant="outlined" size="small" sx={{ minWidth: 180, '& .MuiOutlinedInput-root.Mui-focused': {
+                      '& fieldset': {
+                        borderColor: 'rgb(101, 82, 82)', 
+                      },
                     },
-                  },
-                  '& label.Mui-focused': {
-                    color: 'rgb(101, 82, 82)', 
-                  }
-                }}
-            >
-              <InputLabel id="status-select-label">Status</InputLabel>
-              <Select
-                labelId="status-select-label"
-                id="status-select"
-                value={filters.started === 'true' ? 'active' : filters.started === 'false' ? 'upcoming' : filters.ended === 'true' ? 'ended' : 'all'}
-                onChange={handleStatusChange}
-                label="Status"
-                sx={{ 
-                  '& .MuiOutlinedInput-root.Mui-focused': {
-                    '& fieldset': {
-                      borderColor: 'rgb(101, 82, 82)', 
-                    },
-                  },
-                  '& label.Mui-focused': {
-                    color: 'rgb(101, 82, 82)', 
-                  }
-                }}
+                    '& label.Mui-focused': {
+                      color: 'rgb(101, 82, 82)', 
+                    }
+                  }}
               >
-                <MenuItem value="all"
-                sx={{
-                  '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
-                  '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
-                }}
-                >All Promotions</MenuItem>
-                <MenuItem value="active"
-                sx={{
-                  '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
-                  '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
-                }}
-                >Active</MenuItem>
-                <MenuItem value="upcoming"
-                sx={{
-                  '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
-                  '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
-                }}
-                >Upcoming</MenuItem>
-                <MenuItem value="ended"
-                sx={{
-                  '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
-                  '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
-                }}
-                >Ended</MenuItem>
-              </Select>
-            </FormControl>
+                <InputLabel id="status-select-label">Status</InputLabel>
+                <Select
+                  labelId="status-select-label"
+                  id="status-select"
+                  value={filters.started === 'true' ? 'active' : filters.started === 'false' ? 'upcoming' : filters.ended === 'true' ? 'ended' : 'all'}
+                  onChange={handleStatusChange}
+                  label="Status"
+                  sx={{ 
+                    '& .MuiOutlinedInput-root.Mui-focused': {
+                      '& fieldset': {
+                        borderColor: 'rgb(101, 82, 82)', 
+                      },
+                    },
+                    '& label.Mui-focused': {
+                      color: 'rgb(101, 82, 82)', 
+                    }
+                  }}
+                >
+                  <MenuItem value="all"
+                  sx={{
+                    '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                    '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                  }}
+                  >All Promotions</MenuItem>
+                  <MenuItem value="active"
+                  sx={{
+                    '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                    '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                  }}
+                  >Active</MenuItem>
+                  <MenuItem value="upcoming"
+                  sx={{
+                    '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                    '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                  }}
+                  >Upcoming</MenuItem>
+                  <MenuItem value="ended"
+                  sx={{
+                    '&.Mui-selected': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                    '&.Mui-selected:hover': { bgcolor: 'rgba(232, 180, 180, 0.19)' },
+                  }}
+                  >Ended</MenuItem>
+                </Select>
+              </FormControl>
+            )}
+
           </Box>
         </Box>
         
@@ -316,7 +323,8 @@ const PromotionsList = () => {
                 </FormControl>
               </Grid>
               
-              <Grid item xs={12} md={4}>
+              {promoPrivelage && (
+                <Grid item xs={12} md={4}>
                 <FormControl fullWidth size="small" sx={{ 
                       '& .MuiOutlinedInput-root.Mui-focused': {
                         '& fieldset': {
@@ -362,6 +370,7 @@ const PromotionsList = () => {
                   </Select>
                 </FormControl>
               </Grid>
+            )}
             </Grid>
             
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
