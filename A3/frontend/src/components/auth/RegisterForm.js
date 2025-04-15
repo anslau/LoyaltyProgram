@@ -92,14 +92,32 @@ function RegisterForm() {
       <TextField
         label="UTORid"
         fullWidth
-        sx={{ mb: 2 }}
+        sx={{ mb: 2,
+          '& .MuiOutlinedInput-root.Mui-focused': {
+            '& fieldset': {
+              borderColor: 'rgb(101, 82, 82)',
+            },
+          },
+            '& label.Mui-focused': {
+              color: 'rgb(101, 82, 82)',
+          }
+         }}
         value={utorid}
         onChange={(e) => setUtorid(e.target.value)}
       />
       <TextField
         label="Name"
         fullWidth
-        sx={{ mb: 2 }}
+        sx={{ mb: 2,
+          '& .MuiOutlinedInput-root.Mui-focused': {
+            '& fieldset': {
+              borderColor: 'rgb(101, 82, 82)',
+            },
+          },
+            '& label.Mui-focused': {
+              color: 'rgb(101, 82, 82)',
+          }
+         }}
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
@@ -107,7 +125,16 @@ function RegisterForm() {
         label="Email"
         type="email"
         fullWidth
-        sx={{ mb: 2 }}
+        sx={{ mb: 2,
+          '& .MuiOutlinedInput-root.Mui-focused': {
+            '& fieldset': {
+              borderColor: 'rgb(101, 82, 82)',
+            },
+          },
+            '& label.Mui-focused': {
+              color: 'rgb(101, 82, 82)',
+          }
+         }}
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
@@ -116,7 +143,7 @@ function RegisterForm() {
         type="submit"
         variant="contained"
         disabled={loading}
-        sx={{ mt: 1 }}
+        sx={{ mt: 1, backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)' }}
       >
         {loading ? <CircularProgress size={24} /> : 'Register'}
       </Button>
