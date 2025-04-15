@@ -53,10 +53,10 @@ function App() {
                     <Route path="/transactions" element={<AllTransactionsList />} />
                     <Route path="/transactions/:transactionId" element={<TransactionDetail />} />
                     <Route path="/users" element={<AllUsersList />} />
-                    <Route path="/register" element={<Registration />} /> 
                     <Route path="/users/:userId" element={<UserDetail />} />
                     <Route path="/transfer" element={<TransferPoints />} />
                     <Route path="/profile" element={<UserProfile />} />
+                    <Route path="/register" element={<Register />} />
                 </Route>
 
                 {/* Organizer/Manager event management page */}
@@ -66,7 +66,8 @@ function App() {
                 </Route>
 
                 <Route path="/reset-request" element={<ResetRequest />} />
-                <Route path="/reset-confirm" element={<ResetConfirm />} />
+                <Route path="/reset-confirm/:resetToken" element={<ResetConfirm />} />
+
 
                 {/* Fallback for unmatched routes */}
                 <Route path="*" element={<Navigate to="/" />} />

@@ -59,13 +59,8 @@ function RegisterForm() {
       // data.resetToken is presumably the token for activation
       setResetToken(data.resetToken);
       setSuccessMsg(`User '${utorid}' registered successfully!`);
+      navigate(`/reset-confirm/${data.resetToken}?utorid=${utorid}`);
 
-      // Option A: automatically navigate to resetConfirm
-      // If you have a route like /reset-confirm/:resetId, do:
-      // navigate(`/reset-confirm/${data.resetToken}`);
-
-      // Option B: let the cashier copy the reset token
-      // and share with the new user, or show them a link.
     } catch (err) {
       setError(err.message);
     } finally {
