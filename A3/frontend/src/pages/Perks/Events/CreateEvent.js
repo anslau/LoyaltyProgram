@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import ActiveRoleContext from '../../../context/ActiveRoleContext';
 import { useNavigate } from 'react-router-dom';
 import { 
   Box, 
@@ -23,6 +24,7 @@ import {
 import AuthContext from '../../../context/AuthContext';
 
 const CreateEvent = () => {
+  const { activeRole } = useContext(ActiveRoleContext);
   const navigate = useNavigate();
   const { token } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
@@ -176,6 +178,10 @@ const CreateEvent = () => {
       setLoading(false);
     }
   };
+  
+  if (!['organizer', 'manager', 'superuser'].includes(activeRole)) {
+    return <div>You are not authorized to create events.</div>;
+  }
   
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>

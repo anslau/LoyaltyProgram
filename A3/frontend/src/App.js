@@ -18,8 +18,6 @@ import PromotionsPage from './pages/Perks/Promotions/PromotionsPage';
 import EventsPage from './pages/Perks/Events/EventsPage';
 import ProtectedRoute from './route/ProtectedRoute';
 import AllUsersList from './pages/Users/AllUsersList';
-import OrganizerEvents from './pages/Organizer/OrganizerEvents';
-import EventManage     from './pages/Organizer/EventManage';
 import ResetRequest from './pages/Login/ResetRequest';
 import ResetConfirm from './pages/Login/ResetConfirm';
 import UserDetail from './pages/Users/UserDetail';
@@ -61,12 +59,6 @@ function App() {
                     <Route path="/transfer" element={<TransferPoints />} />
                     <Route path="/profile" element={<UserProfile />} />
                     <Route path="/register" element={<Register />} />
-                </Route>
-
-                {/* Organizer/Manager event management page */}
-                <Route element={<ProtectedRoute />}>
-                    <Route path="/organizer/events" element={<OrganizerEvents />} />
-                    <Route path="/organizer/events/:eventId" element={<EventManage />} />
                 </Route>
 
                 <Route path="/reset-request" element={<ResetRequest />} />

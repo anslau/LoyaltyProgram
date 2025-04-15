@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import ActiveRoleContext from '../../../context/ActiveRoleContext';
 import {
   Container, Box, Typography, Paper, Button, Chip,
   Divider, CircularProgress, Alert, AlertTitle,
@@ -27,6 +28,7 @@ import LogoutButton from '../../../components/auth/LogoutButton';
 import '../../../styles/auth.css';
 
 const EventDetail = () => {
+  const { activeRole } = useContext(ActiveRoleContext);
   const { eventId } = useParams();
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -88,6 +90,16 @@ const EventDetail = () => {
 
   // Determine if the current user is an organizer
   const isCurrentUserOrganizer = event?.organizers?.some(org => org.id === user?.id);
+
+  // Roles that are allowed to manage events
+  const canManageEventRoles = ['organizer', 'manager', 'superuser'];
+
+  // Is the user’s activeRole in the set of organizer-level roles?
+  const canManageByRole = canManageEventRoles.includes(activeRole);
+
+  // Combine “organizer-level role” AND “associated with event” if you want that logic:
+  const canManageParticipants = canManageByRole || isCurrentUserOrganizer; 
+
 
   // Set isManager to true to allow anyone to edit/delete
   const isManager = true;
@@ -717,9 +729,6 @@ const EventDetail = () => {
   const status = getEventStatus();
   const canRSVP = !hasEventEnded() && (!isEventFull() || isAttending);
 
-  // Determine if the current user can manage participants (add/remove guests/organizers, award points)
-  // This is true if they are a manager OR an organizer of this specific event
-  const canManageParticipants = isManager || isCurrentUserOrganizer;
 
   return (
     <div className="dashboard-container">
@@ -1024,16 +1033,16 @@ const EventDetail = () => {
                     size="medium"
                     sx={{ mr: 2 }}
                   />
-                  {isManager && (
+                {(canManageByRole || isCurrentUserOrganizer) && (
                     <Box>
-                      <IconButton color="primary" onClick={handleEditToggle} title="Edit" sx={{ color: '#c48f8f' }}>
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton color="error" onClick={handleDeleteDialogOpen} title="Delete">
-                        <DeleteIcon />
-                      </IconButton>
+                        <IconButton color="primary" onClick={handleEditToggle} title="Edit" sx={{ color: '#c48f8f' }}>
+                            <EditIcon />
+                        </IconButton>
+                        <IconButton color="error" onClick={handleDeleteDialogOpen} title="Delete">
+                            <DeleteIcon />
+                        </IconButton>
                     </Box>
-                  )}
+                )}
                 </Box>
               </Box>
 
@@ -1118,21 +1127,22 @@ const EventDetail = () => {
                         onClick={() => setShowOrganizers(!showOrganizers)}
                         sx={{ bgcolor: 'background.paper' }}
                         secondaryAction={
-                          isManager && (
-                            <Tooltip title="Add organizer">
-                              <IconButton
-                                edge="end"
-                                aria-label="add organizer"
-                                onClick={(e) => {
-                                  e.stopPropagation(); // Prevent toggling the collapse
-                                  handleAddOrganizerDialogOpen();
-                                }}
-                              >
-                                <PersonAddIcon sx={{ color: '#c48f8f' }} />
-                              </IconButton>
-                            </Tooltip>
-                          )
+                            (canManageByRole || isCurrentUserOrganizer) && (
+                              <Tooltip title="Add organizer">
+                                <IconButton
+                                  edge="end"
+                                  aria-label="add organizer"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleAddOrganizerDialogOpen();
+                                  }}
+                                >
+                                  <PersonAddIcon sx={{ color: '#c48f8f' }} />
+                                </IconButton>
+                              </Tooltip>
+                            )
                         }
+                          
                       >
                         <ListItemAvatar>
                           <Avatar sx={{ bgcolor: 'primary.main' }}>
@@ -1154,7 +1164,7 @@ const EventDetail = () => {
                             key={organizer.id}
                             sx={{ pl: 4 }}
                             secondaryAction={
-                              isManager && (
+                                (canManageByRole || isCurrentUserOrganizer) && (
                                 <Tooltip title="Remove organizer">
                                   <IconButton
                                     edge="end"
@@ -1166,7 +1176,7 @@ const EventDetail = () => {
                                   </IconButton>
                                 </Tooltip>
                               )
-                            }
+                            }                        
                           >
                             <ListItemAvatar>
                               <Avatar sx={{ bgcolor: 'primary.dark', color: '#fff' }}>
@@ -1198,7 +1208,7 @@ const EventDetail = () => {
                         onClick={() => setShowGuests(!showGuests)}
                         sx={{ bgcolor: 'background.paper' }}
                         secondaryAction={
-                          isManager && (
+                            (canManageByRole || isCurrentUserOrganizer) && (
                             <Tooltip title="Add guest">
                               <IconButton
                                 edge="end"
@@ -1234,7 +1244,7 @@ const EventDetail = () => {
                             key={guest.id}
                             sx={{ pl: 4 }}
                             secondaryAction={
-                              isManager && (
+                                (canManageByRole || isCurrentUserOrganizer) && (
                                 <>
                                   <Tooltip title="Award points">
                                     <IconButton
