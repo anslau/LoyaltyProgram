@@ -3,7 +3,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'; 
 import { ActiveRoleProvider } from './context/ActiveRoleContext';
 
-import Registration from './pages/Login/Register'; 
+import Register from './pages/Login/Register'; 
 import Login from './pages/Login/Login'; 
 import Dashboard from './pages/Dashboard'; 
 import PastTransactions from './pages/Transactions/PastTransactions';
