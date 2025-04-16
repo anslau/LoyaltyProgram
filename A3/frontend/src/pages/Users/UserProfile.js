@@ -191,7 +191,7 @@ const UserProfile = () => {
     return (
         <div className="dashboard-container">
             <DashboardHeader
-            title="My Profile"
+            title="Profile"
             />
 
 <Box sx={{

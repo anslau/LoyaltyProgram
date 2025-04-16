@@ -56,7 +56,7 @@ const PastTransactions = () => {
     return (
         <div className="dashboard-container">
             <DashboardHeader
-            title="Your Transaction History"
+            title="Your Transactions"
             />
 
 
@@ -64,7 +64,7 @@ const PastTransactions = () => {
       <Box sx={{ maxWidth: '800px', margin: '0 auto', px: 2 }}>
         <TransactionTable
           fetchFunction={fetchTransactions}
-          title="Your Transaction History"
+          title="Your Transactions"
         />
       </Box>
     </div>
