@@ -52,8 +52,8 @@ Create a new GitHub repository and push your code to it:
     git add .
     git commit -m "Loyal Program APP"
     git branch -M main
-    git remote add origin https://github.com/yourusername/your-repo-name.git
-    git push -u origin main
+    git remote add github https://github.com/yourusername/your-repo-name.git
+    git push github main
 
 ### 2. Set Up Railway Account
 
@@ -72,11 +72,11 @@ Create a new GitHub repository and push your code to it:
 2. Rename the service to something like "loyal-program-frontend"
 3. Configure settings:
    - Root Directory: `frontend`
-   - Build Command: `npm run build`
-   - Start Command: `npx serve -s build`
+   - Build Command: `npm install @mui/material @emotion/react @emotion/styled jwt-decode axios @mui/icons-material react-router-dom && npm run build`
+   - Start Command: `npm start`
 4. Deploy the frontend
 5. Generate a public domain under "Settings > Networking"
-   - Note the URL: `https://<frontend-service-name>.up.railway.app`
+   - Note the URL: `https://loyal-program-frontend.up.railway.app`
 
 ### 5. Configure Backend Service
 
@@ -84,19 +84,20 @@ Create a new GitHub repository and push your code to it:
 2. Rename the service to something like "loyal-program-backend"
 3. Configure settings:
    - Root Directory: `backend`
+   - Build Command: `npx prisma db seed`
    - Start Command: `node index.js 8000`
 4. Set environment variables in the "Variables" tab:
-   - Click "Raw Editor" and add: `FRONTEND_URL="https://<frontend-service-name>.up.railway.app"`
+   - Click "Raw Editor" and add: `FRONTEND_URL="https://loyal-program-frontend.up.railway.app"`
    - Add `DATABASE_URL` if using a different database type
 5. Deploy the backend
 6. Generate a public domain under "Settings > Networking"
-   - Note the URL: `https://<backend-service-name>.up.railway.app`
+   - Note the URL: `https://loyal-program-backend.up.railway.app`
 
 ### 6. Connect Frontend to Backend
 
 1. Go back to your frontend service in Railway
 2. Add environment variable in the "Variables" tab:
-   - `REACT_APP_BACKEND_URL="https://<backend-service-name>.up.railway.app"`
+   - `REACT_APP_BACKEND_URL="https://loyal-program-backend.up.railway.app"`
 3. Redeploy the frontend service
 
 ### 7. Verify Deployment
