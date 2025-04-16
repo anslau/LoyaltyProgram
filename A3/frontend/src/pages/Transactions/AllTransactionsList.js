@@ -73,11 +73,6 @@ const AllTransactionsList = () => {
         <div className="dashboard-container">
             <DashboardHeader
             title="All Transactions"
-            links={[
-                ["/dashboard", "Dashboard"],
-                ["/users", "View All Users", ({ activeRole }) => ["manager", "superuser"].includes(activeRole)],
-                ["/events", "Events"]
-            ]}
             />
 
 

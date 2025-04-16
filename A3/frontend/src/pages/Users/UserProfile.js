@@ -7,6 +7,7 @@ import { Box, CircularProgress, Button, IconButton, Grid, Typography, TextField,
 import { Edit as EditIcon, CloudUpload, Done as DoneIcon, Visibility, VisibilityOff } from '@mui/icons-material';
 import RoleSwitcher from '../../components/RoleSwitcher';
 import UserAvatar from '../../components/UserAvatar';
+import DashboardHeader from '../../components/dashboardHeader';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
 
@@ -188,21 +189,9 @@ const UserProfile = () => {
 
     return (
         <div className="user-profile-container">
-            <nav className="dashboard-nav">
-                <div className="nav-content">
-                    <h1 className="dashboard-title">My Profile</h1>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <Link to="/dashboard" style={{ marginRight: '20px', textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}>
-                            Dashboard
-                        </Link>
-                        <Link to="/perks" style={{ marginRight: '20px', textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}>
-                            What's New
-                        </Link>
-                        <RoleSwitcher />
-                        <LogoutButton />
-                    </div>
-                </div>
-            </nav>
+            <DashboardHeader
+            title="My Profile"
+            />
 
             <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start', padding: 2, gap: 4 }}>
                 {loading ? (

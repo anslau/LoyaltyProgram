@@ -212,18 +212,8 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
+        <DashboardHeader title="Dashboard" />
 
-        <DashboardHeader
-        title="Dashboard"
-        links={[
-            ["/transactions", "Your Transactions"],
-            ["/transfer", "Transfer Points", ({ activeRole }) => ["regular", "organizer", "cashier", "manager", "superuser"].includes(activeRole)],
-            ["/users", "View All Users", ({ activeRole }) => ["manager", "superuser"].includes(activeRole)],
-            ["/transactions/all", "All Transactions", ({ activeRole }) => ["manager", "superuser"].includes(activeRole)],
-            ["/promotions", "Promotions"],
-            ["/events", "Events"],
-        ]}
-        />
 
 
       {/* Welcome back + Role */}

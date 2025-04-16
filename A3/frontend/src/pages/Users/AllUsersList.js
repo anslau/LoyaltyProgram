@@ -54,11 +54,6 @@ const AllUsersList = () => {
         <div className="dashboard-container">
         <DashboardHeader
             title="All Users"
-            links={[
-                ["/dashboard", "Dashboard"],
-                ["/users/promote", "Admin Panel", ({ activeRole }) => activeRole === "superuser"],
-                ["/transactions/all", "All Transactions", ({ activeRole }) => ["manager", "superuser"].includes(activeRole)]
-            ]}
         />
 
             <Container maxWidth="lg" sx={{ padding: 1 }}>

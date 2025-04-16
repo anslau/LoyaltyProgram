@@ -15,22 +15,11 @@ const PromotionsPage = () => {
     <div className="dashboard-container">
         <DashboardHeader
         title="Promotions"
-        links={[
-            ["/dashboard", "Dashboard"],
-            ["/events", "Events"],
-            ["/promotions/create", "Create Promotion", ({ activeRole }) => ["manager", "superuser"].includes(activeRole)]
-        ]}
         />
-
-      
-      <Container className="dashboard-main">
-        <Box sx={{ width: '100%', mt: 4 }}>
-          <Typography variant="h4" component="h1" gutterBottom>
-            Available Promotions
-          </Typography>
-          
+      <Container className="dashboard-main" sx={{maxWidth: '800px'}}>
+        <Box sx={{ width: '100%'}}>
           {['manager', 'superuser'].includes(activeRole) && (
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-start', mb: 2 }}>
               <Button 
                 variant="contained"
                 sx={{ color: 'rgb(101, 82, 82)', backgroundColor: '#ebc2c2' }}

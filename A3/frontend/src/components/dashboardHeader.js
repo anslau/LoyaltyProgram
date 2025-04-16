@@ -14,7 +14,7 @@ const navLinkStyle = {
   fontSize: '0.9rem',
 };
 
-const DashboardHeader = ({ title, links }) => {
+const DashboardHeader = ({ title }) => {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const { userDetails } = useContext(AuthContext);
   const { activeRole } = useContext(ActiveRoleContext);
@@ -23,19 +23,33 @@ const DashboardHeader = ({ title, links }) => {
     setDrawerOpen(open);
   };
 
-  // Role-aware global filtering
-  const filteredLinks = links.filter(([path, label, condition]) => {
-    if (typeof condition === 'function') {
-      return condition({ userDetails, activeRole });
-    }
-    return true;
-  });
-
-  // Add "Profile" link for any logged-in user
-  const finalLinks = [
-    ...filteredLinks,
+  const baseLinks = [
+    ["/dashboard", "Dashboard"],
+    ["/users/me/transactions?page=1&limit=10&orderBy=id&order=desc", "Your Transactions"],
+    ["/promotions", "Promotions"],
+    ["/events", "Events"],
+    ["/transfer", "Transfer Points"],
+    ["/perks", "What's New"],
     ["/profile", "Profile"]
   ];
+
+  const managerLinks = [
+    ["/transactions?page=1&limit=10&orderBy=id&order=desc", "All Transactions"],
+    ["/users", "All Users"],    
+  ];
+
+  const superuserLinks = [
+    ["/users/promote", "Admin Panel"]
+  ];
+
+  let roleBasedLinks = [...baseLinks];
+
+  if (["manager", "superuser"].includes(activeRole)) {
+    roleBasedLinks = [...roleBasedLinks, ...managerLinks];
+  }
+  if (activeRole === "superuser") {
+    roleBasedLinks = [...roleBasedLinks, ...superuserLinks];
+  }
 
   return (
     <Box sx={{ maxWidth: '800px', margin: '0 auto' }}>
@@ -68,7 +82,7 @@ const DashboardHeader = ({ title, links }) => {
           <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
             <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
               <List>
-                {finalLinks.map(([path, label]) => (
+                {roleBasedLinks.map(([path, label]) => (
                   <ListItem button key={path} component={Link} to={path}>
                     <ListItemText primary={label} />
                   </ListItem>

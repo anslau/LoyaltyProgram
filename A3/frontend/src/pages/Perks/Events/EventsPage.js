@@ -15,22 +15,12 @@ const EventsPage = () => {
     <div className="dashboard-container">
         <DashboardHeader
         title="Events"
-        links={[
-            ["/dashboard", "Dashboard"],
-            ["/promotions", "Promotions"],
-            ["/events/create", "Create Event", ({ activeRole }) => ["manager", "superuser"].includes(activeRole)]
-        ]}
         />
 
-
-      <Container className="dashboard-main">
-        <Box sx={{ width: '100%', mt: 4 }}>
-          <Typography variant="h4" component="h1" gutterBottom>
-            Upcoming Events
-          </Typography>
-          
+      <Container className="dashboard-main" sx={{maxWidth: '800px'}}>
+        <Box sx={{ width: '100%' }}>
           {['manager', 'superuser'].includes(activeRole) && (
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-start', mb: 2 }}>
               <Button 
                 variant="contained" 
                 sx={{ color: 'rgb(101, 82, 82)', backgroundColor: '#ebc2c2' }}

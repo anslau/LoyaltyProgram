@@ -8,6 +8,7 @@ import RoleSwitcher from '../../components/RoleSwitcher';
 import '../../styles/auth.css';
 import ActiveRoleContext from '../../context/ActiveRoleContext';
 import AuthContext from '../../context/AuthContext';
+import DashboardHeader from '../../components/dashboardHeader';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -39,18 +40,9 @@ const RegularUserPerksPage = () => {
 
   return (
     <div className="dashboard-container">
-      <nav className="dashboard-nav">
-        <div className="nav-content">
-          <h1 className="dashboard-title">What's New</h1>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Link to="/dashboard" style={{ marginRight: '20px', textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}>
-              Dashboard
-            </Link>
-            <RoleSwitcher />
-            <LogoutButton />
-          </div>
-        </div>
-      </nav>
+            <DashboardHeader
+            title="What's New"
+            />
       
       <Container className="dashboard-main">
         <Box sx={{ width: '100%', mt: 4 }}>

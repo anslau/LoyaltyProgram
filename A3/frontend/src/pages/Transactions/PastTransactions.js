@@ -57,12 +57,6 @@ const PastTransactions = () => {
         <div className="dashboard-container">
             <DashboardHeader
             title="Your Transaction History"
-            links={[
-                ["/dashboard", "Dashboard"],
-                ["/transfer", "Transfer Points", ({ activeRole }) => ["regular", "organizer", "cashier", "manager", "superuser"].includes(activeRole)],
-                ["/promotions", "Promotions"],
-                ["/events", "Events"]
-            ]}
             />
 
 
