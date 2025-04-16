@@ -9,6 +9,7 @@ import RoleSwitcher from '../../components/RoleSwitcher';
 import UserAvatar from '../../components/UserAvatar';
 import DashboardHeader from '../../components/dashboardHeader';
 import '../../styles/auth.css';
+import ActiveRoleContext from '../../context/ActiveRoleContext';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
 
