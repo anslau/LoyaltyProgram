@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 
-const port = process.env.PORT || 8000; 
+const port = process.env.PORT || 8080; 
 
 const express = require("express");
 const cors = require("cors");
