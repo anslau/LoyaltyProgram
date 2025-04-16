@@ -168,7 +168,7 @@ function CashierPage() {
   return (
     <Box sx={{ maxWidth: 600, margin: '0 auto', mt: 4, mb: 4 }}>
         <Typography variant="h4" gutterBottom>
-            Cashier Dashboard
+            Transaction/Redemption
         </Typography>
 
         {/* pending redemptions */}
