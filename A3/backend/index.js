@@ -21,8 +21,6 @@ app.use(cors(corsOptions));        // CORS for all normal requests
 app.options('*', cors(corsOptions)); // CORS for every pre‑flight
 app.use(express.json());
 
-// ====================================
-
 // set up
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
