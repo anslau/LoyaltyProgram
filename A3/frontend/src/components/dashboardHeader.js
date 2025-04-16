@@ -52,7 +52,7 @@ const DashboardHeader = ({ title }) => {
   }
 
   return (
-    <Box sx={{ maxWidth: '800px', margin: '0 auto' }}>
+    <Box sx={{ width: '100%' }}>
       <Box
         className="dashboard-nav"
         sx={{

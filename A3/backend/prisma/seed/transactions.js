@@ -81,6 +81,31 @@ module.exports = async function seedTransactions(users, promotions, events) {
     }
   });
 
+  // Additional event award
+  await prisma.transaction.create({
+    data: {
+      utorid: users.regularUser.utorid,
+      type: 'event',
+      amount: 75,
+      relatedId: events[1].id,
+      createdBy: users.managerUser.utorid,
+      remark: 'Workshop participation',
+      customerId: users.regularUser.id
+    }
+  });
+
+  // Additional adjustment
+  await prisma.transaction.create({
+    data: {
+      utorid: users.regularUser.utorid,
+      type: 'adjustment',
+      amount: 20,
+      createdBy: users.managerUser.utorid,
+      remark: 'Bonus points adjustment',
+      customerId: users.regularUser.id
+    }
+  });
+
   // Redemption attempt by user with 0 points
   await prisma.transaction.create({
     data: {

@@ -4,8 +4,8 @@ const prisma = new PrismaClient();
 module.exports = async function seedUsers() {
   const users = [
     {
-      utorid: 'testuser',
-      password: 'Password123!',
+      utorid: 'regular1',
+      password: '123',
       email: 'testuser@utoronto.ca',
       role: 'organizer',
       name: 'Test User',
@@ -13,7 +13,7 @@ module.exports = async function seedUsers() {
     },
     {
       utorid: 'cashier1',
-      password: 'Cashier123!',
+      password: '123',
       email: 'cashier@utoronto.ca',
       role: 'cashier',
       name: 'Test Cashier',
@@ -21,7 +21,7 @@ module.exports = async function seedUsers() {
     },
     {
       utorid: 'manager1',
-      password: 'Manager123!',
+      password: '20954',
       email: 'manager@utoronto.ca',
       role: 'manager',
       name: 'Test Manager',

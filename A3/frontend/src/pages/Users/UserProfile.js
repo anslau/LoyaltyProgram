@@ -8,11 +8,13 @@ import { Edit as EditIcon, CloudUpload, Done as DoneIcon, Visibility, Visibility
 import RoleSwitcher from '../../components/RoleSwitcher';
 import UserAvatar from '../../components/UserAvatar';
 import DashboardHeader from '../../components/dashboardHeader';
+import '../../styles/auth.css';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
 
 const UserProfile = () => {
     const { token } = useContext(AuthContext);
+    const { activeRole } = useContext(ActiveRoleContext);
     const [user, setUser] = useState({});
     const [userForm, setUserForm] = useState({
         name: '',
@@ -26,7 +28,7 @@ const UserProfile = () => {
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
     const [editMode, setEditMode] = useState(false);
-    
+
     const [showOldPassword, setShowOldPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
 
@@ -37,6 +39,13 @@ const UserProfile = () => {
     const [changePassword, setChangePassword] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
     const [passwordSuccess, setPasswordSuccess] = useState(false);
+
+    const navLinkStyle = {
+        textDecoration: 'none',
+        color: '#c48f8f',
+        fontWeight: 'bold',
+        fontSize: '0.9rem',
+    };
 
     // fetching the logged in user details
     useEffect(() => {
@@ -182,15 +191,15 @@ const UserProfile = () => {
 
         } catch (error) {
             setPasswordError(error.message);
-            
+
             setLoading(false);
         }
     };
 
     return (
-        <div className="user-profile-container">
+        <div className="dashboard-container">
             <DashboardHeader
-            title="My Profile"
+            title="Profile"
             />
 
 <Box sx={{
