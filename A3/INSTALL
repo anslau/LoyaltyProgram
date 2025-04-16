@@ -9,8 +9,8 @@
 - Git
 
 ### 1. Clone the Repository
-git clone <url>
-cd <directory>/A3
+git clone https://markus.teach.cs.toronto.edu/git/markus/csc309-2025-01/group_20954 
+cd GROUP_20954/A3
 
 ### 2. Backend Setup
 #### Install Dependencies
