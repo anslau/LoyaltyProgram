@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Box, Typography, IconButton, Drawer, List, ListItem, ListItemText, useMediaQuery } from '@mui/material';
+import { Box, Typography, IconButton, Drawer, List, ListItem, ListItemText } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from 'react-router-dom';
 import RoleSwitcher from './RoleSwitcher';
@@ -16,8 +16,6 @@ const navLinkStyle = {
 
 const DashboardHeader = ({ title, links }) => {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
-  const isMobile = useMediaQuery('(max-width:600px)');
-
   const { userDetails } = useContext(AuthContext);
   const { activeRole } = useContext(ActiveRoleContext);
 
@@ -25,13 +23,19 @@ const DashboardHeader = ({ title, links }) => {
     setDrawerOpen(open);
   };
 
-  // Filter links if any of them have a condition function
+  // Role-aware global filtering
   const filteredLinks = links.filter(([path, label, condition]) => {
     if (typeof condition === 'function') {
       return condition({ userDetails, activeRole });
     }
-    return true; // no condition = always show
+    return true;
   });
+
+  // Add "Profile" link for any logged-in user
+  const finalLinks = [
+    ...filteredLinks,
+    ["/profile", "Profile"]
+  ];
 
   return (
     <Box sx={{ maxWidth: '800px', margin: '0 auto' }}>
@@ -52,36 +56,27 @@ const DashboardHeader = ({ title, links }) => {
           backgroundColor: '#ffffff',
         }}
       >
-        {/* Left Side */}
         <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
           <Typography variant="h6" sx={{ fontWeight: 'bold' }}>{title}</Typography>
-
-          {!isMobile && filteredLinks.map(([path, label]) => (
-            <Link key={path} to={path} style={navLinkStyle}>{label}</Link>
-          ))}
-
-          {isMobile && (
-            <>
-              <IconButton onClick={toggleDrawer(true)} sx={{ color: '#c48f8f' }}>
-                <MenuIcon />
-              </IconButton>
-              <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
-                <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
-                  <List>
-                    {filteredLinks.map(([path, label]) => (
-                      <ListItem button key={path} component={Link} to={path}>
-                        <ListItemText primary={label} />
-                      </ListItem>
-                    ))}
-                  </List>
-                </Box>
-              </Drawer>
-            </>
-          )}
         </Box>
 
-        {/* Right Side */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <IconButton onClick={toggleDrawer(true)} sx={{ color: '#c48f8f' }}>
+            <MenuIcon />
+          </IconButton>
+
+          <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
+            <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
+              <List>
+                {finalLinks.map(([path, label]) => (
+                  <ListItem button key={path} component={Link} to={path}>
+                    <ListItemText primary={label} />
+                  </ListItem>
+                ))}
+              </List>
+            </Box>
+          </Drawer>
+
           <RoleSwitcher />
           <LogoutButton />
         </Box>

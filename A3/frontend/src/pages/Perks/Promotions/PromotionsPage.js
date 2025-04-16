@@ -8,26 +8,20 @@ import RoleSwitcher from '../../../components/RoleSwitcher';
 import ActiveRoleContext from '../../../context/ActiveRoleContext';
 import DashboardHeader from '../../../components/dashboardHeader';
 
-// const navLinkStyle = {
-//     textDecoration: 'none',
-//     color: '#c48f8f',
-//     fontWeight: 'bold',
-//     fontSize: '0.9rem',
-//   };
-
 const PromotionsPage = () => {
   const { activeRole } = useContext(ActiveRoleContext);
 
   return (
     <div className="dashboard-container">
-        <DashboardHeader 
-            title="Promotions"
-            links={[
+        <DashboardHeader
+        title="Promotions"
+        links={[
             ["/dashboard", "Dashboard"],
             ["/events", "Events"],
-            ["/users", "View All Users", ({ activeRole }) => activeRole === "manager"]
-            ]}
+            ["/promotions/create", "Create Promotion", ({ activeRole }) => ["manager", "superuser"].includes(activeRole)]
+        ]}
         />
+
       
       <Container className="dashboard-main">
         <Box sx={{ width: '100%', mt: 4 }}>

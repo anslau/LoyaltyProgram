@@ -7,13 +7,7 @@ import TransactionTable from "../../components/TransactionTable";
 import { Container, FormControlLabel, FormGroup, Checkbox, TextField } from "@mui/material";
 import RoleSwitcher from '../../components/RoleSwitcher';
 import { Box, Typography } from '@mui/material';
-
-const navLinkStyle = {
-    textDecoration: 'none',
-    color: '#c48f8f',
-    fontWeight: 'bold',
-    fontSize: '0.9rem',
-  };  
+import DashboardHeader from '../../components/dashboardHeader';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
 
@@ -77,41 +71,15 @@ const AllTransactionsList = () => {
 
     return (
         <div className="dashboard-container">
-            <Box sx={{ maxWidth: '800px', margin: '0 auto' }}>
-            <Box
-                className="dashboard-nav"
-                sx={{
-                display: 'flex',
-                flexDirection: { xs: 'column', sm: 'row' },
-                alignItems: { xs: 'flex-start', sm: 'center' },
-                justifyContent: 'space-between',
-                flexWrap: 'wrap',
-                gap: 1,
-                paddingY: 2,
-                paddingX: 3,
-                boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
-                borderRadius: 2,
-                marginBottom: 3,
-                backgroundColor: '#ffffff',
-                }}
-            >
-                {/* Left: Title + Links */}
-                <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
-                <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                    Transaction History
-                </Typography>
-                <Link to="/perks" style={navLinkStyle}>What's New</Link>
-                <Link to="/profile" style={navLinkStyle}>Profile</Link>
-                <Link to="/dashboard" style={navLinkStyle}>Dashboard</Link>
-                </Box>
+            <DashboardHeader
+            title="All Transactions"
+            links={[
+                ["/dashboard", "Dashboard"],
+                ["/users", "View All Users", ({ activeRole }) => ["manager", "superuser"].includes(activeRole)],
+                ["/events", "Events"]
+            ]}
+            />
 
-                {/* Right: Role Switcher + Logout */}
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                <RoleSwitcher />
-                <LogoutButton />
-                </Box>
-            </Box>
-            </Box>
 
             <Container maxWidth="lg" sx={{ padding: 1 }}>
                 <TransactionTable
