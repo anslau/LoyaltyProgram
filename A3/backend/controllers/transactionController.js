@@ -1,5 +1,7 @@
 const transactionService = require('../services/transactionService');
 const { validateFields } = require('../utils/validate');
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 
 async function createPurchaseTransaction(req, res) {
     // check that only valid fields are passed
@@ -217,12 +219,33 @@ async function completeRedemption(req, res) {
     return res.status(200).json(transaction);
 }
 
+async function getPendingRedemptions(req, res) {
+    console.log('=== getPendingRedemptions() reached ===');
+    try {
+        // Query all transactions that have processedBy as null
+        const pending = await prisma.transaction.findMany({
+          where: {
+            processedBy: null,
+          }
+          // include: {
+          //   user: true
+          // }
+        });
+    
+        return res.json(pending);
+      } catch (error) {
+        console.error('Error fetching pending redemptions:', error);
+        return res.status(500).json({ error: 'Failed to fetch pending redemptions' });
+      }
+    };
+
 const transactionController = {
     createTransaction,
     retrieveSpecificTransaction,
     transactionSuspicious,
     completeRedemption,
-    retrieveTransactions
+    retrieveTransactions, 
+    getPendingRedemptions
 };
 
 module.exports = transactionController;

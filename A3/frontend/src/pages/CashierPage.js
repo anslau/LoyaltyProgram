@@ -1,5 +1,5 @@
 // src/pages/CashierPage.js
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import AuthContext from '../context/AuthContext';
 import {
   Box,
@@ -21,6 +21,8 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000'
 function CashierPage() {
   const { token } = useContext(AuthContext);
   const navigate = useNavigate();
+  
+  const [pendingRequests, setPendingRequests] = useState([]);
 
   // States for creating a purchase transaction
   const [purchaseUtorid, setPurchaseUtorid] = useState('');
@@ -33,6 +35,25 @@ function CashierPage() {
   const [redemptionId, setRedemptionId] = useState('');
   const [redemptionError, setRedemptionError] = useState('');
   const [redemptionSuccess, setRedemptionSuccess] = useState('');
+
+  const handleAccept = async (id) => {
+    try {
+      const resp = await fetch(`${BACKEND_URL}/transactions/${id}/processed`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ processed: true })
+      });
+  
+      if (!resp.ok) throw new Error('Failed to accept redemption request');
+  
+      setPendingRequests(prev => prev.filter(req => req.id !== id));
+    } catch (err) {
+      alert(err.message);
+    }
+  };
 
   // CREATE PURCHASE TRANSACTION
   const handlePurchase = async (e) => {
@@ -120,12 +141,80 @@ function CashierPage() {
     }
   };
 
+
+  useEffect(() => {
+    console.log('Token in CashierPage:', token);
+    fetch(`${BACKEND_URL}/transactions/pending`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }   
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Failed to fetch pending redemption requests');
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setPendingRequests(data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
   
   return (
     <Box sx={{ maxWidth: 600, margin: '0 auto', mt: 4, mb: 4 }}>
         <Typography variant="h4" gutterBottom>
             Cashier Dashboard
         </Typography>
+
+        {/* pending redemptions */}
+
+        <section className="pending-redemptions">
+            <h3>Pending Redemption Requests</h3>
+            {pendingRequests.length === 0 ? (
+                <p>No pending redemption requests.</p>
+            ) : (
+                <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '1rem' }}>
+                <thead>
+                    <tr style={{ backgroundColor: '#f2f2f2', textAlign: 'left' }}>
+                    <th style={{ padding: '8px' }}>Transaction ID</th>
+                    <th style={{ padding: '8px' }}>User</th>
+                    <th style={{ padding: '8px' }}>Type</th>
+                    <th style={{ padding: '8px' }}>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {pendingRequests.map((request) => (
+                    <tr key={request.id} style={{ borderBottom: '1px solid #ddd' }}>
+                        <td style={{ padding: '8px' }}>{request.id}</td>
+                        <td style={{ padding: '8px' }}>{request.utorid || request.createdBy || '—'}</td>
+                        <td style={{ padding: '8px', textTransform: 'capitalize' }}>{request.type}</td>
+                        <td style={{ padding: '8px' }}>{request.amount}</td>
+                        <td style={{ padding: '8px' }}>
+                        </td>
+                        <td style={{ padding: '8px' }}>
+                        <Button
+                            size="small"
+                            variant="contained"
+                            color="success"
+                            sx={{ mr: 1 }}
+                            onClick={() => handleAccept(request.id)}
+                        >
+                            Accept
+                        </Button>
+                        </td>
+
+                    </tr>
+                    ))}
+                </tbody>
+                </table>
+            )}
+            </section>
+
 
         {/* New Button to navigate to user registration */}
         <Button
