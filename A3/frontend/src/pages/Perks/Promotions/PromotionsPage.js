@@ -6,51 +6,28 @@ import PromotionsList from './PromotionsList';
 import '../../../styles/auth.css';
 import RoleSwitcher from '../../../components/RoleSwitcher';
 import ActiveRoleContext from '../../../context/ActiveRoleContext';
+import DashboardHeader from '../../../components/dashboardHeader';
 
-const navLinkStyle = {
-    textDecoration: 'none',
-    color: '#c48f8f',
-    fontWeight: 'bold',
-    fontSize: '0.9rem',
-  };
+// const navLinkStyle = {
+//     textDecoration: 'none',
+//     color: '#c48f8f',
+//     fontWeight: 'bold',
+//     fontSize: '0.9rem',
+//   };
 
 const PromotionsPage = () => {
   const { activeRole } = useContext(ActiveRoleContext);
 
   return (
     <div className="dashboard-container">
-        <Box sx={{ maxWidth: '800px', margin: '0 auto' }}>
-        <Box
-            className="dashboard-nav"
-            sx={{
-            display: 'flex',
-            flexDirection: { xs: 'column', sm: 'row' },
-            alignItems: { xs: 'flex-start', sm: 'center' },
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: 1,
-            paddingY: 2,
-            paddingX: 3,
-            boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
-            borderRadius: 2,
-            marginBottom: 3,
-            backgroundColor: '#ffffff',
-            }}
-        >
-            <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
-            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                Promotions
-            </Typography>
-            <Link to="/dashboard" style={navLinkStyle}>Dashboard</Link>
-            <Link to="/events" style={navLinkStyle}>Events</Link>
-            </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <RoleSwitcher />
-            <LogoutButton />
-            </Box>
-        </Box>
-        </Box>
-
+        <DashboardHeader 
+            title="Promotions"
+            links={[
+            ["/dashboard", "Dashboard"],
+            ["/events", "Events"],
+            ["/users", "View All Users", ({ activeRole }) => activeRole === "manager"]
+            ]}
+        />
       
       <Container className="dashboard-main">
         <Box sx={{ width: '100%', mt: 4 }}>
