@@ -36,6 +36,25 @@ function CashierPage() {
   const [redemptionError, setRedemptionError] = useState('');
   const [redemptionSuccess, setRedemptionSuccess] = useState('');
 
+  const handleAccept = async (id) => {
+    try {
+      const resp = await fetch(`${BACKEND_URL}/transactions/${id}/processed`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ processed: true })
+      });
+  
+      if (!resp.ok) throw new Error('Failed to accept redemption request');
+  
+      setPendingRequests(prev => prev.filter(req => req.id !== id));
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
   // CREATE PURCHASE TRANSACTION
   const handlePurchase = async (e) => {
     e.preventDefault();
@@ -155,37 +174,47 @@ function CashierPage() {
         {/* pending redemptions */}
 
         <section className="pending-redemptions">
-        <h3>Pending Redemption Requests</h3>
-        {pendingRequests.length === 0 ? (
-          <p>No pending redemption requests.</p>
-        ) : (
-          <table>
-            <thead>
-              <tr>
-                <th>User</th>
-                <th>Request Type</th>
-                <th>Points</th>
-                <th>Date Requested</th>
-              </tr>
-            </thead>
-            <tbody>
-              {pendingRequests.map((request) => (
-                <tr key={request.id}>
-                  <td>{request.userId}</td>
-                  <td>{request.type}</td>
-                  <td>{request.points}</td>
-                  <td>{new Date(request.createdAt).toLocaleString()}</td>
-                  {/* Additional fields and action buttons */}
-                  {/* <td>
-                    <button onClick={() => handleApprove(request.id)}>Approve</button>
-                    <button onClick={() => handleReject(request.id)}>Reject</button>
-                    </td> */}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </section>
+            <h3>Pending Redemption Requests</h3>
+            {pendingRequests.length === 0 ? (
+                <p>No pending redemption requests.</p>
+            ) : (
+                <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '1rem' }}>
+                <thead>
+                    <tr style={{ backgroundColor: '#f2f2f2', textAlign: 'left' }}>
+                    <th style={{ padding: '8px' }}>Transaction ID</th>
+                    <th style={{ padding: '8px' }}>User</th>
+                    <th style={{ padding: '8px' }}>Type</th>
+                    <th style={{ padding: '8px' }}>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {pendingRequests.map((request) => (
+                    <tr key={request.id} style={{ borderBottom: '1px solid #ddd' }}>
+                        <td style={{ padding: '8px' }}>{request.id}</td>
+                        <td style={{ padding: '8px' }}>{request.utorid || request.createdBy || '—'}</td>
+                        <td style={{ padding: '8px', textTransform: 'capitalize' }}>{request.type}</td>
+                        <td style={{ padding: '8px' }}>{request.amount}</td>
+                        <td style={{ padding: '8px' }}>
+                        </td>
+                        <td style={{ padding: '8px' }}>
+                        <Button
+                            size="small"
+                            variant="contained"
+                            color="success"
+                            sx={{ mr: 1 }}
+                            onClick={() => handleAccept(request.id)}
+                        >
+                            Accept
+                        </Button>
+                        </td>
+
+                    </tr>
+                    ))}
+                </tbody>
+                </table>
+            )}
+            </section>
+
 
         {/* New Button to navigate to user registration */}
         <Button
