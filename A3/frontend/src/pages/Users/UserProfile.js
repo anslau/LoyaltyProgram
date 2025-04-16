@@ -8,6 +8,7 @@ import { Edit as EditIcon, CloudUpload, Done as DoneIcon, Visibility, Visibility
 import RoleSwitcher from '../../components/RoleSwitcher';
 import UserAvatar from '../../components/UserAvatar';
 import DashboardHeader from '../../components/dashboardHeader';
+import '../../styles/auth.css';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
 
@@ -188,7 +189,7 @@ const UserProfile = () => {
     };
 
     return (
-        <div className="user-profile-container">
+        <div className="dashboard-container">
             <DashboardHeader
             title="My Profile"
             />
