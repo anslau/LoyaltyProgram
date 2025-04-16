@@ -88,27 +88,16 @@ Create a new GitHub repository and push your code to it:
    - Add `DATABASE_URL="file:./prisma/dev.db"`
 5. Deploy the backend
 6. Generate a public domain under "Settings > Networking"
-   - Note the URL: `https://loyal-program-backend.up.railway.app`
+   - Note the URL: `https://loyal-program-backend-production.up.railway.app`
 
 ### 6. Connect Frontend to Backend
 
 1. Go back to your frontend service in Railway
 2. Add environment variable in the "Variables" tab:
-   - `REACT_APP_BACKEND_URL="https://loyal-program-backend.up.railway.app"`
+   - `REACT_APP_BACKEND_URL="https://loyal-program-backend-production.up.railway.app"`
 3. Redeploy the frontend service
 
 ### 7. Verify Deployment
 
 1. Access your application using the frontend URL
 2. Test key functionality to ensure the frontend and backend are communicating properly
-
-### 8. Update CORS Configuration (if needed)
-
-If you encounter CORS issues, update the backend's CORS configuration to include your frontend domain:
-
-app.use(cors({
-origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-allowedHeaders: ['Content-Type', 'Authorization'],
-credentials: true
-}));
