@@ -26,8 +26,19 @@ import UserProfile from './pages/Users/UserProfile';
 import RegularUserPromotionPage from './pages/Perks/Promotions/RegularUserPromotionPage';
 import RegularUserPerksPage from './pages/Perks/RegularUserPerksPage';
 
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+
+const theme = createTheme({
+    typography: {
+      fontFamily: 'Montserrat, sans-serif',
+    },
+});
+
 function App() { 
     return ( 
+        <ThemeProvider theme={theme}>
+        <CssBaseline />
         <ActiveRoleProvider>
         <BrowserRouter>
             <Routes> 
@@ -70,6 +81,7 @@ function App() {
             </Routes>
         </BrowserRouter>
         </ActiveRoleProvider>
+        </ThemeProvider>
     ); 
 }
   
