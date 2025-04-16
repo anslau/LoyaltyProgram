@@ -32,7 +32,7 @@ const PromotionsList = () => {
   const [error, setError] = useState(null);
   const { token } = useContext(AuthContext);
   const { activeRole } = useContext(ActiveRoleContext);
-  const promoPrivelage = activeRole !== 'regular';
+  const promoPrivelage = ['manager', 'superuser'].includes(activeRole);
   
   // Pagination state
   const [page, setPage] = useState(1);
@@ -48,6 +48,24 @@ const PromotionsList = () => {
     orderBy: 'startTime',
     order: 'asc'
   });
+
+  // For regular users, automatically set filters to show only active promotions
+  useEffect(() => {
+    if (!promoPrivelage) {
+      setFilters(prevFilters => ({
+        ...prevFilters,
+        started: 'true',
+        ended: 'false'
+      }));
+    } else {
+      // Clear the filters when switching to a privileged role
+      setFilters(prevFilters => ({
+        ...prevFilters,
+        started: '',
+        ended: ''
+      }));
+    }
+  }, [promoPrivelage]);
 
   // Sorting state
   const [sortBy, setSortBy] = useState('startTime');
