@@ -137,7 +137,23 @@ const Dashboard = () => {
     }
   };
 
-  // Unified effect to fetch everything once we have a token
+  useEffect(() => {
+    const fetchUnprocessedRedemption = async () => {
+      const resp = await fetch(`${BACKEND_URL}/users/me/transactions?type=redemption`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const data = await resp.json();
+      const pending = data.results.find(tx => tx.processedBy === null);
+      setUnprocessedRedemption(pending || null);
+    };
+  
+    fetchUnprocessedRedemption();
+    
+    // recheck every 5 seconds
+    const interval = setInterval(fetchUnprocessedRedemption, 5000);
+    return () => clearInterval(interval);
+  }, []);  
+
   useEffect(() => {
     if (!token) return;
 

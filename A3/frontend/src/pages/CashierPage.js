@@ -143,26 +143,31 @@ function CashierPage() {
 
 
   useEffect(() => {
-    console.log('Token in CashierPage:', token);
-    fetch(`${BACKEND_URL}/transactions/pending`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }   
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error('Failed to fetch pending redemption requests');
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setPendingRequests(data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    const fetchPendingRedemption = async () => {
+        fetch(`${BACKEND_URL}/transactions/pending`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            }   
+        })
+        .then((res) => {
+            if (!res.ok) {
+              throw new Error('Failed to fetch pending redemption requests');
+            }
+            return res.json();
+          })
+        .then((data) => {
+            setPendingRequests(data);
+          })
+        .catch((err) => {
+            console.error(err);
+          });
+    };
+
+    fetchPendingRedemption();
+    const interval = setInterval(fetchPendingRedemption, 100000);
+    return () => clearInterval(interval);
   }, []);
   
   return (
@@ -188,28 +193,26 @@ function CashierPage() {
                     </tr>
                 </thead>
                 <tbody>
-                    {pendingRequests.map((request) => (
-                    <tr key={request.id} style={{ borderBottom: '1px solid #ddd' }}>
-                        <td style={{ padding: '8px' }}>{request.id}</td>
-                        <td style={{ padding: '8px' }}>{request.utorid || request.createdBy || '—'}</td>
-                        <td style={{ padding: '8px', textTransform: 'capitalize' }}>{request.type}</td>
-                        <td style={{ padding: '8px' }}>{request.amount}</td>
-                        <td style={{ padding: '8px' }}>
-                        </td>
-                        <td style={{ padding: '8px' }}>
-                        <Button
+                {pendingRequests
+                    .filter((tx) => tx.type === 'redemption')
+                    .map((request) => (
+                        <tr key={request.id}>
+                        <td>{request.id}</td>
+                        <td>{request.utorid || request.createdBy || '—'}</td>
+                        <td>{request.type}</td>
+                        <td>{request.amount}</td>
+                        <td>
+                            <Button
                             size="small"
                             variant="contained"
                             color="success"
-                            sx={{ mr: 1 }}
                             onClick={() => handleAccept(request.id)}
-                        >
-                            Accept
-                        </Button>
+                            >
+                            Process
+                            </Button>
                         </td>
-
-                    </tr>
-                    ))}
+                        </tr>
+                ))}
                 </tbody>
                 </table>
             )}
