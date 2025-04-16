@@ -35,6 +35,13 @@ const fieldStyle = {
     },
   };
 
+  const navLinkStyle = {
+    textDecoration: 'none',
+    color: '#c48f8f',
+    fontWeight: 'bold',
+    fontSize: '0.9rem',
+  };
+
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
 
 const Dashboard = () => {
@@ -211,56 +218,56 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
-      {/* Top Navigation */}
-      <nav className="dashboard-nav">
-        <div className="nav-content">
-          <h1 className="dashboard-title">Dashboard</h1>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
+
+        <Box sx={{ maxWidth: '800px', margin: '0 auto' }}> 
+        <Box 
+            className="dashboard-nav"
+            sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', sm: 'row' },
+            alignItems: { xs: 'flex-start', sm: 'center' },
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: 1,
+            paddingY: 2,
+            paddingX: 3,
+            boxShadow: '0 2px 4px rgba(0,0,0,0.05)', 
+            borderRadius: 2, 
+            marginBottom: 3,
+            }}
+        >
+            {/* Left: Title + Links */}
+            <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
+            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                Dashboard
+            </Typography>
+
             {activeRole && ['manager', 'superuser'].includes(activeRole) && (
-              <Link
-                to="/perks"
-                style={{
-                  marginRight: '20px',
-                  textDecoration: 'none',
-                  color: '#c48f8f',
-                  fontWeight: 'bold',
-                }}
-              >
-                What's New
-              </Link>
+                <Link to="/perks" style={navLinkStyle}>What's New</Link>
             )}
             {activeRole && ['regular', 'organizer', 'cashier'].includes(activeRole) && (
-              <Link
-                to="/regularperks"
-                style={{
-                  marginRight: '20px',
-                  textDecoration: 'none',
-                  color: '#c48f8f',
-                  fontWeight: 'bold',
-                }}
-              >
-                What's New
-              </Link>
+                <Link to="/regularperks" style={navLinkStyle}>What's New</Link>
             )}
-            <Link
-              to="/profile"
-              style={{
-                marginRight: '20px',
-                textDecoration: 'none',
-                color: '#c48f8f',
-                fontWeight: 'bold',
-              }}
-            >
-              Profile
-            </Link>
+            <Link to="/profile" style={navLinkStyle}>Profile</Link>
+            </Box>
+
+            {/* Right: Role Switcher + Logout */}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <RoleSwitcher />
             <LogoutButton />
-          </div>
-        </div>
-      </nav>
+            </Box>
+        </Box>
+        </Box>
+
 
       {/* Welcome back + Role */}
-      <Box sx={{ pl: 10, pr: 2, pt: 2, pb: 2 }}>
+      <Box sx={{
+            borderRadius: 2, 
+            marginBottom: 3,
+            maxWidth: '800px',
+            margin: '0 auto',
+            px: 4,
+            py: 4,}}>
         {!loading ? (
           <>
             <Typography variant="h4" sx={{ mb: 2 }}>
@@ -345,7 +352,10 @@ const Dashboard = () => {
       </Box>
 
       {/* Recent Transactions */}
-      <Box sx={{ pl: 10, pr: 2, pt: 2, pb: 2 }}>
+      <Box sx={{ overflowX: 'auto', maxWidth: '800px',
+        margin: '0 auto',
+        px: 4,
+        pb: 4,}}>
         <Typography variant="h6" sx={{ mb: 2 }}>
           Your Recent Transactions
         </Typography>

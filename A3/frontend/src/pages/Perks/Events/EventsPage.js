@@ -7,27 +7,50 @@ import '../../../styles/auth.css';
 import RoleSwitcher from '../../../components/RoleSwitcher';
 import ActiveRoleContext from '../../../context/ActiveRoleContext';
 
+const navLinkStyle = {
+    textDecoration: 'none',
+    color: '#c48f8f',
+    fontWeight: 'bold',
+    fontSize: '0.9rem',
+  };
+
 const EventsPage = () => {
   const { activeRole } = useContext(ActiveRoleContext);
 
   return (
     <div className="dashboard-container">
-      <nav className="dashboard-nav">
-        <div className="nav-content">
-          <h1 className="dashboard-title">Events</h1>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Link to="/dashboard" style={{ marginRight: '20px', textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}>
-              Dashboard
-            </Link>
-            <Link to="/promotions" style={{ marginRight: '20px', textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}>
-              Promotions
-            </Link>
+        <Box sx={{ maxWidth: '800px', margin: '0 auto' }}>
+        <Box
+            className="dashboard-nav"
+            sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', sm: 'row' },
+            alignItems: { xs: 'flex-start', sm: 'center' },
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: 1,
+            paddingY: 2,
+            paddingX: 3,
+            boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+            borderRadius: 2,
+            marginBottom: 3,
+            backgroundColor: '#ffffff',
+            }}
+        >
+            <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
+            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                Events
+            </Typography>
+            <Link to="/dashboard" style={navLinkStyle}>Dashboard</Link>
+            <Link to="/promotions" style={navLinkStyle}>Promotions</Link>
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <RoleSwitcher />
             <LogoutButton />
-          </div>
-        </div>
-      </nav>
-      
+            </Box>
+        </Box>
+        </Box>
+
       <Container className="dashboard-main">
         <Box sx={{ width: '100%', mt: 4 }}>
           <Typography variant="h4" component="h1" gutterBottom>
