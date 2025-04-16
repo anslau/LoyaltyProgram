@@ -7,7 +7,7 @@ import { Box, CircularProgress, Button, IconButton, Grid, Typography, TextField,
 import { Edit as EditIcon, CloudUpload, Done as DoneIcon, Visibility, VisibilityOff } from '@mui/icons-material';
 import RoleSwitcher from '../../components/RoleSwitcher';
 import UserAvatar from '../../components/UserAvatar';
-import ActiveRoleContext from '../../context/ActiveRoleContext';
+import DashboardHeader from '../../components/dashboardHeader';
 import '../../styles/auth.css';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
@@ -198,23 +198,11 @@ const UserProfile = () => {
 
     return (
         <div className="dashboard-container">
-            <nav className="dashboard-nav">
-        <div className="nav-content">
-          <h1 className="dashboard-title">Your Profile</h1>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Link to="/dashboard" style={{ marginRight: '20px', textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}>
-              Dashboard
-            </Link>
-            <Link to="/perks" style={{ marginRight: '20px', textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}>
-                What's New
-            </Link>
-            <RoleSwitcher />
-            <LogoutButton />
-          </div>
-        </div>
-      </nav>
+            <DashboardHeader
+            title="Profile"
+            />
 
-            <Box sx={{
+<Box sx={{
                 display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'center', alignItems: { xs: 'center', md: 'flex-start' },
                 padding: 2, gap: 1, overflowX: 'hidden', minHeight: '100vh'
             }}>

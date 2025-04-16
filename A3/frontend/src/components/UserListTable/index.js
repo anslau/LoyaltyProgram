@@ -313,7 +313,7 @@ const UserListTable = ({
                                 <TableCell key={col.key}>{col.label}</TableCell>
                             ))} */}
                             {mergedColumns.map((col) => (
-                                <TableCell key={col.key} sortDirection={orderBy === col.key ? order : false}>
+                                <TableCell key={col.key} sortDirection={orderBy === col.key ? order : false} sx={{ backgroundColor: '#c48f8f', color: 'white' }}>
                                     <TableSortLabel
                                         active={orderBy === col.key}
                                         direction={orderBy === col.key ? order : 'asc'}

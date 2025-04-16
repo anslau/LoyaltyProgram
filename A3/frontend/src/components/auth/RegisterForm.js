@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../../context/AuthContext';
+import { Link } from 'react-router-dom';
 import {
   Box,
   TextField,
@@ -74,6 +75,12 @@ function RegisterForm() {
       onSubmit={handleRegister}
       sx={{ maxWidth: 400, mx: 'auto', mt: 4 }}
     >
+    <Box sx={{ mb: 2 }}>
+    <Button component={Link} to="/dashboard" variant="outlined" color="1976d2">
+        ← Back to Dashboard
+    </Button>
+    </Box>
+
       <Typography variant="h5" gutterBottom>
         Register New User
       </Typography>

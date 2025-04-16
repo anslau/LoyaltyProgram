@@ -42,3 +42,13 @@
     margin: 0 auto;
     padding: 24px 16px;
 } 
+
+.details-link {
+    text-decoration: none;
+    color: #c48f8f;
+    transition: color 0.2s ease;
+  }
+  
+  .details-link:hover {
+    color: #8e5c5c; /* whatever hover color you want */
+  }

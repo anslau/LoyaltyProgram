@@ -6,6 +6,7 @@ import RoleSwitcher from '../components/RoleSwitcher';
 import LogoutButton from '../components/auth/LogoutButton';
 import QRCode from '../components/qrCode';
 import CashierPage from './CashierPage';
+import DashboardHeader from '../components/dashboardHeader';
 
 import {
   Grid,
@@ -33,13 +34,6 @@ const fieldStyle = {
     '& label.Mui-focused': {
       color: 'rgb(101, 82, 82)',
     },
-  };
-
-  const navLinkStyle = {
-    textDecoration: 'none',
-    color: '#c48f8f',
-    fontWeight: 'bold',
-    fontSize: '0.9rem',
   };
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
@@ -218,46 +212,8 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
+        <DashboardHeader title="Dashboard" />
 
-        <Box sx={{ maxWidth: '800px', margin: '0 auto' }}> 
-        <Box 
-            className="dashboard-nav"
-            sx={{
-            display: 'flex',
-            flexDirection: { xs: 'column', sm: 'row' },
-            alignItems: { xs: 'flex-start', sm: 'center' },
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: 1,
-            paddingY: 2,
-            paddingX: 3,
-            boxShadow: '0 2px 4px rgba(0,0,0,0.05)', 
-            borderRadius: 2, 
-            marginBottom: 3,
-            }}
-        >
-            {/* Left: Title + Links */}
-            <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
-            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                Dashboard
-            </Typography>
-
-            {activeRole && ['manager', 'superuser'].includes(activeRole) && (
-                <Link to="/perks" style={navLinkStyle}>What's New</Link>
-            )}
-            {activeRole && ['regular', 'organizer', 'cashier'].includes(activeRole) && (
-                <Link to="/regularperks" style={navLinkStyle}>What's New</Link>
-            )}
-            <Link to="/profile" style={navLinkStyle}>Profile</Link>
-            </Box>
-
-            {/* Right: Role Switcher + Logout */}
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <RoleSwitcher />
-            <LogoutButton />
-            </Box>
-        </Box>
-        </Box>
 
 
       {/* Welcome back + Role */}
@@ -401,85 +357,6 @@ const Dashboard = () => {
             No recent transactions available.
           </Typography>
         )}
-
-        {/* Links */}
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 4 }}>
-          {/* Always show "View All of Your Transactions" with query params */}
-          <Link
-            to="/users/me/transactions?page=1&limit=10&orderBy=id&order=desc"
-            style={{ textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}
-          >
-            View All of Your Transactions
-          </Link>
-
-          {/* If cashier/manager/superuser, can see all transactions */}
-          {activeRole && ['manager', 'superuser'].includes(activeRole) && (
-            <Link
-              to="/transactions?page=1&limit=10&orderBy=id&order=desc"
-              style={{
-                textDecoration: 'none',
-                color: '#c48f8f',
-                fontWeight: 'bold',
-              }}
-            >
-              View All Transactions
-            </Link>
-          )}
-
-          {/* Always show "View All Promotions" but pick route based on role */}
-          <Link
-            to={
-              activeRole && ['manager', 'superuser'].includes(activeRole)
-                ? '/promotions?page=1&limit=10&orderBy=id&order=desc'
-                : '/regularpromotions?page=1&limit=10&orderBy=id&order=desc'
-            }
-            style={{
-              textDecoration: 'none',
-              color: '#c48f8f',
-              fontWeight: 'bold',
-            }}
-          >
-            View All Promotions
-          </Link>
-
-          {/* Always show "View All Events" with query params */}
-          <Link
-            to="/events?page=1&limit=10&orderBy=id&order=desc"
-            style={{
-              textDecoration: 'none',
-              color: '#c48f8f',
-              fontWeight: 'bold',
-            }}
-          >
-            View All Events
-          </Link>
-
-          {/* manager/superuser can see all users */}
-          {activeRole && ['manager', 'superuser'].includes(activeRole) && (
-            <Link
-              to="/users?page=1&limit=10&orderBy=id&order=asc"
-              style={{
-                textDecoration: 'none',
-                color: '#c48f8f',
-                fontWeight: 'bold',
-              }}
-            >
-              View All Users
-            </Link>
-          )}
-
-          {/* Transfer Points (everyone) */}
-          <Link
-            to="/transfer"
-            style={{
-              textDecoration: 'none',
-              color: '#c48f8f',
-              fontWeight: 'bold',
-            }}
-          >
-            Transfer Points
-          </Link>
-        </Box>
 
         {/* Cashier Functions */}
         {activeRole === 'cashier' && <CashierPage />}

@@ -8,6 +8,7 @@ import RoleSwitcher from '../../components/RoleSwitcher';
 import '../../styles/auth.css';
 import ActiveRoleContext from '../../context/ActiveRoleContext';
 import AuthContext from '../../context/AuthContext';
+import DashboardHeader from '../../components/dashboardHeader';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -39,24 +40,12 @@ const PerksPage = () => {
 
   return (
     <div className="dashboard-container">
-      <nav className="dashboard-nav">
-        <div className="nav-content">
-          <h1 className="dashboard-title">What's New</h1>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Link to="/dashboard" style={{ marginRight: '20px', textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}>
-              Dashboard
-            </Link>
-            <RoleSwitcher />
-            <LogoutButton />
-          </div>
-        </div>
-      </nav>
+            <DashboardHeader
+            title="What's New"
+            />
       
-      <Container className="dashboard-main">
-        <Box sx={{ width: '100%', mt: 4 }}>
-          <Typography variant="h4" component="h1" gutterBottom>
-            What's New
-          </Typography>
+      <Container className="dashboard-main" sx={{maxWidth: '800px'}}>
+        <Box sx={{ width: '100%'}}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs 
               value={tabValue} 
@@ -83,7 +72,7 @@ const PerksPage = () => {
           
           <TabPanel value={tabValue} index={0}>
             {['manager', 'superuser'].includes(activeRole) && (
-              <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'flex-start', mb: 2 }}>
                 <Button
                   variant="contained"
                   sx={{ color: 'rgb(101, 82, 82)', backgroundColor: '#ebc2c2' }}
@@ -99,7 +88,7 @@ const PerksPage = () => {
           
           <TabPanel value={tabValue} index={1}>
             {['manager', 'superuser'].includes(activeRole) && (
-              <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'flex-start', mb: 2 }}>
                 <Button
                   variant="contained"
                   sx={{ color: 'rgb(101, 82, 82)', backgroundColor: '#ebc2c2' }}

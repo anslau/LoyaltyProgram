@@ -6,13 +6,7 @@ import "../../styles/auth.css";
 import UserListTable from "../../components/UserListTable";
 import RoleSwitcher from '../../components/RoleSwitcher';
 import { Box, Typography, Container } from '@mui/material';
-
-const navLinkStyle = {
-    textDecoration: 'none',
-    color: '#c48f8f',
-    fontWeight: 'bold',
-    fontSize: '0.9rem',
-  };  
+import DashboardHeader from '../../components/dashboardHeader';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
 
@@ -58,38 +52,9 @@ const AllUsersList = () => {
 
     return (
         <div className="dashboard-container">
-            <Box sx={{ maxWidth: '800px', margin: '0 auto' }}>
-            <Box
-                className="dashboard-nav"
-                sx={{
-                display: 'flex',
-                flexDirection: { xs: 'column', sm: 'row' },
-                alignItems: { xs: 'flex-start', sm: 'center' },
-                justifyContent: 'space-between',
-                flexWrap: 'wrap',
-                gap: 1,
-                paddingY: 2,
-                paddingX: 3,
-                boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
-                borderRadius: 2,
-                marginBottom: 3,
-                backgroundColor: '#ffffff',
-                }}
-            >
-                <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
-                <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                    User Register
-                </Typography>
-                <Link to="/dashboard" style={navLinkStyle}>Dashboard</Link>
-                <Link to="/perks" style={navLinkStyle}>What's New</Link>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                <RoleSwitcher />
-                <LogoutButton />
-                </Box>
-            </Box>
-            </Box>
-
+        <DashboardHeader
+            title="All Users"
+        />
 
             <Container maxWidth="lg" sx={{ padding: 1 }}>
                 <UserListTable
@@ -100,7 +65,7 @@ const AllUsersList = () => {
                             key: "id",
                             label: "Details",
                             render: (value) => (
-                                <Link to={`/users/${value}`} style={{ textDecoration: 'none', color: 'rgb(101, 82, 82)'}}>
+                                <Link to={`/users/${value}`} className='details-link' style={{ textDecoration: 'none', fontWeight: 'bold' }}>
                                     Details
                                 </Link>
                             ),
