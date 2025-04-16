@@ -216,7 +216,7 @@ const UserProfile = () => {
 
             <Box sx={{
                 display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'center', alignItems: { xs: 'center', md: 'flex-start' },
-                padding: 2, gap: 4, overflowX: 'hidden', height: '100vh'
+                padding: 2, gap: 1, overflowX: 'hidden', minHeight: '100vh'
             }}>
                 {loading ? (
                     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -237,7 +237,7 @@ const UserProfile = () => {
                         <div className="user-profile-info">
                             <Box component={"form"} onSubmit={handleSubmit} sx={{
                                 padding: 2, backgroundColor: '#FFFFFF', borderRadius: 2, position: 'relative', minWidth: { xs: '100%', md: 450 },
-                                width: { xs: 'auto', md: 'auto' }
+                                width: { xs: '100%', md: '450' }, maxWidth: { xs: '100%', md: 450 }
                             }}>
                                 <IconButton color="#c48f8f" onClick={handleEditToggle} title="Edit" sx={{ position: 'absolute', top: 0, right: 0, color: '#c48f8f' }}>
                                     {!editMode && (<EditIcon />)}
@@ -254,7 +254,7 @@ const UserProfile = () => {
                                             {editMode ? (
                                                 <TextField
                                                     type="text"
-                                                    size="medium"
+                                                    fullWidth
                                                     value={userForm.name}
                                                     onChange={(e) => {
                                                         setUserForm({ ...userForm, name: e.target.value });
@@ -289,6 +289,7 @@ const UserProfile = () => {
                                                 <TextField
                                                     type="text"
                                                     value={userForm.email}
+                                                    fullWidth
                                                     onChange={(e) => {
                                                         setUserForm({ ...userForm, email: e.target.value });
                                                         setError('');
@@ -316,6 +317,7 @@ const UserProfile = () => {
                                                 <TextField
                                                     type="date"
                                                     value={userForm.birthday}
+                                                    fullWidth
                                                     onChange={
                                                         (e) => {
                                                             setUserForm({ ...userForm, birthday: e.target.value });
@@ -408,6 +410,7 @@ const UserProfile = () => {
                                                 <strong>Avatar URL: </strong> {
                                                     <TextField
                                                         type="text"
+                                                        fullWidth
                                                         value={userForm.avatar}
                                                         onChange={
                                                             (e) => {
@@ -481,7 +484,9 @@ const UserProfile = () => {
                                 </Grid>
 
                                 {changePassword && (
-                                    <Box component={"form"} onSubmit={handlePasswordReset} sx={{ padding: 2, backgroundColor: '#f5f5f5', borderRadius: 2, position: 'relative', marginTop: 2 }}>
+                                    <Box component={"form"} onSubmit={handlePasswordReset} 
+                                    sx={{ padding: 2, backgroundColor: '#FFFFFF', borderRadius: 2,  minWidth: { xs: '100%', md: 450 },
+                                    width: '100%', maxWidth: {xs: '100%', md:450}, mx: 'auto', mt: 2 }}>
                                         <Grid container spacing={1} direction={'column'} alignItems="flex-start">
                                             <Grid item xs={12}>
                                                 <h2>Reset Password</h2>
@@ -493,6 +498,7 @@ const UserProfile = () => {
                                                     <TextField
                                                         type={showOldPassword ? 'text' : 'password'}
                                                         size="medium"
+                                                        fullWidth
                                                         value={passwordForm.old}
                                                         onChange={(e) => {
                                                             setPasswordForm({ ...passwordForm, old: e.target.value });
@@ -533,6 +539,7 @@ const UserProfile = () => {
                                                     <TextField
                                                         type={showNewPassword ? 'text' : 'password'}
                                                         size="medium"
+                                                        fullWidth
                                                         value={passwordForm.new}
                                                         onChange={(e) => {
                                                             setPasswordForm({ ...passwordForm, new: e.target.value });
