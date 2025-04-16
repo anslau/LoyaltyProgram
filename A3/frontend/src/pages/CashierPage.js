@@ -184,10 +184,26 @@ function CashierPage() {
   }, []);
   
   return (
+    
 <Box sx={{ maxWidth: 800, ml: 0, mr: 2, my: 4 }}>
   <Typography variant="h6" sx={{ mb: 3 }}>
     Cashier Tools
   </Typography>
+
+   {/* Register New User Button */}
+   <Button
+    variant="outlined"
+    onClick={() => navigate('/register')}
+    sx={{
+      mb: 4,
+      px: 4,
+      color: 'rgb(101, 82, 82)',
+      borderColor: 'rgb(101, 82, 82)',
+      '&:hover': { backgroundColor: '#c48f8f' },
+    }}
+  >
+    Register New User
+  </Button>
 
   {/* Pending Redemptions Section */}
   <Card sx={{ mb: 4 }}>
@@ -237,23 +253,39 @@ function CashierPage() {
     </CardContent>
   </Card>
 
-  {/* Register New User Button */}
-  <Button
-    variant="outlined"
-    onClick={() => navigate('/register')}
-    sx={{
-      mb: 4,
-      px: 4,
-      color: 'rgb(101, 82, 82)',
-      borderColor: 'rgb(101, 82, 82)',
-      '&:hover': { backgroundColor: '#c48f8f' },
-    }}
-  >
-    Register New User
-  </Button>
-
-  {/* Accordion: Create Purchase */}
+  {/* Accordion: Process Redemption by ID */}
   <Accordion>
+    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+      <Typography>Process Redemption by ID</Typography>
+    </AccordionSummary>
+    <AccordionDetails>
+      {redemptionError && <Alert severity="error" sx={{ mb: 2 }}>{redemptionError}</Alert>}
+      {redemptionSuccess && <Alert severity="success" sx={{ mb: 2 }}>{redemptionSuccess}</Alert>}
+      <Box
+        component="form"
+        onSubmit={handleProcessRedemption}
+        sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+      >
+        <TextField
+          label="Redemption Transaction ID"
+          value={redemptionId}
+          onChange={(e) => setRedemptionId(e.target.value)}
+          required
+          sx={fieldStyle}
+        />
+        <Button
+          variant="contained"
+          type="submit"
+          sx={{ backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)' }}
+        >
+          Process
+        </Button>
+      </Box>
+    </AccordionDetails>
+  </Accordion>
+
+    {/* Accordion: Create Purchase */}
+    <Accordion>
     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
       <Typography>Create Purchase Transaction</Typography>
     </AccordionSummary>
@@ -296,37 +328,7 @@ function CashierPage() {
       </Box>
     </AccordionDetails>
   </Accordion>
-
-  {/* Accordion: Process Redemption by ID */}
-  <Accordion>
-    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-      <Typography>Process Redemption by ID</Typography>
-    </AccordionSummary>
-    <AccordionDetails>
-      {redemptionError && <Alert severity="error" sx={{ mb: 2 }}>{redemptionError}</Alert>}
-      {redemptionSuccess && <Alert severity="success" sx={{ mb: 2 }}>{redemptionSuccess}</Alert>}
-      <Box
-        component="form"
-        onSubmit={handleProcessRedemption}
-        sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
-      >
-        <TextField
-          label="Redemption Transaction ID"
-          value={redemptionId}
-          onChange={(e) => setRedemptionId(e.target.value)}
-          required
-          sx={fieldStyle}
-        />
-        <Button
-          variant="contained"
-          type="submit"
-          sx={{ backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)' }}
-        >
-          Process
-        </Button>
-      </Box>
-    </AccordionDetails>
-  </Accordion>
+  
 </Box>
 
   );
