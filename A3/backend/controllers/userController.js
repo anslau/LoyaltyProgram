@@ -39,16 +39,16 @@ async function registerNewUser(req, res){
 
 async function retrieveUsersList(req, res){
     // check that only valid filters are passed
-    const validFields = ['name', 'role', 'verified', 'activated', 'page', 'limit'];
+    const validFields = ['name', 'role', 'verified', 'activated', 'page', 'limit', 'orderBy', 'order'];
     if (!validateFields(req.query, validFields)){
         return res.status(400).json({ message: "Invalid field" });
     }
 
     // get the filters and pagination info
-    const { name, role, verified, activated, page, limit } = req.query;
+    const { name, role, verified, activated, page, limit, orderBy, order } = req.query;
 
     // validate the filters
-    const validRoles = ['regular', 'cashier', 'manager', 'superuser'];
+    const validRoles = ['regular', 'organizer', 'cashier', 'manager', 'superuser'];
     const validBools = ['true', 'false'];
     if (role && !validRoles.includes(role)){
         return res.status(400).json({ message: "invalid role param" });
@@ -67,7 +67,8 @@ async function retrieveUsersList(req, res){
     }
 
     // retrieve the users
-    const users = await userService.retrieveUsersList(name, role, verified, activated, page, limit);
+    const filters = { name, role, verified, activated, page, limit, orderBy, order };
+    const users = await userService.retrieveUsersList(filters);
     if (users.error){
         return res.status(users.status).json({ message: users.error });
     }
@@ -111,7 +112,7 @@ async function updateSpecificUserInfo(req, res){
 
     // check the user has clearance to change the role
     const managerRoles = ['regular', 'cashier']
-    const allRoles = ['regular', 'cashier', 'manager', 'superuser'];
+    const allRoles = ['regular', 'organizer', 'cashier', 'manager', 'superuser'];
     const { role: userRole } = req.user;
     if (role){
         if (!allRoles.includes(role)){
@@ -226,14 +227,17 @@ async function updateUserPassword(req, res){
     // check that all fields were filled
     const { old: oldPassword, new : newPassword} = req.body;
     if (!oldPassword || !newPassword){
-        return res.status(400).json({ message: "old or new password is missing" });
+        return res.status(400).json({ message: "Old or new password is missing" });
+    }
+    if (oldPassword === newPassword){
+        return res.status(400).json({ message: "Old and new password cannot be the same" });
     }
 
     // check that the new password is btw 8-20 chars, 1 upper, 1 lower, 1 number, 1 symbol
     // TODO: uncomment this code block
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W])[A-Za-z\d\W]{8,20}$/;
     if (!passwordRegex.test(newPassword)){
-        return res.status(400).json({ message: "Password must be 8-20 characters long with at least 1 upper, 1 lower, 1 number, and 1 symbol" });
+        return res.status(400).json({ message: "Include 8–20 characters with upper, lower, number & symbol" });
     }
 
     // try to update the password
@@ -311,13 +315,13 @@ async function createRedemption(req, res){
 
 async function retrieveOwnTransactions(req, res){
     // validate filters
-    const validFilters = ['type', 'relatedId', 'promotionId', 'amount', 'operator', 'page', 'limit'];
+    const validFilters = ['type', 'relatedId', 'promotionId', 'amount', 'operator', 'page', 'limit', 'orderBy', 'order'];
     if (!validateFields(req.query, validFilters)) {
         return res.status(400).json({ message: "Invalid filter" });
     }
     
     // get the filter parameters
-    const { type, relatedId, promotionId, amount, operator, page, limit } = req.query;
+    const { type, relatedId, promotionId, amount, operator, page, limit, orderBy, order } = req.query;
 
     // check that filters are valid
     // promotionId must be a number
@@ -365,7 +369,7 @@ async function retrieveOwnTransactions(req, res){
     }
 
     // get the transactions
-    const filters = { type, relatedId, promotionId, amount, operator, page, limit };
+    const filters = { type, relatedId, promotionId, amount, operator, page, limit, orderBy, order };
     const { id } = req.user;
     const transactions = await userService.retrieveOwnTransactions(filters, id);
     

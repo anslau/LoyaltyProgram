@@ -1,15 +1,16 @@
 .logout-button {
-    background-color: #ef4444;
-    color: white;
+    background-color: #ebc2c2;
+    color: rgb(101, 82, 82);
     font-weight: bold;
     padding: 8px 16px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .logout-button:hover {
-    background-color: #b91c1c;
+    background-color: #c48f8f;
 }
 
 .dashboard-container {

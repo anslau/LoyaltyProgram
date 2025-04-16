@@ -4,6 +4,8 @@ const jwtAuth = require('../middleware/jwtAuth');
 const clearance = require('../middleware/clearance');
 const router = express.Router();
 
+console.log('GET /pending route reached');
+router.get('/pending', jwtAuth, clearance('cashier'), transactionController.getPendingRedemptions);
 router.post('/', jwtAuth, clearance('cashier'), transactionController.createTransaction);
 router.get('/', jwtAuth, clearance('manager'), transactionController.retrieveTransactions);
 router.get('/:transactionId', jwtAuth, clearance('manager'), transactionController.retrieveSpecificTransaction);

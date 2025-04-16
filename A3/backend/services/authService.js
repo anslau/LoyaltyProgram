@@ -24,9 +24,9 @@ async function tokens(utorid, password) {
             return { error: 'Incorrect password', status: 401 };
         } else {
             // generate a JWT token
-            const token = jwt.sign({ userId: user.id }, SECRET_KEY, { expiresIn: '30d' });
+            const token = jwt.sign({ userId: user.id }, SECRET_KEY, { expiresIn: '14d' });
             var cur = new Date();
-            cur.setDate(cur.getDate() + 30);
+            cur.setDate(cur.getDate() + 14);
             const tokenExpiry = cur.toISOString();
 
             // update the token and expiration in the database

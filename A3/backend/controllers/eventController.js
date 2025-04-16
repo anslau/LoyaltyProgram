@@ -14,10 +14,10 @@ function validDate(date){
 }
 
 async function createEvent(req, res){
-    const { name, description, location, startTime, endTime, capacity, points } = req.body;
+    const { name, description, location, startTime, endTime, capacity, points, published} = req.body;
 
     // check for invalid fields
-    const validFields = ['name', 'description', 'location', 'startTime', 'endTime', 'capacity', 'points'];
+    const validFields = ['name', 'description', 'location', 'startTime', 'endTime', 'capacity', 'points', 'published'];
     if (!validateFields(req.body, validFields)){
         return res.status(400).json({ message: "Invalid field" });
     }
@@ -51,7 +51,7 @@ async function createEvent(req, res){
 
     // create the 
     const { id } = req.user;
-    const data = { name, description, location, startTime, endTime, capacity, points };
+    const data = { name, description, location, startTime, endTime, capacity, points, published };
     const event = await eventService.createEvent(data, id);
 
     return res.status(201).json(event);
@@ -59,16 +59,16 @@ async function createEvent(req, res){
 
 async function retrieveEventsList(req, res){
     // check that only valid fields are passed
-    const validFields = ['name', 'location', 'started', 'ended', 'published', 'showFull', 'page', 'limit'];
+    const validFields = ['name', 'location', 'started', 'ended', 'published', 'showFull', 'page', 'limit', 'orderBy', 'order'];
     if (!validateFields(req.query, validFields)){
         return res.status(404).json({ message: "Invalid URL parameter" });
     }
 
-    const { name, location, started, ended, published, showFull, page, limit } = req.query;
-    const { role } = req.user;
+    const { name, location, started, ended, published, showFull, page, limit, orderBy, order } = req.query;
+    const { role, id } = req.user;
 
     // only managers can access these
-    if ((role === 'regular' || role === 'cashier') && (published)){
+    if ((role === 'regular' || role === 'cashier') && published === 'false'){
         return res.status(403).json({ message: "Unauthorized" });
     }
 
@@ -87,8 +87,8 @@ async function retrieveEventsList(req, res){
     }
 
     // get the events
-    const filters = { name, location, started, ended, published, showFull, page, limit };
-    const events = await eventService.retrieveEventsList(filters, role);
+    const filters = { name, location, started, ended, published, showFull, page, limit, orderBy, order };
+    const events = await eventService.retrieveEventsList(filters, role, id);
 
     return res.status(200).json(events);
 }
@@ -139,9 +139,9 @@ async function updateEvent(req, res){
     if (capacity !== undefined && capacity !== null && (capacity < 0 || !Number.isInteger(capacity))){
         return res.status(400).json({ message: "capacity must be a positive integer value" });
     }
-    if ((points || published) && role !== 'manager'){
-        return res.status(403).json({ message: "Unauthorized" });
-    }
+    // if ((points || published) && role !== 'manager'){
+    //     return res.status(403).json({ message: "Unauthorized" });
+    // }
     if (points && (points < 0 || !Number.isInteger(points))){
         return res.status(400).json({ message: "points must be a positive integer value" });
     }
@@ -239,15 +239,15 @@ async function addGuest(req, res){
 
 async function removeGuest(req, res){
     const { eventId, userId } = req.params;
-    const { id } = req.user;
+    const { id: requesterId, role: requesterRole } = req.user;
 
     // check that data is valid
     if (!Number.isInteger(parseInt(eventId)) || !Number.isInteger(parseInt(userId))){
         return res.status(400).json({ message: "eventid and userid must be an integer" });
     }
 
-    // remove the guest
-    const guest = await eventService.removeGuest(parseInt(eventId), parseInt(userId), id);
+    // remove the guest, passing the requester's role
+    const guest = await eventService.removeGuest(parseInt(eventId), parseInt(userId), requesterId, requesterRole);
     if (guest.error){
         return res.status(guest.status).json({ message: guest.error });
     }

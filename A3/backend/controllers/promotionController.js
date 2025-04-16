@@ -65,18 +65,18 @@ async function createPromotion(req, res){
 
 async function retrievePromotionsList(req, res){
     // check that only valid fields are passed
-    const validFields = ['name', 'type', 'page', 'limit', 'started', 'ended'];
+    const validFields = ['name', 'type', 'page', 'limit', 'started', 'ended', 'orderBy', 'order'];
     if (!validateFields(req.query, validFields)){
         return res.status(404).json({ message: "Invalid URL parameter" });
     }
 
-    const { name, type, page, limit, started, ended } = req.query;
+    const { name, type, page, limit, started, ended, orderBy, order } = req.query;
     const { id, role } = req.user;
 
     // only managers can access these
-    if ((role === 'regular' || role === 'cashier') && (started || ended)){
-        return res.status(403).json({ message: "Unauthorized" });
-    }
+    // if ((role === 'regular' || role === 'cashier') && (started || ended)){
+    //     return res.status(403).json({ message: "Unauthorized" });
+    // }
 
     // check for valid queries
     const validTypes = ['automatic', 'one-time'];
@@ -85,13 +85,13 @@ async function retrievePromotionsList(req, res){
         return res.status(400).json({ message: "Invalid type: only automatic or one-time" });
     }
 
-    if (started && ended){ 
-        return res.status(400).json({ message: "Started and ended cannot be used together and must be boolean" });
-    }else if (started && !validBools.includes(started)){
-        return res.status(400).json({ message: "Started must be a boolean" });
-    }else if (ended && !validBools.includes(ended)){
-        return res.status(400).json({ message: "Ended must be a boolean" });
-    }
+    // if (started && ended){ 
+    //     return res.status(400).json({ message: "Started and ended cannot be used together and must be boolean" });
+    // }else if (started && !validBools.includes(started)){
+    //     return res.status(400).json({ message: "Started must be a boolean" });
+    // }else if (ended && !validBools.includes(ended)){
+    //     return res.status(400).json({ message: "Ended must be a boolean" });
+    // }
     if (page && isNaN(parseInt(page)) || page && page < 0 ){
         return res.status(400).json({ message: "invalid page param" });
     }
@@ -100,7 +100,7 @@ async function retrievePromotionsList(req, res){
     }
 
     // get the promotions
-    const filters = { name, type, page, limit, started, ended };
+    const filters = { name, type, page, limit, started, ended, orderBy, order };
     const promotions = await promotionService.retrievePromotionsList(id, filters, role);
 
     return res.status(200).json(promotions);

@@ -51,7 +51,7 @@ async function createEvent(event, id) {
 
 }
 
-async function retrieveEventsList(filters, role) {
+async function retrieveEventsList(filters, role, userId) {
     try{
         // handle filters
         const where = {};
@@ -68,17 +68,36 @@ async function retrieveEventsList(filters, role) {
             where.endTime = filters.ended === 'true' ? { lte: now } : { gt: now };
         }
 
+        // modified to allow events where the user is an organizer to be shown, 
+        // even if they are not a manager+
+        const conditionals = [];
         if (role === 'regular' || role === 'cashier'){
-            where.published = true;
+            // where.published = true;
+            conditionals.push({
+                OR: [
+                    { published: true },
+                    { organizers: { some: { user: { id: userId } } } }
+                ]
+            });
         }else if (filters.published){
             where.published = filters.published === 'true';
         }
         
         if (filters.showFull !== 'true') {
-            where.OR = [
-                { capacity: null }, 
-                { numGuests: { lt: prisma.event.fields.capacity } } 
-            ];
+            // where.OR = [
+            //     { capacity: null }, 
+            //     { numGuests: { lt: prisma.event.fields.capacity } } 
+            // ];
+            conditionals.push({
+                OR: [
+                    { capacity: null },
+                    { numGuests: { lt: prisma.event.fields.capacity } }
+                ]
+            });
+        }
+
+        if (conditionals.length > 0) {
+            where.AND = conditionals;
         }
 
         // for pagination
@@ -104,7 +123,8 @@ async function retrieveEventsList(filters, role) {
             skip,
             take,
             orderBy: {
-                id: 'asc'
+                // id: 'asc'
+                [filters.orderBy ? filters.orderBy : 'startTime']: filters.order ? filters.order : 'asc'
             }
         });
 
@@ -171,23 +191,51 @@ async function retrieveEvent(eventId, role, userId) {
             return {error: "Event not found", status: 404};
         }    
 
+        // Calculate if the current user is a guest *before* filtering
+        const currentUserGuestInfo = event.guests.find(guest => guest.user.id === userId)?.user;
+        const isCurrentUserGuest = !!currentUserGuestInfo; // True if currentUserGuestInfo is found
+
         // if the user is not a manager/superuser/organizer, they can only see published events
         const lowerPrivilege = ['regular', 'cashier'];
         const isOrganizer = event.organizers.some(organizer => organizer.user.id === userId);
 
         // formatting the organizers and guests
-        event.organizers = event.organizers.map(organizer => organizer.user);
-        event.guests = event.guests.map(guest => guest.user);
+        const formattedOrganizers = event.organizers.map(organizer => organizer.user);
+        const formattedGuests = event.guests.map(guest => guest.user);
 
         if (lowerPrivilege.includes(role) && !event.published && !isOrganizer){
             return {error: "Event not found", status: 404};
         }else if (lowerPrivilege.includes(role) && !isOrganizer && event.published){
-            const { pointsRemain, pointsAwarded, published, guests, ...publicEvent } = event;
-            return publicEvent;
-        }
+            // Strip sensitive info for regular users
+            const { pointsRemain, pointsAwarded, published, guests, organizers, ...publicEvent } = event;
 
-        const { numGuests, ...publicEvent } = event;
-        return publicEvent;
+            // If the current user is a guest, include *only* them in the guests array
+            // Use the formatted list to find the current user's info
+            const currentUserFormattedGuestInfo = formattedGuests.find(guest => guest.id === userId);
+            const guestsToShow = isCurrentUserGuest && currentUserFormattedGuestInfo ? [currentUserFormattedGuestInfo] : [];
+
+            return {
+                ...publicEvent,
+                organizers: formattedOrganizers, // Still return organizers
+                guests: guestsToShow,           // Return only self or empty array
+                numGuests: event.numGuests,     // Return the correct total number of guests
+                isCurrentUserGuest              // Keep the flag
+            };
+        }
+        // }else if (lowerPrivilege.includes(role) && !isOrganizer && event.published){
+        //     const { pointsRemain, pointsAwarded, published, guests, ...publicEvent } = event;
+        //     return publicEvent;
+        // }
+
+        // For privileged users, return full details including the flag
+        // **Format organizers and guests before returning**
+        const { organizers, guests, ...privilegedEventData } = event; // Separate organizers/guests
+        return {
+            ...privilegedEventData,
+            organizers: formattedOrganizers, // Use the formatted list
+            guests: formattedGuests,         // Use the formatted list
+            isCurrentUserGuest
+        };
 
     }catch(e){
         console.error(`error in retrieveEvent ${e.message}`);
@@ -576,7 +624,7 @@ async function addGuest(role, eventId, utorid, requesterId) {
 
 }
 
-async function removeGuest(eventId, userId, requesterId) {
+async function removeGuest(eventId, userId, requesterId, requesterRole) {
     try{
         // make sure the event exists
         const event = await prisma.event.findUnique({
@@ -610,10 +658,10 @@ async function removeGuest(eventId, userId, requesterId) {
             return {error: "Event not found", status: 404};
         }
 
-        // check that the requester is not an organizer for this event
+        // Allow managers to remove guests even if they are organizers
         const isOrganizer = event.organizers.some(organizer => organizer.user.id === requesterId);
-        if (isOrganizer){
-            return {error: "Organizers cannot remove guests", status: 403};
+        if (requesterRole !== 'manager' && isOrganizer){ // Check if the requester is NOT a manager AND is an organizer
+            return {error: "Organizers cannot remove guests (unless they are managers)", status: 403};
         }
 
         // check that the user is a guest for this event
@@ -667,7 +715,16 @@ async function addCurrentUserAsGuest(eventId, userId) {
                 endTime: true,
                 numGuests: true,
                 capacity: true,
-                guests: {
+                guests: { // Keep selecting guests to check if already attending
+                    select: {
+                        user: {
+                            select: {
+                                id: true
+                            }
+                        }
+                    }
+                },
+                organizers: { // Select organizers to check if user is one
                     select: {
                         user: {
                             select: {
@@ -681,6 +738,12 @@ async function addCurrentUserAsGuest(eventId, userId) {
 
         if (!event){
             return {error: "Event not found", status: 404};
+        }
+
+        // Check if the user is an organizer for this event
+        const isOrganizer = event.organizers.some(organizer => organizer.user.id === userId);
+        if (isOrganizer) {
+            return {error: "Organizers cannot RSVP to their own events", status: 403}; 
         }
 
         // check that the user is not already on the guest list
@@ -888,7 +951,7 @@ async function createRewardTransaction(type, eventId, utorid, amount, userId, us
                         amount,
                         relatedId: eventId,
                         remark: `Awarded ${amount} points for attending event ${eventId}`,
-                        createBy: userUtorid,
+                        createdBy: userUtorid,
                         customerId: user.id
                     }
                 }),
@@ -943,7 +1006,7 @@ async function createRewardTransaction(type, eventId, utorid, amount, userId, us
                             amount,
                             relatedId: eventId,
                             remark: `Awarded ${amount} points for attending event ${eventId}`,
-                            createBy: userUtorid,
+                            createdBy: userUtorid,
                             customerId: guest.user.id
                         }
                     })

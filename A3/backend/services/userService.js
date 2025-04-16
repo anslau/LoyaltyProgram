@@ -55,12 +55,14 @@ async function registerNewUser(utorid, name, email){
 
 }
 
-async function retrieveUsersList(name, role, verified, activated, page, limit) {
+async function retrieveUsersList(filters) {
     try{
+        const { name, role, verified, activated, page, limit, orderBy, order } = filters;
         // for pagination
         let pageNum = parseInt(page) || 1;
         let take = parseInt(limit) || 10;
         const skip = (pageNum - 1) * take;
+        
 
         // check if the name exists. if it does, see whether it matches the name or utorid
         const nameFilter = name
@@ -90,7 +92,8 @@ async function retrieveUsersList(name, role, verified, activated, page, limit) {
             skip,
             take,
             orderBy: {
-                id: 'asc'
+                // id: 'asc'
+                [orderBy || 'id']: order || 'asc'
             }
         });
 
@@ -143,6 +146,7 @@ async function retrieveSpecificUser(id, clearance){
                 ...createdAt,
                 ...lastLogin,
                 verified: true,
+                suspicious: true,
                 ...avatarUrl,
                 promotions: {
                     where: {
@@ -222,9 +226,9 @@ async function updateSpecificUserInfo(id, data){
             update.role = data.role;
 
             // if the role is being changed to cashier, then suspicious should be false
-            if (data.role === 'cashier'){
-                update.suspicious = false;
-            }
+            // if (data.role === 'cashier'){
+            //     update.suspicious = false;
+            // }
         }
 
         // update the user
@@ -371,7 +375,7 @@ async function updateUserPassword(utorid, oldPassword, newPassword){
         });
 
         if (!user){
-            return { error: 'Provided password does not match the password on account', status: 403 };
+            return { error: 'Given does not match the password on account', status: 403 };
         }
 
         // update the password
@@ -442,7 +446,7 @@ async function transferTransaction(senderId, recipientId, amount, type, remark){
                     relatedId: recipientId,
                     remark,
                     customerId: senderId,
-                    createBy: sender.utorid
+                    createdBy: sender.utorid
                 }
             }),
 
@@ -455,7 +459,7 @@ async function transferTransaction(senderId, recipientId, amount, type, remark){
                     relatedId: senderId,
                     remark,
                     customerId: recipientId,
-                    createBy: sender.utorid
+                    createdBy: sender.utorid
                 }
             }),
 
@@ -535,7 +539,7 @@ async function createRedemption(userId, type, amount, remark){
                 amount: amount || 0,
                 remark,
                 customerId: userId,
-                createBy: user.utorid
+                createdBy: user.utorid
             },
             select: {
                 id: true,
@@ -567,7 +571,7 @@ async function createRedemption(userId, type, amount, remark){
 async function retrieveOwnTransactions(filters, userId){
     try{
         // get the filters
-        const { type, relatedId, promotionId, amount, operator, page, limit } = filters;
+        const { type, relatedId, promotionId, amount, operator, page, limit, orderBy, order } = filters;
 
         // for pagination
         let pageNum = parseInt(page) || 1;
@@ -618,13 +622,14 @@ async function retrieveOwnTransactions(filters, userId){
                 },
                 relatedId: true,
                 remark: true,
-                createBy: true,
+                createdBy: true,
                 processedBy: true
             },
             skip,
             take,
             orderBy: {
-                id: 'asc'
+                // id: 'asc'
+                [orderBy || 'id']: order || 'desc'
             }
         });
 
@@ -644,7 +649,7 @@ async function retrieveOwnTransactions(filters, userId){
             promotionIds: transaction.promotions.map(promotion => promotion.promotionId),
             redeemed: transaction.type === 'redemption' ? transaction.amount : undefined,
             remark: transaction.remark,
-            createdBy: transaction.createBy,
+            createdBy: transaction.createdBy,
             processedBy: transaction.type === 'redemption' ? transaction.processedBy : undefined
         }));
 
