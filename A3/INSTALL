@@ -20,7 +20,7 @@ npm install
 #### Database Setup
 npx prisma migrate dev
 
-#### Seed the Database (Optional)
+#### Seed the Database
 npx prisma db seed
 
 ### 3. Frontend Setup
@@ -82,10 +82,13 @@ Create a new GitHub repository and push your code to it:
 2. Rename the service to something like "loyal-program-backend"
 3. Configure settings:
    - Root Directory: `backend`
+   - Build Command: `npx prisma generate`
    - Start Command: `npm run start`
 4. Set environment variables in the "Variables" tab:
-   - Click "Raw Editor" and add: `FRONTEND_URL=https://loyal-program-frontend-production.up.railway.app`
-   - Add `DATABASE_URL="file:./prisma/dev.db"`
+   - Click "Raw Editor" and add:
+     FRONTEND_URL=https://loyal-program-frontend-production.up.railway.app
+     DATABASE_URL="file:./prisma/dev.db"
+     PORT=8000
 5. Deploy the backend
 6. Generate a public domain under "Settings > Networking"
    - Note the URL: `https://loyal-program-backend-production.up.railway.app`
@@ -94,10 +97,9 @@ Create a new GitHub repository and push your code to it:
 
 1. Go back to your frontend service in Railway
 2. Add environment variable in the "Variables" tab:
-   - `REACT_APP_BACKEND_URL="https://loyal-program-backend-production.up.railway.app"`
+   - `REACT_APP_BACKEND_URL=https://loyal-program-backend-production.up.railway.app`
 3. Redeploy the frontend service
 
 ### 7. Verify Deployment
 
-1. Access your application using the frontend URL
-2. Test key functionality to ensure the frontend and backend are communicating properly
+Access your application using the frontend URL
