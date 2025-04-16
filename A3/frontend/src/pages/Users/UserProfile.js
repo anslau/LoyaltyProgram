@@ -8,6 +8,7 @@ import { Edit as EditIcon, CloudUpload, Done as DoneIcon, Visibility, Visibility
 import RoleSwitcher from '../../components/RoleSwitcher';
 import UserAvatar from '../../components/UserAvatar';
 import ActiveRoleContext from '../../context/ActiveRoleContext';
+import '../../styles/auth.css';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
 
@@ -196,47 +197,22 @@ const UserProfile = () => {
     };
 
     return (
-        <div className="user-profile-container">
-            <Box sx={{ maxWidth: '800px', margin: '0 auto' }}>
-                <Box
-                    className="dashboard-nav"
-                    sx={{
-                        display: 'flex',
-                        flexDirection: { xs: 'column', sm: 'row' },
-                        alignItems: { xs: 'flex-start', sm: 'center' },
-                        justifyContent: 'space-between',
-                        flexWrap: 'wrap',
-                        gap: 1,
-                        paddingY: 2,
-                        paddingX: 3,
-                        boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
-                        borderRadius: 2,
-                        marginBottom: 3,
-                    }}
-                >
-                    {/* Left: Title + Links */}
-                    <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
-                        <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                            Dashboard
-                        </Typography>
-
-                        {activeRole && ['manager', 'superuser'].includes(activeRole) && (
-                            <Link to="/perks" style={navLinkStyle}>What's New</Link>
-                        )}
-                        {activeRole && ['regular', 'organizer', 'cashier'].includes(activeRole) && (
-                            <Link to="/regularperks" style={navLinkStyle}>What's New</Link>
-                        )}
-                        <Link to="/profile" style={navLinkStyle}>Profile</Link>
-                    </Box>
-
-                    {/* Right: Role Switcher + Logout */}
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                        <RoleSwitcher />
-                        <LogoutButton />
-                    </Box>
-                </Box>
-            </Box>
-
+        <div className="dashboard-container">
+            <nav className="dashboard-nav">
+        <div className="nav-content">
+          <h1 className="dashboard-title">Your Profile</h1>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <Link to="/dashboard" style={{ marginRight: '20px', textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}>
+              Dashboard
+            </Link>
+            <Link to="/perks" style={{ marginRight: '20px', textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}>
+                What's New
+            </Link>
+            <RoleSwitcher />
+            <LogoutButton />
+          </div>
+        </div>
+      </nav>
 
             <Box sx={{
                 display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'center', alignItems: { xs: 'center', md: 'flex-start' },
@@ -251,7 +227,7 @@ const UserProfile = () => {
                         <div className="user-profile-details">
                             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 2, borderRadius: 2, gap: 2 }}>
                                 <UserAvatar name={user.name} avatarUrl={user.avatarUrl} size={256} />
-                                <Button variant="outlined" onClick={() => setQrCodeOpen(true)} style={{ marginRight: '20px', borderColor: 'rgb(101, 82, 82)', color: 'rgb(101, 82, 82)' }}>
+                                <Button variant="contained" onClick={() => setQrCodeOpen(true)} style={{ marginRight: '20px', backgroundColor: '#c48f8f', color: '#FFFFFF' }}>
                                     QR Code
                                 </Button>
                             </Box>
@@ -260,7 +236,7 @@ const UserProfile = () => {
 
                         <div className="user-profile-info">
                             <Box component={"form"} onSubmit={handleSubmit} sx={{
-                                padding: 2, backgroundColor: '#f5f5f5', borderRadius: 2, position: 'relative', minWidth: { xs: '100%', md: 450 },
+                                padding: 2, backgroundColor: '#FFFFFF', borderRadius: 2, position: 'relative', minWidth: { xs: '100%', md: 450 },
                                 width: { xs: 'auto', md: 'auto' }
                             }}>
                                 <IconButton color="#c48f8f" onClick={handleEditToggle} title="Edit" sx={{ position: 'absolute', top: 0, right: 0, color: '#c48f8f' }}>
