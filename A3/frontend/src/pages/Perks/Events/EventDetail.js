@@ -1545,7 +1545,10 @@ const EventDetail = () => {
             <DialogContentText sx={{ mb: 2 }}>
               {awardAllGuests 
                 ? "How many points would you like to award to all guests?"
-                : `How many points would you like to award to <strong>${selectedGuest?.name || selectedGuest?.utorid || 'user'}</strong>?`
+                : <Typography>
+                How many points would you like to award to{' '}
+                <strong>{selectedGuest?.name || selectedGuest?.utorid || 'user'}</strong>?
+              </Typography>
               }
             </DialogContentText>
             <TextField
