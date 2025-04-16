@@ -42,13 +42,16 @@ const PromotionsList = () => {
   const [limit, setLimit] = useState(6);
   
   // Filter state
-  const [filters, setFilters] = useState({
-    name: '',
-    type: '',
-    started: '',
-    ended: '',
-    orderBy: 'startTime',
-    order: 'asc'
+  const [filters, setFilters] = useState(() => {
+    const isPrivileged = ['manager', 'superuser'].includes(activeRole);
+    return {
+      name: '',
+      type: '',
+      started: isPrivileged ? '' : 'true',
+      ended: isPrivileged ? '' : 'false',
+      orderBy: 'startTime',
+      order: 'asc'
+    };
   });
 
   // For regular users, automatically set filters to show only active promotions
