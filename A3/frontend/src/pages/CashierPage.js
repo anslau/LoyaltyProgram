@@ -11,10 +11,23 @@ import {
   TextField,
   Button,
   Alert,
+  Card, 
+  CardContent
 } from '@mui/material';
 
 import { useNavigate } from 'react-router-dom';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
+const fieldStyle = {
+    '& .MuiOutlinedInput-root.Mui-focused': {
+      '& fieldset': {
+        borderColor: 'rgb(101, 82, 82)',
+      },
+    },
+    '& label.Mui-focused': {
+      color: 'rgb(101, 82, 82)',
+    },
+  };
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
 
@@ -171,201 +184,151 @@ function CashierPage() {
   }, []);
   
   return (
-    <Box sx={{ maxWidth: 600, margin: '0 auto', mt: 4, mb: 4 }}>
-        <Typography variant="h4" gutterBottom>
-            Cashier Dashboard
-        </Typography>
+<Box sx={{ maxWidth: 800, ml: 0, mr: 2, my: 4 }}>
+  <Typography variant="h6" sx={{ mb: 3 }}>
+    Cashier Tools
+  </Typography>
 
-        {/* pending redemptions */}
-
-        <section className="pending-redemptions">
-            <h3>Pending Redemption Requests</h3>
-            {pendingRequests.length === 0 ? (
-                <p>No pending redemption requests.</p>
-            ) : (
-                <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '1rem' }}>
-                <thead>
-                    <tr style={{ backgroundColor: '#f2f2f2', textAlign: 'left' }}>
-                    <th style={{ padding: '8px' }}>Transaction ID</th>
-                    <th style={{ padding: '8px' }}>User</th>
-                    <th style={{ padding: '8px' }}>Type</th>
-                    <th style={{ padding: '8px' }}>Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {pendingRequests
-                    .filter((tx) => tx.type === 'redemption')
-                    .map((request) => (
-                        <tr key={request.id}>
-                        <td>{request.id}</td>
-                        <td>{request.utorid || request.createdBy || '—'}</td>
-                        <td>{request.type}</td>
-                        <td>{request.amount}</td>
-                        <td>
-                            <Button
-                            size="small"
-                            variant="contained"
-                            color="success"
-                            onClick={() => handleAccept(request.id)}
-                            >
-                            Process
-                            </Button>
-                        </td>
-                        </tr>
+  {/* Pending Redemptions Section */}
+  <Card sx={{ mb: 4 }}>
+    <CardContent>
+      <Typography variant="h6" sx={{ mb: 2 }}>
+        Pending Redemption Requests
+      </Typography>
+      {pendingRequests.length === 0 ? (
+        <Alert severity="info">No pending redemption requests at this time.</Alert>
+      ) : (
+        <Box sx={{ overflowX: 'auto' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <thead>
+              <tr style={{ backgroundColor: '#f2f2f2', textAlign: 'left' }}>
+                <th style={{ padding: '8px' }}>Transaction ID</th>
+                <th style={{ padding: '8px' }}>User</th>
+                <th style={{ padding: '8px' }}>Type</th>
+                <th style={{ padding: '8px' }}>Amount</th>
+                <th style={{ padding: '8px' }}>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {pendingRequests
+                .filter((tx) => tx.type === 'redemption')
+                .map((request) => (
+                  <tr key={request.id}>
+                    <td style={{ padding: '8px' }}>{request.id}</td>
+                    <td style={{ padding: '8px' }}>{request.utorid || request.createdBy || '—'}</td>
+                    <td style={{ padding: '8px' }}>{request.type}</td>
+                    <td style={{ padding: '8px' }}>{request.amount}</td>
+                    <td style={{ padding: '8px' }}>
+                      <Button
+                        size="small"
+                        variant="contained"
+                        color="success"
+                        onClick={() => handleAccept(request.id)}
+                      >
+                        Process
+                      </Button>
+                    </td>
+                  </tr>
                 ))}
-                </tbody>
-                </table>
-            )}
-            </section>
+            </tbody>
+          </table>
+        </Box>
+      )}
+    </CardContent>
+  </Card>
 
+  {/* Register New User Button */}
+  <Button
+    variant="outlined"
+    onClick={() => navigate('/register')}
+    sx={{
+      mb: 4,
+      px: 4,
+      color: 'rgb(101, 82, 82)',
+      borderColor: 'rgb(101, 82, 82)',
+      '&:hover': { backgroundColor: '#c48f8f' },
+    }}
+  >
+    Register New User
+  </Button>
 
-        {/* New Button to navigate to user registration */}
+  {/* Accordion: Create Purchase */}
+  <Accordion>
+    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+      <Typography>Create Purchase Transaction</Typography>
+    </AccordionSummary>
+    <AccordionDetails>
+      {purchaseError && <Alert severity="error" sx={{ mb: 2 }}>{purchaseError}</Alert>}
+      {purchaseSuccess && <Alert severity="success" sx={{ mb: 2 }}>{purchaseSuccess}</Alert>}
+      <Box
+        component="form"
+        onSubmit={handlePurchase}
+        sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+      >
+        <TextField
+          label="Customer Utorid"
+          value={purchaseUtorid}
+          onChange={(e) => setPurchaseUtorid(e.target.value)}
+          required
+          sx={fieldStyle}
+        />
+        <TextField
+          label="Amount Spent (e.g. 19.99)"
+          type="number"
+          value={purchaseAmount}
+          onChange={(e) => setPurchaseAmount(e.target.value)}
+          required
+          sx={fieldStyle}
+        />
+        <TextField
+          label="Promotion IDs (comma‑sep, optional)"
+          value={promoIds}
+          onChange={(e) => setPromoIds(e.target.value)}
+          sx={fieldStyle}
+        />
         <Button
-            variant="outlined"
-            sx={{
-            mt: 2,
-            mb: 4,
-            px: 4,
-            color: 'rgb(101, 82, 82)',
-            borderColor: 'rgb(101, 82, 82)',
-            '&:hover': { backgroundColor: '#c48f8f' }
-            }}
-            onClick={() => navigate('/register')}
+          variant="contained"
+          type="submit"
+          sx={{ backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)' }}
         >
-            Register New User
+          Submit Purchase
         </Button>
+      </Box>
+    </AccordionDetails>
+  </Accordion>
 
-        {/* ACCORDION 1: CREATE PURCHASE */}
-        <Accordion>
-            <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1a-content"
-            id="panel1a-header"
-            >
-            <Typography>Create Purchase Transaction</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-            {purchaseError && (
-                <Alert severity="error" sx={{ mb: 2 }}>
-                {purchaseError}
-                </Alert>
-            )}
-            {purchaseSuccess && (
-                <Alert severity="success" sx={{ mb: 2 }}>
-                {purchaseSuccess}
-                </Alert>
-            )}
+  {/* Accordion: Process Redemption by ID */}
+  <Accordion>
+    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+      <Typography>Process Redemption by ID</Typography>
+    </AccordionSummary>
+    <AccordionDetails>
+      {redemptionError && <Alert severity="error" sx={{ mb: 2 }}>{redemptionError}</Alert>}
+      {redemptionSuccess && <Alert severity="success" sx={{ mb: 2 }}>{redemptionSuccess}</Alert>}
+      <Box
+        component="form"
+        onSubmit={handleProcessRedemption}
+        sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+      >
+        <TextField
+          label="Redemption Transaction ID"
+          value={redemptionId}
+          onChange={(e) => setRedemptionId(e.target.value)}
+          required
+          sx={fieldStyle}
+        />
+        <Button
+          variant="contained"
+          type="submit"
+          sx={{ backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)' }}
+        >
+          Process
+        </Button>
+      </Box>
+    </AccordionDetails>
+  </Accordion>
+</Box>
 
-            <Box
-                component="form"
-                onSubmit={handlePurchase}
-                sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
-            >
-                <TextField
-                label="Customer Utorid"
-                value={purchaseUtorid}
-                onChange={(e) => setPurchaseUtorid(e.target.value)}
-                required
-                sx={{
-                  '& .MuiOutlinedInput-root.Mui-focused': {
-                      '& fieldset': {
-                          borderColor: 'rgb(101, 82, 82)',
-                      },
-                  },
-                  '& label.Mui-focused': {
-                      color: 'rgb(101, 82, 82)',
-                  }
-                }}
-                />
-                <TextField
-                label="Amount Spent (e.g. 19.99)"
-                type="number"
-                value={purchaseAmount}
-                onChange={(e) => setPurchaseAmount(e.target.value)}
-                required
-                sx={{
-                  '& .MuiOutlinedInput-root.Mui-focused': {
-                      '& fieldset': {
-                          borderColor: 'rgb(101, 82, 82)',
-                      },
-                  },
-                  '& label.Mui-focused': {
-                      color: 'rgb(101, 82, 82)',
-                  }
-                }}
-                />
-                <TextField
-                    label="Promotion IDs (comma‑sep, optional)"
-                    value={promoIds}
-                    onChange={(e) => setPromoIds(e.target.value)}
-                    sx={{
-                      '& .MuiOutlinedInput-root.Mui-focused': {
-                          '& fieldset': {
-                              borderColor: 'rgb(101, 82, 82)',
-                          },
-                      },
-                      '& label.Mui-focused': {
-                          color: 'rgb(101, 82, 82)',
-                      }
-                    }}
-                />
-                <Button variant="contained" type="submit" sx={{ backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)' }}>
-                Submit Purchase
-                </Button>
-            </Box>
-            </AccordionDetails>
-        </Accordion>
-
-        {/* ACCORDION 2: PROCESS REDEMPTION */}
-        <Accordion>
-            <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel2a-content"
-                id="panel2a-header"
-            >
-            <Typography>Process Redemption</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-            {redemptionError && (
-                <Alert severity="error" sx={{ mb: 2 }}>
-                {redemptionError}
-                </Alert>
-            )}
-            {redemptionSuccess && (
-                <Alert severity="success" sx={{ mb: 2 }}>
-                {redemptionSuccess}
-                </Alert>
-            )}
-
-            <Box
-                component="form"
-                onSubmit={handleProcessRedemption}
-                sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
-            >
-                
-            <TextField
-                label="Redemption Transaction ID"
-                value={redemptionId}
-                onChange={(e) => setRedemptionId(e.target.value)}
-                required
-                sx={{
-                  '& .MuiOutlinedInput-root.Mui-focused': {
-                      '& fieldset': {
-                          borderColor: 'rgb(101, 82, 82)',
-                      },
-                  },
-                  '& label.Mui-focused': {
-                      color: 'rgb(101, 82, 82)',
-                  }
-                }}
-            />
-            <Button variant="contained" type="submit" sx={{ backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)' }}>
-                Process
-            </Button>
-            </Box>
-            </AccordionDetails>
-        </Accordion>
-    </Box>
   );
 }
 
