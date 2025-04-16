@@ -17,8 +17,23 @@ import {
   Box,
   Alert,
   TextField,
-  CircularProgress
+  CircularProgress, 
+  Accordion,
+  AccordionSummary,
+  AccordionDetails
 } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
+const fieldStyle = {
+    '& .MuiOutlinedInput-root.Mui-focused': {
+      '& fieldset': {
+        borderColor: 'rgb(101, 82, 82)',
+      },
+    },
+    '& label.Mui-focused': {
+      color: 'rgb(101, 82, 82)',
+    },
+  };
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
 
@@ -277,28 +292,41 @@ const Dashboard = () => {
         )}
 
         {/* Redeem Form */}
-        <Box sx={{ mt: 2 }}>
-          <Typography variant="subtitle1">Redeem Points</Typography>
-          <form onSubmit={handleRedeem}>
+        <Accordion sx={{ mt: 4 }}>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>Redeem Points</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+            {error && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+                {error}
+            </Alert>
+            )}
+
+            <Box
+            component="form"
+            onSubmit={handleRedeem}
+            sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+            >
             <TextField
-              label="Points to Redeem"
-              type="number"
-              value={redeemAmount}
-              onChange={(e) => setRedeemAmount(e.target.value)}
-              sx={{ mr: 2, width: 200, '& .MuiOutlinedInput-root.Mui-focused': {
-                                                                '& fieldset': {
-                                                                    borderColor: 'rgb(101, 82, 82)',
-                                                                },
-                                                            },
-                                                            '& label.Mui-focused': {
-                                                                color: 'rgb(101, 82, 82)',
-                                                            }}}
+                label="Points to Redeem"
+                type="number"
+                value={redeemAmount}
+                onChange={(e) => setRedeemAmount(e.target.value)}
+                required
+                sx={fieldStyle}
             />
-            <Button type="submit" variant="contained" sx={{ backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)' }}>
-              Submit
+            <Button
+                type="submit"
+                variant="contained"
+                sx={{ backgroundColor: '#ebc2c2', color: 'rgb(101, 82, 82)' }}
+            >
+                Submit
             </Button>
-          </form>
-        </Box>
+            </Box>
+        </AccordionDetails>
+        </Accordion>
+
 
         {/* Show Unprocessed Redemption (QR) */}
         {unprocessedRedemption && (
