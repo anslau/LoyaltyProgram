@@ -27,6 +27,8 @@ import AuthContext from '../../../context/AuthContext';
 import EventItem from './EventItem';
 import ActiveRoleContext from '../../../context/ActiveRoleContext';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
+
 const EventsList = () => {
   const { activeRole } = useContext(ActiveRoleContext);
 
@@ -87,7 +89,7 @@ const EventsList = () => {
         window.history.pushState(null, '', newUrl);
       }
       
-      const response = await axios.get(`http://localhost:8000/events?${queryParams.toString()}`, {
+      const response = await axios.get(`${BACKEND_URL}/events?${queryParams.toString()}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }

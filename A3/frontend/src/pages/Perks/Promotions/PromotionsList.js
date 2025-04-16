@@ -26,6 +26,8 @@ import PromotionItem from './PromotionItem';
 
 import ActiveRoleContext from '../../../context/ActiveRoleContext';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
+
 const PromotionsList = () => {
   const [promotions, setPromotions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -99,7 +101,7 @@ const PromotionsList = () => {
         window.history.pushState(null, '', newUrl);
       }
       
-      const response = await axios.get(`http://localhost:8000/promotions?${queryParams.toString()}`, {
+      const response = await axios.get(`${BACKEND_URL}/promotions?${queryParams.toString()}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }

@@ -21,6 +21,8 @@ import {
 } from '@mui/material';
 import AuthContext from '../../../context/AuthContext';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
+
 const CreatePromotion = () => {
   const navigate = useNavigate();
   const { token } = useContext(AuthContext);
@@ -158,7 +160,7 @@ const CreatePromotion = () => {
         endTime: endDate.toISOString()
       };
       
-      const response = await fetch('http://localhost:8000/promotions', {
+      const response = await fetch(`${BACKEND_URL}/promotions`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -23,6 +23,8 @@ import {
 } from '@mui/material';
 import AuthContext from '../../../context/AuthContext';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
+
 const CreateEvent = () => {
   const { activeRole } = useContext(ActiveRoleContext);
   const navigate = useNavigate();
@@ -154,7 +156,7 @@ const CreateEvent = () => {
         published: formData.published
       };
       
-      const response = await fetch('http://localhost:8000/events', {
+      const response = await fetch(`${BACKEND_URL}/events`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

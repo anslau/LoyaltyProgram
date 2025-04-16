@@ -27,6 +27,8 @@ import AuthContext from '../../../context/AuthContext';
 import LogoutButton from '../../../components/auth/LogoutButton';
 import '../../../styles/auth.css';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
+
 const EventDetail = () => {
   const { activeRole } = useContext(ActiveRoleContext);
   const { eventId } = useParams();
@@ -94,10 +96,10 @@ const EventDetail = () => {
   // Roles that are allowed to manage events
   const canManageEventRoles = ['organizer', 'manager', 'superuser'];
 
-  // Is the user’s activeRole in the set of organizer-level roles?
+  // Is the user's activeRole in the set of organizer-level roles?
   const canManageByRole = canManageEventRoles.includes(activeRole);
 
-  // Combine “organizer-level role” AND “associated with event” if you want that logic:
+  // Combine "organizer-level role" AND "associated with event" if you want that logic:
   const canManageParticipants = canManageByRole || isCurrentUserOrganizer; 
 
 
@@ -108,7 +110,7 @@ const EventDetail = () => {
   useEffect(() => {
     const fetchEventDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/events/${eventId}`, {
+        const response = await axios.get(`${BACKEND_URL}/events/${eventId}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -165,7 +167,7 @@ const EventDetail = () => {
       
       // Call API to send reward request
       const response = await axios.post(
-        `http://localhost:8000/events/${eventId}/transactions`,
+        `${BACKEND_URL}/events/${eventId}/transactions`,
         {
           type: "event",
           utorid: awardAllGuests ? undefined : selectedGuest.utorid,
@@ -212,7 +214,7 @@ const EventDetail = () => {
     try {
       if (isAttending) {
         // Cancel RSVP
-        await axios.delete(`http://localhost:8000/events/${eventId}/guests/me`, {
+        await axios.delete(`${BACKEND_URL}/events/${eventId}/guests/me`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -242,7 +244,7 @@ const EventDetail = () => {
       } else {
         // RSVP to event
         // Use the response data which might contain the added guest info
-        const response = await axios.post(`http://localhost:8000/events/${eventId}/guests/me`, {}, {
+        const response = await axios.post(`${BACKEND_URL}/events/${eventId}/guests/me`, {}, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -398,7 +400,7 @@ const EventDetail = () => {
         published: editFormData.published
       };
 
-      const response = await axios.patch(`http://localhost:8000/events/${eventId}`, payload, {
+      const response = await axios.patch(`${BACKEND_URL}/events/${eventId}`, payload, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
@@ -433,7 +435,7 @@ const EventDetail = () => {
     setDeleteLoading(true);
 
     try {
-      await axios.delete(`http://localhost:8000/events/${eventId}`, {
+      await axios.delete(`${BACKEND_URL}/events/${eventId}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -472,7 +474,7 @@ const EventDetail = () => {
     setAddGuestSuccess(null);
 
     try {
-      const response = await axios.post(`http://localhost:8000/events/${eventId}/guests`,
+      const response = await axios.post(`${BACKEND_URL}/events/${eventId}/guests`,
         { utorid: addGuestUtorid.trim() },
         {
           headers: {
@@ -513,7 +515,7 @@ const EventDetail = () => {
     setRemoveGuestLoading(true);
 
     try {
-      await axios.delete(`http://localhost:8000/events/${eventId}/guests/${userId}`, {
+      await axios.delete(`${BACKEND_URL}/events/${eventId}/guests/${userId}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -602,7 +604,7 @@ const EventDetail = () => {
     setAddOrganizerSuccess(null);
 
     try {
-      const response = await axios.post(`http://localhost:8000/events/${eventId}/organizers`,
+      const response = await axios.post(`${BACKEND_URL}/events/${eventId}/organizers`,
         { utorid: addOrganizerUtorid.trim() },
         {
           headers: {
@@ -643,7 +645,7 @@ const EventDetail = () => {
     setRemoveOrganizerLoading(true);
 
     try {
-      await axios.delete(`http://localhost:8000/events/${eventId}/organizers/${userId}`, {
+      await axios.delete(`${BACKEND_URL}/events/${eventId}/organizers/${userId}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

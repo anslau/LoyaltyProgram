@@ -25,6 +25,8 @@ import {
 import { Edit as EditIcon, Delete as DeleteIcon, ArrowBack as ArrowBackIcon } from '@mui/icons-material';
 import AuthContext from '../../../context/AuthContext';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
+
 const PromotionDetail = () => {
   const { promotionId } = useParams();
   const navigate = useNavigate();
@@ -59,7 +61,7 @@ const PromotionDetail = () => {
     const fetchPromotion = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`http://localhost:8000/promotions/${promotionId}`, {
+        const response = await fetch(`${BACKEND_URL}/promotions/${promotionId}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -195,7 +197,7 @@ const PromotionDetail = () => {
         endTime: new Date(formData.endTime).toISOString()
       };
       
-      const response = await fetch(`http://localhost:8000/promotions/${promotionId}`, {
+      const response = await fetch(`${BACKEND_URL}/promotions/${promotionId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -231,7 +233,7 @@ const PromotionDetail = () => {
     setDeleteLoading(true);
     
     try {
-      const response = await fetch(`http://localhost:8000/promotions/${promotionId}`, {
+      const response = await fetch(`${BACKEND_URL}/promotions/${promotionId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
