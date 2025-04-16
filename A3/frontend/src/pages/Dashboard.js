@@ -4,7 +4,6 @@ import AuthContext from '../context/AuthContext';
 import ActiveRoleContext from '../context/ActiveRoleContext';
 import RoleSwitcher from '../components/RoleSwitcher';
 import LogoutButton from '../components/auth/LogoutButton';
-import QRCode from '../components/qrCode';
 import CashierPage from './CashierPage';
 import DashboardHeader from '../components/dashboardHeader';
 
@@ -291,18 +290,13 @@ const Dashboard = () => {
         </Accordion>
 
 
-        {/* Show Unprocessed Redemption (QR) */}
+        {/* Show Unprocessed Redemption */}
         {unprocessedRedemption && (
           <Box sx={{ mt: 3 }}>
             <Alert severity="info">
               You have a pending redemption request (Transaction #
               {unprocessedRedemption.id}). A cashier can process it.
             </Alert>
-            <QRCode
-              value={String(unprocessedRedemption.id)}
-              size={128}
-              includeMargin
-            />
           </Box>
         )}
       </Box>

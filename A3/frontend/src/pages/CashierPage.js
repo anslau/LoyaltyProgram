@@ -1,5 +1,6 @@
 // src/pages/CashierPage.js
 import React, { useState, useContext, useEffect } from 'react';
+import QrCode from '../components/qrCode';
 import AuthContext from '../context/AuthContext';
 import {
   Box,
@@ -48,6 +49,9 @@ function CashierPage() {
   const [redemptionId, setRedemptionId] = useState('');
   const [redemptionError, setRedemptionError] = useState('');
   const [redemptionSuccess, setRedemptionSuccess] = useState('');
+
+  // QR code
+  const [qrCodeOpen, setQrCodeOpen] = useState(false);
 
   const handleAccept = async (id) => {
     try {
@@ -218,11 +222,11 @@ function CashierPage() {
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
               <tr style={{ backgroundColor: '#f2f2f2', textAlign: 'left' }}>
-                <th style={{ padding: '8px' }}>Transaction ID</th>
-                <th style={{ padding: '8px' }}>User</th>
-                <th style={{ padding: '8px' }}>Type</th>
-                <th style={{ padding: '8px' }}>Amount</th>
-                <th style={{ padding: '8px' }}>Action</th>
+                <th style={{ padding: '8px', textAlign: 'center'  }}>Transaction ID</th>
+                <th style={{ padding: '8px', textAlign: 'center'  }}>User</th>
+                <th style={{ padding: '8px', textAlign: 'center'  }}>Type</th>
+                <th style={{ padding: '8px', textAlign: 'center'  }}>Amount</th>
+                <th style={{ padding: '8px', textAlign: 'center'  }}>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -230,19 +234,42 @@ function CashierPage() {
                 .filter((tx) => tx.type === 'redemption')
                 .map((request) => (
                   <tr key={request.id}>
-                    <td style={{ padding: '8px' }}>{request.id}</td>
-                    <td style={{ padding: '8px' }}>{request.utorid || request.createdBy || '—'}</td>
-                    <td style={{ padding: '8px' }}>{request.type}</td>
-                    <td style={{ padding: '8px' }}>{request.amount}</td>
-                    <td style={{ padding: '8px' }}>
-                      <Button
+                    <td 
+                    onClick={() => setQrCodeOpen(true)}
+                    style={{
+                        padding: '8px',
+                        color: '#de9c9c',             
+                        cursor: 'pointer',
+                        textDecoration: 'underline',
+                        fontWeight: 500,
+                        transition: 'color 0.3s',
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.color = '#d88888'}  
+                    onMouseLeave={e => e.currentTarget.style.color = '#de9c9c'}
+                    >
+                    <div style={{ textAlign: 'center' }}>{request.id} </div>
+                    </td>
+
+                    <QrCode open={qrCodeOpen} onClose={() => setQrCodeOpen(false)} redemption={request} />
+                    <td style={{ padding: '8px', textAlign: 'center'  }}>{request.utorid || request.createdBy || '—'}</td>
+                    <td style={{ padding: '8px', textAlign: 'center'  }}>{request.type}</td>
+                    <td style={{ padding: '8px', textAlign: 'center'  }}>{request.amount}</td>
+                    <td style={{ padding: '8px', textAlign: 'center'  }}>
+                    <Button
                         size="small"
                         variant="contained"
-                        color="success"
                         onClick={() => handleAccept(request.id)}
-                      >
+                        style={{
+                            backgroundColor: '#c48f8f',
+                            color: '#f9f9f9',
+                            textTransform: 'none',
+                            fontWeight: 500
+                        }}
+                        onMouseEnter={e => e.currentTarget.style.backgroundColor = '#a36d6d'}
+                        onMouseLeave={e => e.currentTarget.style.backgroundColor = '#c48f8f'}
+                        >
                         Process
-                      </Button>
+                        </Button>
                     </td>
                   </tr>
                 ))}

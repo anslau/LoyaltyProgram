@@ -216,7 +216,7 @@ const UserProfile = () => {
                         <div className="user-profile-details">
                             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 2, borderRadius: 2, gap: 2 }}>
                                 <UserAvatar name={user.name} avatarUrl={user.avatarUrl} size={256} />
-                                <Button variant="contained" onClick={() => setQrCodeOpen(true)} style={{ marginRight: '20px', backgroundColor: '#c48f8f', color: '#FFFFFF' }}>
+                                <Button variant="contained" onClick={() => setQrCodeOpen(true)} style={{ marginRight: '20px', backgroundColor: '#c48f8f', color: '#f9f9f9' }}>
                                     QR Code
                                 </Button>
                             </Box>
