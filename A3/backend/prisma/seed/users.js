@@ -6,7 +6,7 @@ module.exports = async function seedUsers() {
     {
       utorid: 'regular1',
       password: '123',
-      email: 'testuser@utoronto.ca',
+      email: 'testuser@mail.utoronto.ca',
       role: 'organizer',
       name: 'Test User',
       verified: true
@@ -14,7 +14,7 @@ module.exports = async function seedUsers() {
     {
       utorid: 'cashier1',
       password: '123',
-      email: 'cashier@utoronto.ca',
+      email: 'cashier@mail.utoronto.ca',
       role: 'cashier',
       name: 'Test Cashier',
       verified: true
@@ -22,7 +22,7 @@ module.exports = async function seedUsers() {
     {
       utorid: 'manager1',
       password: '20954',
-      email: 'manager@utoronto.ca',
+      email: 'manager@mail.utoronto.ca',
       role: 'manager',
       name: 'Test Manager',
       verified: true
@@ -30,7 +30,7 @@ module.exports = async function seedUsers() {
     {
       utorid: 'superuser',
       password: 'Super123!',
-      email: 'super@utoronto.ca',
+      email: 'super@mail.utoronto.ca',
       role: 'superuser',
       name: 'Super User',
       verified: true
@@ -38,7 +38,7 @@ module.exports = async function seedUsers() {
     {
       utorid: 'unverified1',
       password: 'Test123!',
-      email: 'unverified1@utoronto.ca',
+      email: 'unverified1@mail.utoronto.ca',
       role: 'regular',
       name: 'Unverified User',
       verified: false
@@ -46,7 +46,7 @@ module.exports = async function seedUsers() {
     {
       utorid: 'minimal1',
       password: 'Test123!',
-      email: 'minimal1@utoronto.ca',
+      email: 'minimal1@mail.utoronto.ca',
       role: 'regular',
       name: '',
       verified: true
@@ -54,7 +54,7 @@ module.exports = async function seedUsers() {
     {
       utorid: 'redemptionzero',
       password: 'Test123!',
-      email: 'redemptionzero@utoronto.ca',
+      email: 'redemptionzero@mail.utoronto.ca',
       role: 'regular',
       name: 'No Points',
       verified: true
@@ -62,7 +62,7 @@ module.exports = async function seedUsers() {
     {
       utorid: 'eventguest1',
       password: 'Test123!',
-      email: 'guest1@utoronto.ca',
+      email: 'guest1@mail.utoronto.ca',
       role: 'regular',
       name: 'Event Guest',
       verified: true
@@ -70,7 +70,7 @@ module.exports = async function seedUsers() {
     {
       utorid: 'cashier2',
       password: 'Test123!',
-      email: 'cashier2@utoronto.ca',
+      email: 'cashier2@mail.utoronto.ca',
       role: 'cashier',
       name: 'Cashier Two',
       verified: true
@@ -78,7 +78,7 @@ module.exports = async function seedUsers() {
     {
       utorid: 'manager2',
       password: 'Test123!',
-      email: 'manager2@utoronto.ca',
+      email: 'manager2@mail.utoronto.ca',
       role: 'manager',
       name: 'Manager Two',
       verified: true
@@ -86,7 +86,7 @@ module.exports = async function seedUsers() {
     {
       utorid: 'forgotpw',
       password: 'Test123!', // reset to 'Reset123!'
-      email: 'forgotpw@utoronto.ca',
+      email: 'forgotpw@mail.utoronto.ca',
       role: 'regular',
       name: 'Forgot Password',
       verified: true
