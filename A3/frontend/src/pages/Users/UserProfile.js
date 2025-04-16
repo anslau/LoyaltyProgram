@@ -7,11 +7,13 @@ import { Box, CircularProgress, Button, IconButton, Grid, Typography, TextField,
 import { Edit as EditIcon, CloudUpload, Done as DoneIcon, Visibility, VisibilityOff } from '@mui/icons-material';
 import RoleSwitcher from '../../components/RoleSwitcher';
 import UserAvatar from '../../components/UserAvatar';
+import ActiveRoleContext from '../../context/ActiveRoleContext';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
 
 const UserProfile = () => {
     const { token } = useContext(AuthContext);
+    const { activeRole } = useContext(ActiveRoleContext);
     const [user, setUser] = useState({});
     const [userForm, setUserForm] = useState({
         name: '',
@@ -25,7 +27,7 @@ const UserProfile = () => {
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
     const [editMode, setEditMode] = useState(false);
-    
+
     const [showOldPassword, setShowOldPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
 
@@ -36,6 +38,13 @@ const UserProfile = () => {
     const [changePassword, setChangePassword] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
     const [passwordSuccess, setPasswordSuccess] = useState(false);
+
+    const navLinkStyle = {
+        textDecoration: 'none',
+        color: '#c48f8f',
+        fontWeight: 'bold',
+        fontSize: '0.9rem',
+    };
 
     // fetching the logged in user details
     useEffect(() => {
@@ -181,30 +190,58 @@ const UserProfile = () => {
 
         } catch (error) {
             setPasswordError(error.message);
-            
+
             setLoading(false);
         }
     };
 
     return (
         <div className="user-profile-container">
-            <nav className="dashboard-nav">
-                <div className="nav-content">
-                    <h1 className="dashboard-title">My Profile</h1>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <Link to="/dashboard" style={{ marginRight: '20px', textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}>
+            <Box sx={{ maxWidth: '800px', margin: '0 auto' }}>
+                <Box
+                    className="dashboard-nav"
+                    sx={{
+                        display: 'flex',
+                        flexDirection: { xs: 'column', sm: 'row' },
+                        alignItems: { xs: 'flex-start', sm: 'center' },
+                        justifyContent: 'space-between',
+                        flexWrap: 'wrap',
+                        gap: 1,
+                        paddingY: 2,
+                        paddingX: 3,
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+                        borderRadius: 2,
+                        marginBottom: 3,
+                    }}
+                >
+                    {/* Left: Title + Links */}
+                    <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
+                        <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
                             Dashboard
-                        </Link>
-                        <Link to="/perks" style={{ marginRight: '20px', textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}>
-                            What's New
-                        </Link>
+                        </Typography>
+
+                        {activeRole && ['manager', 'superuser'].includes(activeRole) && (
+                            <Link to="/perks" style={navLinkStyle}>What's New</Link>
+                        )}
+                        {activeRole && ['regular', 'organizer', 'cashier'].includes(activeRole) && (
+                            <Link to="/regularperks" style={navLinkStyle}>What's New</Link>
+                        )}
+                        <Link to="/profile" style={navLinkStyle}>Profile</Link>
+                    </Box>
+
+                    {/* Right: Role Switcher + Logout */}
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                         <RoleSwitcher />
                         <LogoutButton />
-                    </div>
-                </div>
-            </nav>
+                    </Box>
+                </Box>
+            </Box>
 
-            <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start', padding: 2, gap: 4 }}>
+
+            <Box sx={{
+                display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'center', alignItems: { xs: 'center', md: 'flex-start' },
+                padding: 2, gap: 4, overflowX: 'hidden', height: '100vh'
+            }}>
                 {loading ? (
                     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
                         <CircularProgress />
@@ -222,7 +259,10 @@ const UserProfile = () => {
                         </div>
 
                         <div className="user-profile-info">
-                            <Box component={"form"} onSubmit={handleSubmit} sx={{ padding: 2, backgroundColor: '#f5f5f5', borderRadius: 2, position: 'relative', minWidth: 450 }}>
+                            <Box component={"form"} onSubmit={handleSubmit} sx={{
+                                padding: 2, backgroundColor: '#f5f5f5', borderRadius: 2, position: 'relative', minWidth: { xs: '100%', md: 450 },
+                                width: { xs: 'auto', md: 'auto' }
+                            }}>
                                 <IconButton color="#c48f8f" onClick={handleEditToggle} title="Edit" sx={{ position: 'absolute', top: 0, right: 0, color: '#c48f8f' }}>
                                     {!editMode && (<EditIcon />)}
                                 </IconButton>
@@ -388,33 +428,33 @@ const UserProfile = () => {
                                         // </Grid>
 
                                         <Grid item xs={12} sx={{ maxWidth: 400, width: '100%' }}>
-                                        <Typography variant="h6">
-                                            <strong>Avatar URL: </strong> {
-                                                <TextField
-                                                    type="text"
-                                                    value={userForm.avatar}
-                                                    onChange={
-                                                        (e) => {
-                                                            setUserForm({ ...userForm, avatar: e.target.value });
-                                                            setError('');
-                                                            setSuccess(false);
+                                            <Typography variant="h6">
+                                                <strong>Avatar URL: </strong> {
+                                                    <TextField
+                                                        type="text"
+                                                        value={userForm.avatar}
+                                                        onChange={
+                                                            (e) => {
+                                                                setUserForm({ ...userForm, avatar: e.target.value });
+                                                                setError('');
+                                                                setSuccess(false);
+                                                            }
                                                         }
-                                                    }
-                                                    sx={{
-                                                        mb: 1,
-                                                        '& .MuiOutlinedInput-root.Mui-focused': {
-                                                            '& fieldset': {
-                                                                borderColor: 'rgb(101, 82, 82)',
+                                                        sx={{
+                                                            mb: 1,
+                                                            '& .MuiOutlinedInput-root.Mui-focused': {
+                                                                '& fieldset': {
+                                                                    borderColor: 'rgb(101, 82, 82)',
+                                                                },
                                                             },
-                                                        },
-                                                        '& label.Mui-focused': {
-                                                            color: 'rgb(101, 82, 82)',
-                                                        }
-                                                    }}
-                                                />
-                                            }
-                                        </Typography>
-                                    </Grid>
+                                                            '& label.Mui-focused': {
+                                                                color: 'rgb(101, 82, 82)',
+                                                            }
+                                                        }}
+                                                    />
+                                                }
+                                            </Typography>
+                                        </Grid>
                                     )}
 
                                     {editMode && (
@@ -485,17 +525,17 @@ const UserProfile = () => {
                                                         }}
                                                         InputProps={{
                                                             endAdornment: (
-                                                              <InputAdornment position="end">
-                                                                <IconButton
-                                                                  onClick={() => setShowOldPassword(!showOldPassword)}
-                                                                  onMouseDown={(e) => e.preventDefault()}
-                                                                  edge="end"
-                                                                >
-                                                                  {showOldPassword ? <VisibilityOff /> : <Visibility />}
-                                                                </IconButton>
-                                                              </InputAdornment>
+                                                                <InputAdornment position="end">
+                                                                    <IconButton
+                                                                        onClick={() => setShowOldPassword(!showOldPassword)}
+                                                                        onMouseDown={(e) => e.preventDefault()}
+                                                                        edge="end"
+                                                                    >
+                                                                        {showOldPassword ? <VisibilityOff /> : <Visibility />}
+                                                                    </IconButton>
+                                                                </InputAdornment>
                                                             )
-                                                          }}
+                                                        }}
                                                         sx={{
                                                             mb: 1,
                                                             '& .MuiOutlinedInput-root.Mui-focused': {
@@ -523,7 +563,7 @@ const UserProfile = () => {
                                                             setPasswordError('');
                                                             setPasswordSuccess(false);
                                                         }}
-                                                        InputProps={{ 
+                                                        InputProps={{
                                                             endAdornment: (
                                                                 <InputAdornment position="end">
                                                                     <IconButton
