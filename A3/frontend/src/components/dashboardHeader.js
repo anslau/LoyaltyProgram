@@ -84,7 +84,7 @@ const DashboardHeader = ({ title }) => {
               <List>
                 {roleBasedLinks.map(([path, label]) => (
                   <ListItem button key={path} component={Link} to={path}>
-                    <ListItemText primary={label} />
+                    <ListItemText primary={label} sx={{ color: '#c48f8f' }}/>
                   </ListItem>
                 ))}
               </List>
