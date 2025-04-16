@@ -193,7 +193,10 @@ const UserProfile = () => {
             title="My Profile"
             />
 
-            <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start', padding: 2, gap: 4 }}>
+<Box sx={{
+                display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'center', alignItems: { xs: 'center', md: 'flex-start' },
+                padding: 2, gap: 1, overflowX: 'hidden', minHeight: '100vh'
+            }}>
                 {loading ? (
                     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
                         <CircularProgress />
@@ -203,7 +206,7 @@ const UserProfile = () => {
                         <div className="user-profile-details">
                             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 2, borderRadius: 2, gap: 2 }}>
                                 <UserAvatar name={user.name} avatarUrl={user.avatarUrl} size={256} />
-                                <Button variant="outlined" onClick={() => setQrCodeOpen(true)} style={{ marginRight: '20px', borderColor: 'rgb(101, 82, 82)', color: 'rgb(101, 82, 82)' }}>
+                                <Button variant="contained" onClick={() => setQrCodeOpen(true)} style={{ marginRight: '20px', backgroundColor: '#c48f8f', color: '#FFFFFF' }}>
                                     QR Code
                                 </Button>
                             </Box>
@@ -211,7 +214,10 @@ const UserProfile = () => {
                         </div>
 
                         <div className="user-profile-info">
-                            <Box component={"form"} onSubmit={handleSubmit} sx={{ padding: 2, backgroundColor: '#f5f5f5', borderRadius: 2, position: 'relative', minWidth: 450 }}>
+                            <Box component={"form"} onSubmit={handleSubmit} sx={{
+                                padding: 2, backgroundColor: '#FFFFFF', borderRadius: 2, position: 'relative', minWidth: { xs: '100%', md: 450 },
+                                width: { xs: '100%', md: '450' }, maxWidth: { xs: '100%', md: 450 }
+                            }}>
                                 <IconButton color="#c48f8f" onClick={handleEditToggle} title="Edit" sx={{ position: 'absolute', top: 0, right: 0, color: '#c48f8f' }}>
                                     {!editMode && (<EditIcon />)}
                                 </IconButton>
@@ -227,7 +233,7 @@ const UserProfile = () => {
                                             {editMode ? (
                                                 <TextField
                                                     type="text"
-                                                    size="medium"
+                                                    fullWidth
                                                     value={userForm.name}
                                                     onChange={(e) => {
                                                         setUserForm({ ...userForm, name: e.target.value });
@@ -262,6 +268,7 @@ const UserProfile = () => {
                                                 <TextField
                                                     type="text"
                                                     value={userForm.email}
+                                                    fullWidth
                                                     onChange={(e) => {
                                                         setUserForm({ ...userForm, email: e.target.value });
                                                         setError('');
@@ -289,6 +296,7 @@ const UserProfile = () => {
                                                 <TextField
                                                     type="date"
                                                     value={userForm.birthday}
+                                                    fullWidth
                                                     onChange={
                                                         (e) => {
                                                             setUserForm({ ...userForm, birthday: e.target.value });
@@ -377,33 +385,34 @@ const UserProfile = () => {
                                         // </Grid>
 
                                         <Grid item xs={12} sx={{ maxWidth: 400, width: '100%' }}>
-                                        <Typography variant="h6">
-                                            <strong>Avatar URL: </strong> {
-                                                <TextField
-                                                    type="text"
-                                                    value={userForm.avatar}
-                                                    onChange={
-                                                        (e) => {
-                                                            setUserForm({ ...userForm, avatar: e.target.value });
-                                                            setError('');
-                                                            setSuccess(false);
+                                            <Typography variant="h6">
+                                                <strong>Avatar URL: </strong> {
+                                                    <TextField
+                                                        type="text"
+                                                        fullWidth
+                                                        value={userForm.avatar}
+                                                        onChange={
+                                                            (e) => {
+                                                                setUserForm({ ...userForm, avatar: e.target.value });
+                                                                setError('');
+                                                                setSuccess(false);
+                                                            }
                                                         }
-                                                    }
-                                                    sx={{
-                                                        mb: 1,
-                                                        '& .MuiOutlinedInput-root.Mui-focused': {
-                                                            '& fieldset': {
-                                                                borderColor: 'rgb(101, 82, 82)',
+                                                        sx={{
+                                                            mb: 1,
+                                                            '& .MuiOutlinedInput-root.Mui-focused': {
+                                                                '& fieldset': {
+                                                                    borderColor: 'rgb(101, 82, 82)',
+                                                                },
                                                             },
-                                                        },
-                                                        '& label.Mui-focused': {
-                                                            color: 'rgb(101, 82, 82)',
-                                                        }
-                                                    }}
-                                                />
-                                            }
-                                        </Typography>
-                                    </Grid>
+                                                            '& label.Mui-focused': {
+                                                                color: 'rgb(101, 82, 82)',
+                                                            }
+                                                        }}
+                                                    />
+                                                }
+                                            </Typography>
+                                        </Grid>
                                     )}
 
                                     {editMode && (
@@ -454,7 +463,9 @@ const UserProfile = () => {
                                 </Grid>
 
                                 {changePassword && (
-                                    <Box component={"form"} onSubmit={handlePasswordReset} sx={{ padding: 2, backgroundColor: '#f5f5f5', borderRadius: 2, position: 'relative', marginTop: 2 }}>
+                                    <Box component={"form"} onSubmit={handlePasswordReset} 
+                                    sx={{ padding: 2, backgroundColor: '#FFFFFF', borderRadius: 2,  minWidth: { xs: '100%', md: 450 },
+                                    width: '100%', maxWidth: {xs: '100%', md:450}, mx: 'auto', mt: 2 }}>
                                         <Grid container spacing={1} direction={'column'} alignItems="flex-start">
                                             <Grid item xs={12}>
                                                 <h2>Reset Password</h2>
@@ -466,6 +477,7 @@ const UserProfile = () => {
                                                     <TextField
                                                         type={showOldPassword ? 'text' : 'password'}
                                                         size="medium"
+                                                        fullWidth
                                                         value={passwordForm.old}
                                                         onChange={(e) => {
                                                             setPasswordForm({ ...passwordForm, old: e.target.value });
@@ -474,17 +486,17 @@ const UserProfile = () => {
                                                         }}
                                                         InputProps={{
                                                             endAdornment: (
-                                                              <InputAdornment position="end">
-                                                                <IconButton
-                                                                  onClick={() => setShowOldPassword(!showOldPassword)}
-                                                                  onMouseDown={(e) => e.preventDefault()}
-                                                                  edge="end"
-                                                                >
-                                                                  {showOldPassword ? <VisibilityOff /> : <Visibility />}
-                                                                </IconButton>
-                                                              </InputAdornment>
+                                                                <InputAdornment position="end">
+                                                                    <IconButton
+                                                                        onClick={() => setShowOldPassword(!showOldPassword)}
+                                                                        onMouseDown={(e) => e.preventDefault()}
+                                                                        edge="end"
+                                                                    >
+                                                                        {showOldPassword ? <VisibilityOff /> : <Visibility />}
+                                                                    </IconButton>
+                                                                </InputAdornment>
                                                             )
-                                                          }}
+                                                        }}
                                                         sx={{
                                                             mb: 1,
                                                             '& .MuiOutlinedInput-root.Mui-focused': {
@@ -506,13 +518,14 @@ const UserProfile = () => {
                                                     <TextField
                                                         type={showNewPassword ? 'text' : 'password'}
                                                         size="medium"
+                                                        fullWidth
                                                         value={passwordForm.new}
                                                         onChange={(e) => {
                                                             setPasswordForm({ ...passwordForm, new: e.target.value });
                                                             setPasswordError('');
                                                             setPasswordSuccess(false);
                                                         }}
-                                                        InputProps={{ 
+                                                        InputProps={{
                                                             endAdornment: (
                                                                 <InputAdornment position="end">
                                                                     <IconButton
