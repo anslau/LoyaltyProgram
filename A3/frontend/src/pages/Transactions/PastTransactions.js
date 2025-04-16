@@ -61,12 +61,12 @@ const PastTransactions = () => {
 
 
       {/* === Main Content === */}
-      <Box sx={{ maxWidth: '800px', margin: '0 auto', px: 2 }}>
+      <Container maxWidth='lg' sx={{ padding: 1 }}>
         <TransactionTable
           fetchFunction={fetchTransactions}
           title="Your Transactions"
         />
-      </Box>
+      </Container>
     </div>
   );
 };
