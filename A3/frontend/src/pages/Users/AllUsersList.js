@@ -65,7 +65,7 @@ const AllUsersList = () => {
                             key: "id",
                             label: "Details",
                             render: (value) => (
-                                <Link to={`/users/${value}`} style={{ textDecoration: 'none', color: '#c48f8f', fontWeight: 'bold' }}>
+                                <Link to={`/users/${value}`} className='details-link' style={{ textDecoration: 'none', fontWeight: 'bold' }}>
                                     Details
                                 </Link>
                             ),
