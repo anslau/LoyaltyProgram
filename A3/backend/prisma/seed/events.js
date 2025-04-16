@@ -57,5 +57,17 @@ module.exports = async function seedEvents(users) {
   await prisma.eventGuest.create({ data: { eventId: event1.id, userId: users.regularUser.id } });
   await prisma.eventGuest.create({ data: { eventId: event2.id, userId: users.eventGuestUser.id } });
 
+  // update number of guests
+  await Promise.all([
+    prisma.event.update({
+      where: { id: event1.id },
+      data: { numGuests: { increment: 1 } }
+    }),
+    prisma.event.update({
+      where: { id: event2.id },
+      data: { numGuests: { increment: 1 } }
+    })
+  ]);
+
   return [event1, event2, event3];
 };
