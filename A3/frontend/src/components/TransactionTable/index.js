@@ -181,7 +181,7 @@ const TransactionTable = ({
         },
         { key: 'spent', label: 'Spent', render: (value) => value || 'N/A' },
         { key: 'promotionIds', label: 'Promotions Used (ID)', render: (value) => value.length > 0 ? value.join(', ') : 'N/A' },
-        { key: 'relatedUser', label: 'Sender/Recipient', render: (value) => value || 'N/A' },
+        { key: 'relatedId', label: 'Sender/Recipient', render: (value) => value || 'N/A' },
         { key: 'amount', label: 'Amount', render: (value) => value || 'N/A' },
         { key: 'remark', label: 'Remark', render: (value) => value || 'N/A' },
         { key: 'createdBy', label: 'Created By' },
