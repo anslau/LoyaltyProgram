@@ -25,8 +25,11 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../../../context/AuthContext';
 import EventItem from './EventItem';
+import ActiveRoleContext from '../../../context/ActiveRoleContext';
 
 const EventsList = () => {
+  const { activeRole } = useContext(ActiveRoleContext);
+
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -45,7 +48,9 @@ const EventsList = () => {
     started: '',
     ended: '',
     published: 'true',
-    showFull: ''
+    showFull: '',
+    orderBy: 'startTime',
+    order: 'asc'
   });
   
   // Sorting state
@@ -72,6 +77,15 @@ const EventsList = () => {
       if (filters.ended) queryParams.append('ended', filters.ended);
       if (filters.published) queryParams.append('published', filters.published);
       if (filters.showFull) queryParams.append('showFull', filters.showFull);
+      if (filters.orderBy) queryParams.append('orderBy', filters.orderBy);
+      if (filters.order) queryParams.append('order', filters.order);
+
+      // update the url with the filtering params
+      const query = queryParams.toString();
+      const newUrl = `/events?${query ? `${query}` : ''}`;
+      if (window.location.pathname + window.location.search !== newUrl) {
+        window.history.pushState(null, '', newUrl);
+      }
       
       const response = await axios.get(`http://localhost:8000/events?${queryParams.toString()}`, {
         headers: {
@@ -188,10 +202,20 @@ const EventsList = () => {
     if (sortBy === field) {
       // Toggle sort order if clicking the same field
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+      setFilters(prev => ({
+        ...prev,
+        orderBy: field,
+        order: sortOrder === 'asc' ? 'desc' : 'asc'
+      }));
     } else {
       // Set new sort field and default to ascending
       setSortBy(field);
       setSortOrder('asc');
+      setFilters(prev => ({
+        ...prev,
+        orderBy: field,
+        order: 'asc'
+      }));
     }
   };
 
@@ -387,6 +411,7 @@ const EventsList = () => {
                 />
               </Grid>
               
+              {['manager', 'superuser'].includes(activeRole) && (
               <Grid item xs={12} md={4}>
                 <FormControlLabel
                   control={
@@ -404,6 +429,7 @@ const EventsList = () => {
                   label="Published Events Only"
                 />
               </Grid>
+              )}
               
               <Grid item xs={12} md={8}>
                 <Box sx={{ display: 'flex', gap: 2 }}>

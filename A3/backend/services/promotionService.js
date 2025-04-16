@@ -105,7 +105,7 @@ async function retrievePromotionsList(id, filters, role) {
             skip,
             take,
             orderBy: {
-                id: 'asc'
+                [filters.orderBy ? filters.orderBy : 'startTime']: filters.order ? filters.order : 'asc'
             }
         });
 

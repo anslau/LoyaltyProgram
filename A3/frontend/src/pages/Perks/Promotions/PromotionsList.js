@@ -19,7 +19,7 @@ import {
   Checkbox,
   Paper
 } from '@mui/material';
-import { Search as SearchIcon, FilterList as FilterListIcon } from '@mui/icons-material';
+import { Search as SearchIcon, FilterList as FilterListIcon, SortRounded as SortIcon } from '@mui/icons-material';
 import axios from 'axios';
 import AuthContext from '../../../context/AuthContext';
 import PromotionItem from './PromotionItem';
@@ -44,8 +44,14 @@ const PromotionsList = () => {
     name: '',
     type: '',
     started: '',
-    ended: ''
+    ended: '',
+    orderBy: 'startTime',
+    order: 'asc'
   });
+
+  // Sorting state
+  const [sortBy, setSortBy] = useState('startTime');
+  const [sortOrder, setSortOrder] = useState('asc');
   
   // Filter visibility
   const [showFilters, setShowFilters] = useState(false);
@@ -65,6 +71,15 @@ const PromotionsList = () => {
       if (filters.type) queryParams.append('type', filters.type);
       if (filters.started) queryParams.append('started', filters.started);
       if (filters.ended) queryParams.append('ended', filters.ended);
+      if (filters.orderBy) queryParams.append('orderBy', filters.orderBy);
+      if (filters.order) queryParams.append('order', filters.order);
+
+      // update the url with the filtering params
+      const query = queryParams.toString();
+      const newUrl = `/promotions?${query ? `${query}` : ''}`;
+      if (window.location.pathname + window.location.search !== newUrl) {
+        window.history.pushState(null, '', newUrl);
+      }
       
       const response = await axios.get(`http://localhost:8000/promotions?${queryParams.toString()}`, {
         headers: {
@@ -98,7 +113,7 @@ const PromotionsList = () => {
         fetchedPromotions = response.data;
         total = fetchedPromotions.length;
       }
-      
+
 
       
       setPromotions(fetchedPromotions);
@@ -114,7 +129,7 @@ const PromotionsList = () => {
   // Fetch promotions when dependencies change
   useEffect(() => {
     fetchPromotions();
-  }, [token, page, limit]);
+  }, [token, page, limit, sortBy, sortOrder]);
   
   // Reset to page 1 when filters change
   useEffect(() => {
@@ -172,6 +187,27 @@ const PromotionsList = () => {
       started: '',
       ended: ''
     });
+  };
+
+  const handleSortChange = (field) => {
+    if (sortBy === field) {
+      // Toggle sort order if clicking the same field
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+      setFilters(prev => ({
+        ...prev,
+        orderBy: field,
+        order: sortOrder === 'asc' ? 'desc' : 'asc'
+      }));
+    } else {
+      // Set new sort field and default to ascending
+      setSortBy(field);
+      setSortOrder('asc');
+      setFilters(prev => ({
+        ...prev,
+        orderBy: field,
+        order: 'asc'
+      }));
+    }
   };
 
   return (
@@ -371,6 +407,27 @@ const PromotionsList = () => {
                 </FormControl>
               </Grid>
             )}
+            <Grid item xs={12} md={8}>
+                <Box sx={{ display: 'flex', gap: 2 }}>
+                  <Typography variant="subtitle2" sx={{ mr: 2, alignSelf: 'center' }}>Sort by:</Typography>
+                  <Chip 
+                    label="Start Time" 
+                    variant={sortBy === 'startTime' ? 'filled' : 'outlined'}
+                    color={sortBy === 'startTime' ? 'rgb(101, 82, 82)' : 'default'}
+                    onClick={() => handleSortChange('startTime')}
+                    icon={sortBy === 'startTime' ? <SortIcon sx={{ transform: sortOrder === 'desc' ? 'rotate(180deg)' : 'none' }} /> : null}
+                    sx={{ cursor: 'pointer' }}
+                  />
+                  <Chip 
+                    label="Name" 
+                    variant={sortBy === 'name' ? 'filled' : 'outlined'}
+                    color={sortBy === 'name' ? 'rgb(101, 82, 82)' : 'default'}
+                    onClick={() => handleSortChange('name')}
+                    icon={sortBy === 'name' ? <SortIcon sx={{ transform: sortOrder === 'desc' ? 'rotate(180deg)' : 'none' }} /> : null}
+                    sx={{ cursor: 'pointer' }}
+                  />
+                </Box>
+              </Grid>
             </Grid>
             
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>

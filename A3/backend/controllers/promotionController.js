@@ -65,12 +65,12 @@ async function createPromotion(req, res){
 
 async function retrievePromotionsList(req, res){
     // check that only valid fields are passed
-    const validFields = ['name', 'type', 'page', 'limit', 'started', 'ended'];
+    const validFields = ['name', 'type', 'page', 'limit', 'started', 'ended', 'orderBy', 'order'];
     if (!validateFields(req.query, validFields)){
         return res.status(404).json({ message: "Invalid URL parameter" });
     }
 
-    const { name, type, page, limit, started, ended } = req.query;
+    const { name, type, page, limit, started, ended, orderBy, order } = req.query;
     const { id, role } = req.user;
 
     // only managers can access these
@@ -100,7 +100,7 @@ async function retrievePromotionsList(req, res){
     }
 
     // get the promotions
-    const filters = { name, type, page, limit, started, ended };
+    const filters = { name, type, page, limit, started, ended, orderBy, order };
     const promotions = await promotionService.retrievePromotionsList(id, filters, role);
 
     return res.status(200).json(promotions);

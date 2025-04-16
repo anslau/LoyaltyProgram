@@ -149,7 +149,7 @@ const EventDetail = () => {
       setError('Authentication token not found. Please log in.');
       setLoading(false);
     }
-  }, [eventId, token, user?.id, refreshEvent]); // Add safe navigation for user.id
+  }, [eventId, token, user?.id, refreshEvent, rsvpSuccess]); // Add safe navigation for user.id
 
   const handleAwardPoints = async () => {
     setAwardPointsLoading(true);
@@ -617,7 +617,8 @@ const EventDetail = () => {
       if (!updatedEvent.organizers) {
         updatedEvent.organizers = [];
       }
-      updatedEvent.organizers.push(response.data);
+      // updatedEvent.organizers.push(response.data.organizers);
+      updatedEvent.organizers.splice(0, updatedEvent.organizers.length, ...response.data.organizers);
       setEvent(updatedEvent);
 
       setAddOrganizerSuccess('Organizer added successfully!');

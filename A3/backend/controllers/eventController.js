@@ -59,12 +59,12 @@ async function createEvent(req, res){
 
 async function retrieveEventsList(req, res){
     // check that only valid fields are passed
-    const validFields = ['name', 'location', 'started', 'ended', 'published', 'showFull', 'page', 'limit'];
+    const validFields = ['name', 'location', 'started', 'ended', 'published', 'showFull', 'page', 'limit', 'orderBy', 'order'];
     if (!validateFields(req.query, validFields)){
         return res.status(404).json({ message: "Invalid URL parameter" });
     }
 
-    const { name, location, started, ended, published, showFull, page, limit } = req.query;
+    const { name, location, started, ended, published, showFull, page, limit, orderBy, order } = req.query;
     const { role, id } = req.user;
 
     // only managers can access these
@@ -87,7 +87,7 @@ async function retrieveEventsList(req, res){
     }
 
     // get the events
-    const filters = { name, location, started, ended, published, showFull, page, limit };
+    const filters = { name, location, started, ended, published, showFull, page, limit, orderBy, order };
     const events = await eventService.retrieveEventsList(filters, role, id);
 
     return res.status(200).json(events);
