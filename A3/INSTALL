@@ -71,10 +71,10 @@ Create a new GitHub repository and push your code to it:
 3. Configure settings:
    - Root Directory: `A3/frontend`
    - Build Command: `npm run build`
-   - Start Command: `npx serve -s dist`
+   - Start Command: `npx serve -s build`
 4. Deploy the frontend
 5. Generate a public domain under "Settings > Networking"
-   - Note the URL: `https://loyal-program-frontend-production.up.railway.app`
+   - Note the URL: `https://project-frontend-production-5bf5.up.railway.app`
 
 ### 5. Configure Backend Service
 
@@ -86,20 +86,20 @@ Create a new GitHub repository and push your code to it:
    - Start Command: `npm run start`
 4. Set environment variables in the "Variables" tab:
    - Click "Raw Editor" and add:
-     FRONTEND_URL=https://loyal-program-frontend-production.up.railway.app
+     FRONTEND_URL=https://project-frontend-production-5bf5.up.railway.app
      DATABASE_URL="file:./prisma/dev.db"
-     PORT=8000
 5. Deploy the backend
 6. Generate a public domain under "Settings > Networking"
-   - Note the URL: `https://loyal-program-backend-production.up.railway.app`
+   - Note the URL: `https://project-frontend-production-5bf5.up.railway.app` 
 
 ### 6. Connect Frontend to Backend
 
 1. Go back to your frontend service in Railway
 2. Add environment variable in the "Variables" tab:
-   - `REACT_APP_BACKEND_URL=https://loyal-program-backend-production.up.railway.app`
+   - `REACT_APP_BACKEND_URL=https://project-backend-production-5de7.up.railway.app`
+   - `CI=false`
 3. Redeploy the frontend service
 
 ### 7. Verify Deployment
 
-Access your application using the frontend URL
+Access your application using the frontend URL.
