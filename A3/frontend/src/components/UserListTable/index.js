@@ -74,7 +74,7 @@ const UserListTable = ({
     useEffect(() => {
         fetchUsers();
         setPage(1);
-    }, [page, limit, orderBy, order]);
+    }, [filters.page, limit, orderBy, order]);
 
     const handleSearch = () => {
         setPage(1);
@@ -351,7 +351,7 @@ const UserListTable = ({
             <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
                 <Pagination
                     count={count}
-                    page={page}
+                    page={filters.page}
                     onChange={handlePageChange}
                     color="#c48f8f"
                     showFirstButton
